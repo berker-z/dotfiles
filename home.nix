@@ -11,11 +11,6 @@ waybar
 kitty
 ];
 
-programs.git = {
-enable = true;
-userName = "berker-z";
-userEmail = "berker.zor@gmail.com";
-};
 
 
 programs.waybar = {

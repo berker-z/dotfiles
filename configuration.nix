@@ -108,7 +108,6 @@ services.gnome.gnome-keyring.enable = true;
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   git
   gh
-  kitty
   wget
   vscode
   xdg-desktop-portal-hyprland
@@ -131,6 +130,13 @@ services.gnome.gnome-keyring.enable = true;
     };
   };
 
+programs.git = {
+  enable = true;
+  package = pkgs.gitFull;
+  config = { 
+      credential.helper = "libsecret";
+  };
+};
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
