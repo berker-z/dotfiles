@@ -115,6 +115,7 @@ services.gnome.gnome-keyring.enable = true;
   fzf
   tlrc
   obsidian
+  neovim
   ];
 
 
