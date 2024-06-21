@@ -27,12 +27,31 @@ wayland.windowManager.hyprland = {
 
 
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Nordic";
+      package = pkgs.nordic;
+    };
+    iconTheme = {
+      name = "Nordzy";
+      package = pkgs.nordzy-icon-theme;
+    };
+    cursorTheme = {
+      name = "Nordzy-cursors";
+      package = pkgs.nordzy-cursor-theme;
+      size = 32;
+    };
+#    gtk2 = {
+ #     configLocation = "${config.home.homeDirectory}/.gtkrc-2.0";
+  #  };
+  };
+
 programs.kitty = {
   enable = true;
   settings = {
       font_size = "14.0";
       background = "#122440";
-
   };
 
 };
