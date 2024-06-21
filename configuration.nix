@@ -90,7 +90,15 @@ services.gnome.gnome-keyring.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   # Enable Fish
-  programs.fish.enable = true;
+
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      set fish_greeting
+      neofetch
+    '';
+
+  };
   # Enable Hyprland
   programs.hyprland.enable = true;
   
