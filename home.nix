@@ -38,10 +38,15 @@ wayland.windowManager.hyprland = {
 
 xdg. configFile."hypr/hyprlock.conf"= {
 source = ./modules/hypr/hyprlock.conf;
-
 };
 
+xdg.configFile."kitty/kitty.conf"={
+  source = ./modules/kitty/kitty.conf;
+};
 
+xdg.configFile."neofetch/config.conf"={
+  source = ./modules/neofetch/config.conf;
+};
 
 
 
@@ -96,8 +101,7 @@ services.hypridle = {
 programs.kitty = {
   enable = true;
   settings = {
-      font_size = "14.0";
-      background = "#122440";
+
   };
 
 };
