@@ -1,6 +1,17 @@
 {config, pkgs, ...}:
 
+
+
+
+
 {
+
+  imports = [
+
+    ./modules
+
+  ];
+
 home.username = "berkerz";
 home.homeDirectory = "/home/berkerz";
 
@@ -12,6 +23,7 @@ kitty
 hyprlock
 hypridle
 hyprpaper
+
 ];
 
 
@@ -19,24 +31,16 @@ hyprpaper
 wayland.windowManager.hyprland = {
 
   enable = true;
-
+    extraConfig = ''
+      ${builtins.readFile ./modules/hypr/hyprland.conf}
+    '';
    };
 
-#xdg.configFile."hypr/hyprlock.conf".source = ./modules/hypr/hyprlock.conf;
- xdg = {
-
-enable = true;
-configFile."hypr/hyprland.conf"= {
-source = ./modules/hypr/hyprland.conf;
-  recursive = true;
-
-};
-configFile."hypr/hyprlock.conf"= {
+xdg. configFile."hypr/hyprlock.conf"= {
 source = ./modules/hypr/hyprlock.conf;
-  recursive = true;
 
 };
-}; 
+
 
 
 
