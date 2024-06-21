@@ -36,7 +36,7 @@ wayland.windowManager.hyprland = {
     '';
    };
 
-xdg. configFile."hypr/hyprlock.conf"= {
+xdg.configFile."hypr/hyprlock.conf"= {
 source = ./modules/hypr/hyprlock.conf;
 };
 
@@ -75,7 +75,21 @@ services.hypridle = {
 
 };
 
+services.hyprpaper = {
+  enable = true;
+  settings = 
+  {
+  ipc = "off";
+  splash = true;
+  splash_offset = 2.0;
 
+  preload = "~/.dotfiles/assets/lain.jpg";
+
+  wallpaper = ",~/.dotfiles/assets/lain.jpg";
+};
+
+
+};
 
 
   gtk = {
