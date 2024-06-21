@@ -16,17 +16,17 @@
     ],
     "modules-right": [
         "mpd",
-        "idle_inhibitor",
+        //"idle_inhibitor",
         "pulseaudio",
         "network",
         "power-profiles-daemon",
-        "cpu",
-        "memory",
+        //"cpu",
+        //"memory",
         "temperature",
         "backlight",
         "keyboard-state",
-        "hyprland/language",
-        "battery",
+        //"hyprland/language",
+        //"battery",
         "battery#bat2",
         "clock",
         "tray"
@@ -59,15 +59,12 @@
                    "4":[],
                    "5":[]                              }
       },
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
+
+      "hyprland/window": {
+        "format": "> {class}"
+            },
+
+ 
     "hyprland/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
@@ -115,17 +112,22 @@
         // "icon-size": 21,
         "spacing": 10
     },
-    "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
+	"clock": {
+        "timezone": "Asia/Istanbul",
+		"format": "{:%A, %d %B %G | %H:%M:%OS}",
+    "interval": 1,
+		"tooltip": "false",
+//        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        	"format-alt": "{:%d/%m/%Y}",
+  //  "on-click-right": "bash ~/.config/rofi/calendar/calendar.sh",
+	},
+
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false
     },
     "memory": {
-        "format": "{}% ahaşşahah "
+        "format": "{}% ahaşşahah "
     },
     "temperature": {
         // "thermal-zone": 2,

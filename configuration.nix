@@ -37,6 +37,8 @@ XDG_SESSION_TYPE = "wayland";
 
   # Set your time zone.
   time.timeZone = "Europe/Istanbul";
+  # This is so windows doesn't shit the bed
+  time.hardwareClockInLocalTime = true;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -126,19 +128,26 @@ services.gnome.gnome-keyring.enable = true;
   neovim
   ];
 
+# this is for trashcan i think
+services.gvfs.enable = true;
+
 
   # Fonts here
 
   fonts.packages = with pkgs; [
-  iosevka
+    font-awesome
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+  (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "Iosevka"  ]; })
+
 ];
 
-# this is for trashcan i think
-services.gvfs.enable = true;
 
   fonts.fontconfig = {
     defaultFonts = {
-      monospace = [ "Iosevka" ];
+      monospace = [ "Iosevka Nerd Font" "Noto Color Emoji" "Font Awesome" ];
+
     };
   };
 
@@ -167,7 +176,7 @@ programs.git = {
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
