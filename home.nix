@@ -9,21 +9,63 @@ firefox
 neofetch
 waybar
 kitty
+hyprlock
+hypridle
+hyprpaper
 ];
 
 
 
-programs.waybar = {
-  enable = true;
-};
-
 wayland.windowManager.hyprland = {
 
   enable = true;
-    extraConfig = ''
-      ${builtins.readFile ./hyprland.conf}
-    '';
+
    };
+
+#xdg.configFile."hypr/hyprlock.conf".source = ./modules/hypr/hyprlock.conf;
+ xdg = {
+
+enable = true;
+configFile."hypr/hyprland.conf"= {
+source = ./modules/hypr/hyprland.conf;
+  recursive = true;
+
+};
+configFile."hypr/hyprlock.conf"= {
+source = ./modules/hypr/hyprlock.conf;
+  recursive = true;
+
+};
+}; 
+
+
+
+
+services.hypridle = {
+  enable = true;
+  settings = 
+  {
+  general = {
+    after_sleep_cmd = "hyprctl dispatch dpms on";
+    ignore_dbus_inhibit = false;
+    lock_cmd = "hyprlock";
+  };
+
+  listener = [
+    {
+      timeout = 900;
+      on-timeout = "hyprlock";
+    }
+    {
+      timeout = 1200;
+      on-timeout = "hyprctl dispatch dpms off";
+      on-resume = "hyprctl dispatch dpms on";
+    }
+  ];
+};
+
+};
+
 
 
 
