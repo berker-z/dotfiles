@@ -133,6 +133,9 @@ services.gnome.gnome-keyring.enable = true;
   iosevka
 ];
 
+# this is for trashcan i think
+services.gvfs.enable = true;
+
   fonts.fontconfig = {
     defaultFonts = {
       monospace = [ "Iosevka" ];

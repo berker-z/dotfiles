@@ -23,7 +23,7 @@ kitty
 hyprlock
 hypridle
 hyprpaper
-
+gnome.nautilus
 ];
 
 
