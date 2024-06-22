@@ -27,9 +27,11 @@
         "keyboard-state",
         //"hyprland/language",
         //"battery",
-        "battery#bat2",
+        //"battery#bat2",
+        "tray",
         "clock",
-        "tray"
+        "tray",
+        "custom/power"
     ],
     // Modules configuration
     "hyprland/workspaces": {
@@ -65,6 +67,12 @@
             },
 
  
+            "custom/power":
+            {
+                "format": "⏻ ",
+                "on-click": "wlogout"
+            },
+        
     "hyprland/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
@@ -109,7 +117,7 @@
         }
     },
     "tray": {
-        // "icon-size": 21,
+        "icon-size": 21,
         "spacing": 10
     },
 	"clock": {
@@ -127,7 +135,7 @@
         "tooltip": false
     },
     "memory": {
-        "format": "{}% ahaşşahah "
+        "format": "{}%  "
     },
     "temperature": {
         // "thermal-zone": 2,

@@ -24,6 +24,7 @@ hyprlock
 hypridle
 hyprpaper
 gnome.nautilus
+wlogout
 ];
 
 

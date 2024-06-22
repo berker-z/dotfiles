@@ -126,7 +126,12 @@ services.gnome.gnome-keyring.enable = true;
   tlrc
   obsidian
   neovim
+  networkmanagerapplet
   ];
+  
+  ##############################################################
+  #fix bluetooth
+
 
 # this is for trashcan i think
 services.gvfs.enable = true;
