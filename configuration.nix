@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   imports =
@@ -91,8 +91,8 @@ services.gnome.gnome-keyring.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  # Enable Fish
 
+  # Enable Fish
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
@@ -101,12 +101,36 @@ services.gnome.gnome-keyring.enable = true;
     '';
 
   };
+
+
+
   # Enable Hyprland
   programs.hyprland.enable = true;
   
-  
-  programs.waybar = { 
+  #sddm?
+  services.displayManager.sddm =
+  {
+    enable = true;
+    wayland.enable = true;
+   sugarCandyNix = {
+        enable = true; # This set SDDM's theme to "sddm-sugar-candy-nix".
+        settings = {
+          # Set your configuration options here.
+          # Here is a simple example:
+          Background = lib.cleanSource ./assets/laininv.jpg;
+          ScreenWidth = 2560;
+          ScreenHeight = 1440;
+          FormPosition = "left";
+          HaveFormBackground = true;
+          PartialBlur = true;
+          # ...
+        };
+      };
 
+  };
+
+  #not sure why i need this but i see it around a lot
+  programs.waybar = { 
       package = pkgs.waybar.overrideAttrs (oldAttrs: {
       mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
 });
@@ -126,7 +150,12 @@ services.gnome.gnome-keyring.enable = true;
   tlrc
   obsidian
   neovim
+  gimp
   networkmanagerapplet
+  nix-prefetch
+  nix-prefetch-git
+  yazi
+  libsForQt5.qt5.qtgraphicaleffects
   ];
   
   ##############################################################

@@ -116,6 +116,9 @@ services.hyprpaper = {
   #  };
   };
 
+qt = {
+  enable = true;
+};
 programs.kitty = {
   enable = true;
   settings = {
