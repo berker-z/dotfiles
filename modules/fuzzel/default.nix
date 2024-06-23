@@ -7,14 +7,14 @@
 main = {
 
 terminal = "kitty";
-font = "Iosevka-16";
+font = "Iosevka Nerd Font-16";
 prompt = "❯ ";
-width = "50";
-height = "20";
-horizontal-pad = "30";
-vertical-pad = "10";
+width = "30";
+height = "0";
+horizontal-pad = "10";
+vertical-pad = "5";
 inner-pad = "5";
-line-height = "25";
+line-height = "20";
 letter-spacing = "0.5";
 #icons-enabled = "no";
 #icon-theme = "${config.gtk.iconTheme.name}";
@@ -32,7 +32,7 @@ selection-match = "2e3440f8";
 
 border = {
 width = "1";
-radius = "0";
+radius = "3";
 };
 
     };

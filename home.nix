@@ -25,6 +25,9 @@ hypridle
 hyprpaper
 gnome.nautilus
 wlogout
+playerctl
+spotify
+spotify-tray
 ];
 
 

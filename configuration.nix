@@ -139,22 +139,38 @@ services.gvfs.enable = true;
 
   # Fonts here
 
-  fonts.packages = with pkgs; [
+fonts.packages = with pkgs; [
     font-awesome
     noto-fonts
+    liberation_ttf
     noto-fonts-cjk
     noto-fonts-emoji
-  (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "Iosevka"  ]; })
+    (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "Iosevka"  ]; })
 
 ];
 
 
-  fonts.fontconfig = {
+fonts.fontconfig = {
+    enable = true;
+    antialias = true;
+        subpixel = {
+        lcdfilter = "default";
+        rgba = "rgb";
+      };
+
+
     defaultFonts = {
       monospace = [ "Iosevka Nerd Font" "Noto Color Emoji" "Font Awesome" ];
+      sansSerif = ["Liberation Sans" "Noto Color Emoji" "Font Awesome"];
+      serif = ["Liberation Serif" "Noto Color Emoji" "Font Awesome"];
 
     };
   };
+
+  fonts.fontDir = {
+      enable = true;
+      decompressFonts = true;
+    };
 
 programs.git = {
   enable = true;
