@@ -28,10 +28,13 @@ window#waybar {
 #custom-power {
     margin: 1px 4px;
 }
+#custom-power:hover {
+    color: @nord7;
+}
 
- #group-right, #group-sound, #custom-power, #window, #workspaces, #custom-crypto
+ #group-right, #group-sound, #custom-power, #window, #workspaces, #custom-crypto 
  {
-     background: @nord1;
+     background: @nord0;
      border-radius: 10px;
      box-shadow: 0px 0px 3px rgba(0,0,0,1);
      border: 1px solid @nord8;
@@ -59,7 +62,8 @@ window#waybar {
 }
 
 #workspaces button.active {
-    color: @nord13;
+    color: @nord4;
+    background-color: @nord7;
     text-shadow:
       0.25px 0.25px 0   @nord7,
       -0.25px 0.25px 0  @nord7,
@@ -102,9 +106,17 @@ window#waybar {
 
 
 #tray {
-    color: @nord12;
-}
+    background: @nord7;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px rgba(0,0,0,1);
+    border: 1px solid @nord0;
+    padding: 1px 5px;
+    margin: 5px;
 
+}
+#tray > .button {
+    color: @nord5;
+}
 #tray > .active {
     color: @nord12;
 }

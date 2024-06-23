@@ -32,6 +32,7 @@
         //"battery",
         //"battery#bat2",
         "group/group-right",
+        "tray",
         "custom/power"
     ],
 
@@ -39,7 +40,7 @@
     {"orientation": "inherit",
 "modules":[
   "clock",
-  "tray"
+
 ]
 },
 
@@ -94,7 +95,7 @@
       },
 
       "hyprland/window": {
-        "format": "> {title}"
+        "format": "> {initialTitle}"
             },
 
  

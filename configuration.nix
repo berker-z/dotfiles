@@ -154,7 +154,6 @@ services.gnome.gnome-keyring.enable = true;
   networkmanagerapplet
   nix-prefetch
   nix-prefetch-git
-  yazi
   libsForQt5.qt5.qtgraphicaleffects
   ];
   

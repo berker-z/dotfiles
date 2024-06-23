@@ -106,11 +106,11 @@ services.hyprpaper = {
       name = "Nordzy";
       package = pkgs.nordzy-icon-theme;
     };
-    cursorTheme = {
-      name = "Nordzy-cursors";
-      package = pkgs.nordzy-cursor-theme;
-      size = 32;
-    };
+  #  cursorTheme = {
+  #    name = "Nordzy-cursors";
+  #    package = pkgs.nordzy-cursor-theme;
+  #    size = 32;
+  #  };
 #    gtk2 = {
  #     configLocation = "${config.home.homeDirectory}/.gtkrc-2.0";
   #  };
@@ -127,6 +127,18 @@ programs.kitty = {
 
 };
 
+programs.yazi = 
+{
+  enable = true;
+  enableFishIntegration = true;
+  settings = 
+  {
+    manager = 
+    {
+      show_hidden = true;
+    };
+  };
+};
 
 home.stateVersion = "24.05";
 
