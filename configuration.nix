@@ -5,10 +5,7 @@
 { lib, config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+
 
 environment = {
   variables = {
@@ -21,11 +18,36 @@ XDG_SESSION_TYPE = "wayland";
     };
 };
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
-  boot.loader.efi.canTouchEfiVariables = true;
+  #boot.loader.systemd-boot.enable = true;
+  #boot.loader.systemd-boot.configurationLimit = 5;
 
-  networking.hostName = "nixos"; # Define your hostname.
+boot.loader.efi = {
+  efiSysMountPoint = "/boot";
+  canTouchEfiVariables = true;
+};
+  boot.loader.grub = {
+  enable = true;
+  devices = [ "nodev" ];
+  useOSProber = true;
+  efiSupport = true;
+    extraEntries = ''
+      menuentry "Windows" {
+        insmod part_gpt
+        insmod fat
+        insmod search_fs_uuid
+        insmod chain
+        search --fs-uuid --set=root $FS_UUID
+        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      }
+    '';
+  version = 2;
+
+
+  };
+
+
+
+   # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -79,7 +101,6 @@ XDG_SESSION_TYPE = "wayland";
 
 #keyring stuff?
 services.gnome.gnome-keyring.enable = true;
-
 
   users.users.berkerz = {
     isNormalUser = true;

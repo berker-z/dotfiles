@@ -18,11 +18,11 @@ inputs.nixpkgs.follows = "nixpkgs";
   outputs = inputs@{ self, nixpkgs, home-manager, sddm-sugar-candy-nix, ... }: {
 	nixosConfigurations = {
 	nixos = nixpkgs.lib.nixosSystem {
-system = "x86_64-linux";
-modules = [
-sddm-sugar-candy-nix.nixosModules.default
-./configuration.nix
-
+    system = "x86_64-linux";
+    modules = [
+    sddm-sugar-candy-nix.nixosModules.default
+    ./configuration.nix
+    ./hosts/nixos/default.nix
       {
         nixpkgs = {
           overlays = [

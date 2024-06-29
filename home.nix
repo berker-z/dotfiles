@@ -1,4 +1,4 @@
-{config, pkgs, ...}:
+{config, pkgs, osConfig, ...}:
 
 
 
@@ -9,6 +9,7 @@
   imports = [
 
     ./modules
+    ./hosts/${osConfig.networking.hostName}/home.nix
 
   ];
 
@@ -37,6 +38,7 @@ wayland.windowManager.hyprland = {
   enable = true;
     extraConfig = ''
       ${builtins.readFile ./modules/hypr/hyprland.conf}
+      ${builtins.readFile ./modules/hypr/${osConfig.networking.hostName}/hyp2.conf}
     '';
    };
 
@@ -106,10 +108,10 @@ services.hyprpaper = {
       name = "Nordzy";
       package = pkgs.nordzy-icon-theme;
     };
-  #  cursorTheme = {
+  # cursorTheme = {
   #    name = "Nordzy-cursors";
   #    package = pkgs.nordzy-cursor-theme;
-  #    size = 32;
+  #    size = 24;
   #  };
 #    gtk2 = {
  #     configLocation = "${config.home.homeDirectory}/.gtkrc-2.0";
