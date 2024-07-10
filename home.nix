@@ -18,13 +18,13 @@ home.homeDirectory = "/home/berkerz";
 
 home.packages = with pkgs; [
 firefox
-neofetch
+
 waybar
 kitty
 hyprlock
 hypridle
 hyprpaper
-gnome.nautilus
+#nautilus
 wlogout
 playerctl
 spotify
@@ -48,10 +48,6 @@ source = ./modules/hypr/hyprlock.conf;
 
 xdg.configFile."kitty/kitty.conf"={
   source = ./modules/kitty/kitty.conf;
-};
-
-xdg.configFile."neofetch/config.conf"={
-  source = ./modules/neofetch/config.conf;
 };
 
 
@@ -140,6 +136,40 @@ programs.yazi =
       show_hidden = true;
     };
   };
+};
+
+programs.fastfetch = 
+
+{
+enable = true;
+settings = 
+{
+ logo = {
+       source =  "~/.dotfiles/assets/ascii.txt";
+};
+  modules = [
+    "title"
+    "separator"
+    "os"
+    "packages"
+    "kernel"
+    "uptime"
+    "shell"
+    "display"
+    "wmtheme"
+    "theme"
+    "de"
+    "wm"
+    "terminal"
+    "terminalfont"
+    "cpu"
+    "disk"
+    "break"
+    "colors"
+  ];
+
+};
+
 };
 
 home.stateVersion = "24.05";

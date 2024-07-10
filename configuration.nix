@@ -40,7 +40,7 @@ boot.loader.efi = {
         chainloader /EFI/Microsoft/Boot/bootmgfw.efi
       }
     '';
-  version = 2;
+  #version = 2;
 
 
   };
@@ -120,7 +120,7 @@ services.gnome.gnome-keyring.enable = true;
     enable = true;
     interactiveShellInit = ''
       set fish_greeting
-      neofetch
+      fastfetch
     '';
 
   };
