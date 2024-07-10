@@ -15,6 +15,7 @@ wayland.windowManager.hyprland = {
 
     extraConfig = ''
 
+<<<<<<< HEAD
       ${builtins.readFile ./hyp2.conf}
     '';
    };
@@ -27,6 +28,13 @@ font_size = 12;
 #  font.size = 12;
 
 };
+=======
+      ${builtins.readFile ./hosts/${osConfig.networking.hostName}/hyp2.conf}
+    '';
+   };
+
+
+>>>>>>> 6e88ab4d5e90085aa40607d29630730b15a5d16c
 
 
 
