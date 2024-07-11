@@ -113,6 +113,11 @@ services.gnome.gnome-keyring.enable = true;
       set fish_greeting
       fastfetch
     '';
+      shellAliases = {
+        mergio = "bash ~/.dotfiles/scripts/mergio.sh";
+        pushio = "bash ~/.dotfiles/scripts/pushio.sh";
+
+  };
 
   };
 
