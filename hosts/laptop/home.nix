@@ -24,8 +24,6 @@ programs.kitty = {
 settings = {
 font_size = 12;
 };
-#  font.size = 12;
-
 };
 
 

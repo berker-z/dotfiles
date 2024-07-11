@@ -30,16 +30,7 @@ boot.loader.efi = {
   devices = [ "nodev" ];
   useOSProber = true;
   efiSupport = true;
-    extraEntries = ''
-      menuentry "Windows" {
-        insmod part_gpt
-        insmod fat
-        insmod search_fs_uuid
-        insmod chain
-        search --fs-uuid --set=root $FS_UUID
-        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-      }
-    '';
+
   #version = 2;
 
 
@@ -182,7 +173,12 @@ services.gnome.gnome-keyring.enable = true;
   
   ##############################################################
   #fix bluetooth
-
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings.General.Experimental = true; 
+  };
+  
 
 # this is for trashcan i think
 services.gvfs.enable = true;

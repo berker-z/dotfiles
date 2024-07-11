@@ -29,6 +29,8 @@ wlogout
 playerctl
 spotify
 spotify-tray
+bluez
+blueman
 ];
 
 
@@ -38,7 +40,6 @@ wayland.windowManager.hyprland = {
   enable = true;
     extraConfig = ''
       ${builtins.readFile ./modules/hypr/hyprland.conf}
-      ${builtins.readFile ./modules/hypr/${osConfig.networking.hostName}/hyp2.conf}
     '';
    };
 
