@@ -116,6 +116,7 @@ services.gnome.gnome-keyring.enable = true;
       shellAliases = {
         mergio = "bash ~/.dotfiles/scripts/mergio.sh";
         pushio = "bash ~/.dotfiles/scripts/pushio.sh";
+        updateio = "bash ~/.dotfiles/scripts/updateio.sh";
 
   };
 
