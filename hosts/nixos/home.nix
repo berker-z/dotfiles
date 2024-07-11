@@ -22,7 +22,7 @@ evolution
 programs.kitty = {
 
 settings = {
-font_size = 16;
+font_size = 14;
 };
 };
 

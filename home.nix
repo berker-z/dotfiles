@@ -47,9 +47,6 @@ xdg.configFile."hypr/hyprlock.conf"= {
 source = ./modules/hypr/hyprlock.conf;
 };
 
-xdg.configFile."kitty/kitty.conf"={
-  source = ./modules/kitty/kitty.conf;
-};
 
 
 
@@ -120,8 +117,10 @@ qt = {
 };
 programs.kitty = {
   enable = true;
-  settings = {
+  theme = "Nord";
 
+  settings = {
+  confirm_os_window_close = 0;
   };
 
 };
