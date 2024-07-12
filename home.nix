@@ -141,6 +141,18 @@ programs.yazi =
   };
 };
 
+services.gammastep = { #redshift
+  enable = true;
+  provider = "manual";
+  temperature.day = 5500;
+  temperature.night = 3000;
+  tray = true;
+  latitude = 41.0;
+  longitude = 28.9;
+};
+
+
+
 programs.fastfetch = 
 
 {
