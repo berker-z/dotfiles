@@ -24,6 +24,8 @@ kitty
 hyprlock
 hypridle
 hyprpaper
+hyprshot
+hyprpicker
 #nautilus
 wlogout
 playerctl
