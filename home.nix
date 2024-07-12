@@ -25,14 +25,15 @@ hyprlock
 hypridle
 hyprpaper
 hyprshot
-hyprpicker
+hyprpicker #needed for hyprshot
 #nautilus
 wlogout
 playerctl
-spotify
-spotify-tray
-bluez
-blueman
+spotify 
+spotify-tray #idk this doesnt work
+bluez #bluetooth 
+blueman #bluetooth
+pinta #paint kind of
 ];
 
 
