@@ -34,6 +34,7 @@ spotify-tray #idk this doesnt work
 bluez #bluetooth 
 blueman #bluetooth
 pinta #paint kind of
+
 ];
 
 
