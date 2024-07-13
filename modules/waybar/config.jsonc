@@ -40,6 +40,7 @@
     {"orientation": "inherit",
 "modules":[
   "clock",
+  "battery"
 
 ]
 },
@@ -95,14 +96,16 @@
       },
 
       "hyprland/window": {
-        "format": "> {initialTitle}"
+        "format": "> {initialClass}",
+        "max-length": 24
             },
 
  
             "custom/power":
             {
                 "format": " ⏻  ",
-                "on-click": "wlogout"
+                "on-click": "wlogout",
+                "tooltip": false
             },
         
     "hyprland/mode": {
@@ -110,7 +113,7 @@
     },
     "hyprland/scratchpad": {
         "format": "{icon} {count}",
-        "show-empty": false,
+        "show-empty": true,
         "format-icons": ["", ""],
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
