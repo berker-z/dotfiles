@@ -152,12 +152,12 @@
         }
     },
     "tray": {
-        "icon-size": 21,
+        "icon-size": 16,
         "spacing": 10
     },
 	"clock": {
         "timezone": "Asia/Istanbul",
-		"format": "{:%H:%M:%OS | %A, %d %B %G |}",
+		"format": "{:%H:%M:%OS | %A, %d %B %G}",
     "interval": 1,
 		"tooltip": "false",
 //        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
@@ -191,11 +191,11 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
+        "format": "| {capacity}% {icon}",
+        "format-full": "| {capacity}% {icon}",
+        "format-charging": "| {capacity}% ",
+        "format-plugged": "| {capacity}% ",
+        "format-alt": "| {time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]

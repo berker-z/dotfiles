@@ -5,7 +5,7 @@
     /* `otf-font-awesome` is required to be installed for icons */
     margin-top: 1px;
     font-family: FontAwesome, Iosevka Nerd Font;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 }
 window#waybar {
@@ -37,7 +37,7 @@ window#waybar {
      border-radius: 10px;
      box-shadow: 0px 0px 3px rgba(0,0,0,1);
      border: 1px solid @nord8;
-     padding: 1px 5px;
+     padding: 0px 5px;
      margin: 3px;
      color: @nord6;
  }
@@ -105,6 +105,7 @@ window#waybar {
 
 
 #tray {
+    
     background: @nord7;
     border-radius: 10px;
     box-shadow: 0px 0px 3px rgba(0,0,0,1);
@@ -142,7 +143,7 @@ window#waybar {
     box-shadow: none;
 }
 #pulseaudio-slider trough {
-    min-height: 10px;
+    min-height: 8px;
     min-width: 80px;
     border-radius: 5px;
     background-color: @nord0;
@@ -170,33 +171,6 @@ window#waybar {
 }
 
 
-#battery {
-    background-color: #ffffff;
-    color: #000000;
-}
-
-#battery.charging, #battery.plugged {
-    color: #ffffff;
-    background-color: #26A65B;
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: #000000;
-    }
-}
-
-/* Using steps() instead of linear as a timing function to limit cpu usage */
-#battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
 
 #power-profiles-daemon {
     padding-right: 15px;
