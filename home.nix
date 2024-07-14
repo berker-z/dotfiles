@@ -106,16 +106,22 @@ services.hyprpaper = {
       name = "Nordzy";
       package = pkgs.nordzy-icon-theme;
     };
-  # cursorTheme = {
-  #    name = "Nordzy-cursors";
-  #    package = pkgs.nordzy-cursor-theme;
-  #    size = 24;
-  #  };
+   cursorTheme = {
+      name = "Bibata-Modern-Ice";
+      package = pkgs.bibata-cursors;
+      size = 24;
+    };
 #    gtk2 = {
  #     configLocation = "${config.home.homeDirectory}/.gtkrc-2.0";
   #  };
   };
-
+  home.pointerCursor =
+  {
+  name = "Bibata-Modern-Ice";
+  package = pkgs.bibata-cursors;
+  size = 24;  
+  gtk.enable = true;
+  };
 qt = {
   enable = true;
 };
