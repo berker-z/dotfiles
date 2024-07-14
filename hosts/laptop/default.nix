@@ -12,7 +12,7 @@
 
 # NVIDIA drivers are unfree.  
 services.xserver.videoDrivers = [ "nvidia" ]; # If you are using a hybrid laptop add its iGPU manufacturer
-hardware.opengl = {  
+hardware.graphics = {  
   enable = true;  
 #  driSupport = true;  
 #  driSupport32Bit = true;  
