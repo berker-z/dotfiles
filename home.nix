@@ -35,6 +35,7 @@ bluez #bluetooth
 blueman #bluetooth
 pinta #paint kind of
 foliate #ebook reader
+swaylock-effects
 
 ];
 
@@ -62,13 +63,13 @@ services.hypridle = {
   general = {
     after_sleep_cmd = "hyprctl dispatch dpms on";
     ignore_dbus_inhibit = false;
-    lock_cmd = "hyprlock";
+    lock_cmd = "swaylock -f";
   };
 
   listener = [
     {
       timeout = 900;
-      on-timeout = "hyprlock";
+      on-timeout = "swaylock -f";
     }
     {
       timeout = 1200;
@@ -194,6 +195,14 @@ settings =
 };
 
 };
+
+
+
+xdg.configFile."swaylock/config"= {
+source = ./modules/swaylock/config;
+};
+
+
 
 home.stateVersion = "24.05";
 

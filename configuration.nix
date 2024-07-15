@@ -122,7 +122,8 @@ services.gnome.gnome-keyring.enable = true;
 
   };
 
-
+    #swaylock fucks up without this i think
+    security.pam.services.swaylock = {};
 
   # Enable Hyprland
   programs.hyprland.enable = true;
