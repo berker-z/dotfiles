@@ -38,6 +38,7 @@ foliate #ebook reader
 swaylock-effects
 floorp
 tangram
+sioyek
 
 ];
 
