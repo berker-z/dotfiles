@@ -36,6 +36,8 @@ blueman #bluetooth
 pinta #paint kind of
 foliate #ebook reader
 swaylock-effects
+floorp
+tangram
 
 ];
 
