@@ -17,8 +17,6 @@ home.username = "berkerz";
 home.homeDirectory = "/home/berkerz";
 
 home.packages = with pkgs; [
-firefox
-
 waybar
 kitty
 hyprlock
@@ -35,9 +33,10 @@ bluez #bluetooth
 blueman #bluetooth
 pinta #paint kind of
 foliate #ebook reader
-swaylock-effects
-floorp
-tangram
+swaylock-effects # i hated hyprlock
+floorp #browser
+ferdium #whatsapp, telegram, discord
+
 sioyek
 
 ];
