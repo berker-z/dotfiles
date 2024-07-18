@@ -19,32 +19,6 @@ hardware.graphics = {
 };
 
 #20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
-boot.loader = {
-  efi.efiSysMountPoint = "/boot";
-  efi.canTouchEfiVariables = true;
-
-};
-  boot.loader.grub = {
-  enable = true;
-  devices = [ "nodev" ];
-  useOSProber = false;
-  efiSupport = true;
-  extraEntries = ''
-  menuentry "Windows" {
-  insmod part_gpt
-  insmod fat
-  insmod search_fs_uuid
-  insmod chain
-  search --fs-uuid --set=root 20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
-  chainloader /EFI/EFI/Microsoft/Boot/bootmgr.efi
-  }
-  '';
-
-  #version = 2;
-
-
-  };
-
 
 networking.hostName = "laptop";
 hardware.nvidia = {
