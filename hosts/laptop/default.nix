@@ -18,6 +18,29 @@ hardware.graphics = {
 #  driSupport32Bit = true;  
 };
 
+#20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
+boot.loader.efi = {
+  efiSysMountPoint = "/boot";
+  canTouchEfiVariables = true;
+};
+  boot.loader.grub = {
+  enable = true;
+  devices = [ "nodev" ];
+  useOSProber = true;
+  efiSupport = false;
+  extraEntries = ''
+  menuentry "Windows" {
+  search --fs-uuid --set=root 20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
+  chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+  }
+  '';
+
+  #version = 2;
+
+
+  };
+
+
 networking.hostName = "laptop";
 hardware.nvidia = {
   # Enable modesetting for Wayland compositors (hyprland)

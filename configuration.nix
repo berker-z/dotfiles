@@ -21,20 +21,7 @@ XDG_SESSION_TYPE = "wayland";
   #boot.loader.systemd-boot.enable = true;
   #boot.loader.systemd-boot.configurationLimit = 5;
 
-boot.loader.efi = {
-  efiSysMountPoint = "/boot";
-  canTouchEfiVariables = true;
-};
-  boot.loader.grub = {
-  enable = true;
-  devices = [ "nodev" ];
-  useOSProber = true;
-  efiSupport = true;
 
-  #version = 2;
-
-
-  };
 
 
 
