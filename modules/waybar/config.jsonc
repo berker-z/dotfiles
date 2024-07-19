@@ -57,14 +57,16 @@
     "format": " ::  <span>{}</span>",
     "return-type": "json",
     "max-length": 42,
-    "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
-    "on-click-middle": "playerctl play-pause",
-    "on-click": "playerctl previous",
-    "on-click-right": "playerctl next",
+    "exec": "playerctl --player=spotify metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+    "on-click": "playerctl --player=spotify play-pause",
+    "on-scroll-down": "playerctl --player=spotify previous",
+    "on-scroll-up": "playerctl --player=spotify next",
     "format-icons": {
-      "Playing": "<span foreground='#B1B946'>󰝚</span>",
-      "Paused": "<span foreground='#47423E'>󰝛</span>"
-    },
+      "Playing": "󰝚",
+      "Paused": "󰝛"
+    }
+
+
   },
     // Modules configuration
     "hyprland/workspaces": {
