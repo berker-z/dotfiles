@@ -16,6 +16,9 @@
 home.packages = with pkgs; [
 brave
 evolution
+swaynotificationcenter
+mako
+dunst
 ];
 
 

@@ -75,8 +75,8 @@ services.hypridle = {
     }
     {
       timeout = 1200;
-      on-timeout = "hyprctl dispatch dpms off";
-      on-resume = "hyprctl dispatch dpms on";
+      #on-timeout = "hyprctl dispatch dpms off";
+      #on-resume = "hyprctl dispatch dpms on";
     }
   ];
 };
