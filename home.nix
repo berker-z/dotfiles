@@ -36,7 +36,7 @@ foliate #ebook reader
 swaylock-effects # i hated hyprlock
 floorp #browser
 ferdium #whatsapp, telegram, discord
-
+vivaldi #like this these days
 sioyek
 
 ];
