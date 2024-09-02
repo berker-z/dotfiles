@@ -38,7 +38,8 @@ floorp #browser
 ferdium #whatsapp, telegram, discord
 vivaldi #like this these days
 sioyek
-
+vlc
+deluge #torrent client
 ];
 
 

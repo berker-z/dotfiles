@@ -176,6 +176,7 @@ services.gnome.gnome-keyring.enable = true;
   nix-prefetch
   nix-prefetch-git
   libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
+  ntfs3g
   ];
   
   ##############################################################
