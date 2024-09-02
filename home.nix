@@ -37,6 +37,7 @@ swaylock-effects # i hated hyprlock
 floorp #browser
 ferdium #whatsapp, telegram, discord
 vivaldi #like this these days
+vivaldi-ffmpeg-codecs
 sioyek
 vlc
 deluge #torrent client
