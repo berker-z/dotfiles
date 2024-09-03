@@ -67,13 +67,13 @@ services.hypridle = {
   general = {
     after_sleep_cmd = "hyprctl dispatch dpms on";
     ignore_dbus_inhibit = false;
-    lock_cmd = "swaylock -f";
+    lock_cmd = "hyperlock -f";
   };
 
   listener = [
     {
       timeout = 900;
-      on-timeout = "swaylock -f";
+      on-timeout = "hyperlock -f";
     }
     {
       timeout = 1200;
@@ -93,9 +93,10 @@ services.hyprpaper = {
   splash = true;
   splash_offset = 2.0;
 
-  preload = "~/.dotfiles/assets/lain.jpg";
+  #preload = "~/.dotfiles/assets/lain.jpg";
+    preload = "~/.dotfiles/assets/squi.jpg";
 
-  wallpaper = ",~/.dotfiles/assets/lain.jpg";
+  wallpaper = ",~/.dotfiles/assets/squi.jpg";
 };
 
 
