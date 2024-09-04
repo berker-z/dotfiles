@@ -67,13 +67,13 @@ services.hypridle = {
   general = {
     after_sleep_cmd = "hyprctl dispatch dpms on";
     ignore_dbus_inhibit = false;
-    lock_cmd = "hyperlock -f";
+    lock_cmd = "swaylock -f";
   };
 
   listener = [
     {
       timeout = 900;
-      on-timeout = "hyperlock -f";
+      on-timeout = "swaylock -f";
     }
     {
       timeout = 1200;
