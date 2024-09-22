@@ -15,8 +15,7 @@ XDG_SESSION_TYPE = "wayland";
       XDG_CURRENT_DESKTOP = "Hyprland";
 	    XDG_SESSION_DESKTOP = "Hyprland";
 	    XDG_SESSION_TYPE = "wayland";
-	   # GTK_USE_PORTAL = "1";
-	    NIXOS_XDG_OPEN_USE_PORTAL = "1";
+      GTK_USE_PORTAL = "1";
       NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
       WLR_NO_HARDWARE_CURSORS = "1"; # Fix cursor rendering issue on wlr nvidia.
     };
@@ -129,9 +128,6 @@ services.gnome.gnome-keyring.enable = true;
     #swaylock fucks up without this i think
     security.pam.services.swaylock = {};
 
-  # Enable Hyprland
-  programs.hyprland.enable = true;
-  
   #sddm?
   services.displayManager.sddm =
   {
@@ -161,6 +157,15 @@ services.gnome.gnome-keyring.enable = true;
 });
 };
 
+programs.hyprland = {
+enable = true;
+
+
+  xwayland.enable = true;
+  systemd.setPath.enable = true;
+
+};
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -171,7 +176,7 @@ services.gnome.gnome-keyring.enable = true;
   vscode
   xdg-desktop-portal
   xdg-desktop-portal-hyprland
-  #xdg-desktop-portal-gtk
+  xdg-desktop-portal-gtk
   xdg-utils
   fzf
   tlrc
@@ -197,7 +202,12 @@ services.gnome.gnome-keyring.enable = true;
 # this is for trashcan i think
 services.gvfs.enable = true;
 
-
+xdg.mime.enable = true;
+xdg.mime.addedAssociations = {
+  "x-scheme-handler/appflowy-flutter" = "appflowy.desktop";
+  "x-scheme-handler/appflowy" = "appflowy.desktop";
+    "x-scheme-handler/appflowy-desktop" = "appflowy.desktop";
+};
   # Fonts here
 
 fonts.packages = with pkgs; [
@@ -214,10 +224,11 @@ services.dbus.enable = true;
 xdg.portal = {
   enable = true;
   extraPortals = with pkgs; [
-    #xdg-desktop-portal-gtk
+
     xdg-desktop-portal-hyprland
+    xdg-desktop-portal-gtk
   ];
-  config.common.default = "*";
+
 };
 
 fonts.fontconfig = {

@@ -45,6 +45,7 @@ appflowy
 libsForQt5.qtstyleplugins #qt theming
 libsForQt5.qt5ct
 libsForQt5.qtstyleplugin-kvantum
+notion-app-enhanced
 ];
 
 
@@ -54,7 +55,7 @@ wayland.windowManager.hyprland = {
   enable = true;
   systemd.enableXdgAutostart = true;
   systemd.enable = true;
-
+  systemd.variables = ["--all"];
     extraConfig = ''
       ${builtins.readFile ./modules/hypr/hyprland.conf}
     '';
