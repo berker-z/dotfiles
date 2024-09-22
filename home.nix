@@ -42,6 +42,9 @@ sioyek
 vlc
 deluge #torrent client
 appflowy
+libsForQt5.qtstyleplugins #qt theming
+libsForQt5.qt5ct
+libsForQt5.qtstyleplugin-kvantum
 ];
 
 
@@ -133,9 +136,20 @@ services.hyprpaper = {
   size = 24;  
   gtk.enable = true;
   };
+
 qt = {
   enable = true;
+  platformTheme.name = "kvantum";
+  style = {
+    name = "kvantum";
+  };
 };
+
+
+
+
+
+
 programs.kitty = {
   enable = true;
   theme = "Nord";
@@ -217,8 +231,15 @@ home.stateVersion = "24.05";
 
 programs.home-manager.enable = true;
 
+home.sessionVariables = {
 
+  QT_STYLE_OVERRIDE = "kvantum";
+};
 
+xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+[General]
+theme=Nordic-Darker
+'';
 
 
 
