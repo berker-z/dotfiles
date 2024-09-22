@@ -41,6 +41,7 @@ vivaldi-ffmpeg-codecs
 sioyek
 vlc
 deluge #torrent client
+appflowy
 ];
 
 
@@ -48,6 +49,9 @@ deluge #torrent client
 wayland.windowManager.hyprland = {
 
   enable = true;
+  systemd.enableXdgAutostart = true;
+  systemd.enable = true;
+
     extraConfig = ''
       ${builtins.readFile ./modules/hypr/hyprland.conf}
     '';

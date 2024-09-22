@@ -12,9 +12,13 @@ environment = {
 XDG_SESSION_TYPE = "wayland";
 };
     sessionVariables = {
+      XDG_CURRENT_DESKTOP = "Hyprland";
+	    XDG_SESSION_DESKTOP = "Hyprland";
+	    XDG_SESSION_TYPE = "wayland";
+	    GTK_USE_PORTAL = "1";
+	    NIXOS_XDG_OPEN_USE_PORTAL = "1";
       NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
       WLR_NO_HARDWARE_CURSORS = "1"; # Fix cursor rendering issue on wlr nvidia.
-      DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox"; # Set default browser
     };
 };
   # Bootloader.
@@ -165,7 +169,9 @@ services.gnome.gnome-keyring.enable = true;
   gh
   wget
   vscode
+  xdg-desktop-portal
   xdg-desktop-portal-hyprland
+  xdg-desktop-portal-gtk
   xdg-utils
   fzf
   tlrc
@@ -204,6 +210,15 @@ fonts.packages = with pkgs; [
 
 ];
 
+services.dbus.enable = true;
+xdg.portal = {
+  enable = true;
+  extraPortals = with pkgs; [
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-hyprland
+  ];
+  config.common.default = "*";
+};
 
 fonts.fontconfig = {
     enable = true;
@@ -234,6 +249,10 @@ programs.git = {
       credential.helper = "libsecret";
   };
 };
+
+
+
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
