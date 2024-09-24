@@ -176,7 +176,6 @@ enable = true;
   vscode
   xdg-desktop-portal
   xdg-desktop-portal-hyprland
-  xdg-desktop-portal-gtk
   xdg-utils
   fzf
   tlrc
@@ -281,28 +280,6 @@ programs.git = {
 
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
-
-# RClone Google Drive service
-systemd.services.rclone-gdrive-mount = {
-  # Ensure the service starts after the network is up
-  wantedBy = [ "multi-user.target" ];
-  after = [ "network-online.target" ];
-  requires = [ "network-online.target" ];
-
-  # Service configuration
-  serviceConfig = {
-    Type = "simple";
-    ExecStartPre = "/run/current-system/sw/bin/mkdir -p ~/gDrive"; # Creates folder if didn't exist
-    ExecStart = "${pkgs.rclone}/bin/rclone mount drive: ~/gDrive"; # Mounts
-    ExecStop = "/run/current-system/sw/bin/fusermount -u ~/gDrive"; # Dismounts
-    Restart = "on-failure";
-    RestartSec = "10s";
-    User = "berkerz";
-    Group = "users";
-    Environment = [ "PATH=/run/wrappers/bin/:$PATH" ]; # Required environments
-  };
-};
-
 
 
 
