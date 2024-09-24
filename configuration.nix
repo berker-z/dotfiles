@@ -188,6 +188,7 @@ enable = true;
   libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
   ntfs3g
   rclone
+  nautilus
   ];
   
   ##############################################################
