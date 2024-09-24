@@ -14,10 +14,7 @@
   ];
 
 home.packages = with pkgs; [
-brave
-evolution
-vivaldi
-#dunst
+
 ];
 
 
