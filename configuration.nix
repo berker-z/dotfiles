@@ -258,7 +258,27 @@ programs.git = {
 
 
 # RClone Google Drive service
-systemd.services.rclone-gdrive-mount = {
+#systemd.services.rclone-gdrive-mount = {
+#  # Ensure the service starts after the network is up
+#  wantedBy = [ "multi-user.target" ];
+#  after = [ "network-online.target" ];
+#  requires = [ "network-online.target" ];
+#
+#  # Service configuration
+#  serviceConfig = {
+#    Type = "simple";
+#    ExecStartPre = "/run/current-system/sw/bin/mkdir -p /home/berkerz/gDrive"; # Creates folder if didn't exist
+#    ExecStart = "${pkgs.rclone}/bin/rclone mount drive: /home/berkerz/gDrive"; # Mounts
+#    ExecStop = "/run/current-system/sw/bin/fusermount -u /home/berkerz/gDrive"; # Dismounts
+#    Restart = "on-failure";
+#    RestartSec = "10s";
+#    User = "berkerz";
+#    Group = "users";
+#    Environment = [ "PATH=/run/wrappers/bin/:$PATH" ]; # Required environments
+#  };
+#};
+
+systemd.services.rclone-gdrive-sync = {
   # Ensure the service starts after the network is up
   wantedBy = [ "multi-user.target" ];
   after = [ "network-online.target" ];
@@ -266,18 +286,25 @@ systemd.services.rclone-gdrive-mount = {
 
   # Service configuration
   serviceConfig = {
-    Type = "simple";
-    ExecStartPre = "/run/current-system/sw/bin/mkdir -p /home/berkerz/gDrive"; # Creates folder if didn't exist
-    ExecStart = "${pkgs.rclone}/bin/rclone mount drive: /home/berkerz/gDrive"; # Mounts
-    ExecStop = "/run/current-system/sw/bin/fusermount -u /home/berkerz/gDrive"; # Dismounts
-    Restart = "on-failure";
-    RestartSec = "10s";
+    Type = "oneshot";
+    ExecStartPre = "/run/current-system/sw/bin/mkdir -p /home/berkerz/gDrive"; # Creates folder if it doesn't exist
+    ExecStart = "${pkgs.rclone}/bin/rclone bisync drive: /home/berkerz/gDrive"; # Syncs
     User = "berkerz";
     Group = "users";
     Environment = [ "PATH=/run/wrappers/bin/:$PATH" ]; # Required environments
   };
 };
 
+# Add a timer to run the sync service periodically
+systemd.timers.rclone-gdrive-sync = {
+  wantedBy = [ "timers.target" ];
+  partOf = [ "rclone-gdrive-sync.service" ];
+  timerConfig = {
+    OnBootSec = "1m";
+    OnUnitActiveSec = "1m";
+    Unit = "rclone-gdrive-sync.service";
+  };
+};
 
 
   # Some programs need SUID wrappers, can be configured further or are
