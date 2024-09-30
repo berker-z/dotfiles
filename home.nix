@@ -37,7 +37,6 @@ floorp #browser
 #ferdium #i've grown to dislike this a lot
 vivaldi #like this these days
 vivaldi-ffmpeg-codecs
-sioyek #pdf viewer
 vlc #media player
 deluge #torrent client
 appflowy #you kinda need to fuck with mime apps for this appflowy.flutter > appflowy.desktop iirc
@@ -49,10 +48,14 @@ feh #picture viewer
 ];
 
 
-programs.sioyek.config = {
+programs.sioyek =
+
+{
+enable = true;
+config = {
   "background_color" = "0.18 0.20 0.25";
 };
-
+  };
 
 
 wayland.windowManager.hyprland = {
