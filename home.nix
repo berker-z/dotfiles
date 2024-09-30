@@ -146,13 +146,26 @@ qt = {
 };
 
 
-
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "inode/directory" = ["org.gnome.Nautilus.desktop"];
+      "image/*" = ["feh.desktop"];
+      "application/pdf" = ["sioyek.desktop"];
+      "application/epub+zip" = ["com.github.johnfactotum.Foliate.desktop"];
+      "video/*" = ["vlc.desktop"];
+      "audio/*" = ["vlc.desktop"];
+      "x-scheme-handler/http" = ["vivaldi-stable.desktop"];
+      "x-scheme-handler/https" = ["vivaldi-stable.desktop"];
+      "text/html" = ["vivaldi-stable.desktop"];
+    };
+  };
 
 
 
 programs.kitty = {
   enable = true;
-  theme = "Nord";
+  themeFile = "Nord";
 
   settings = {
   confirm_os_window_close = 0;
@@ -170,7 +183,18 @@ programs.yazi =
     {
       show_hidden = true;
     };
-  };
+
+#opener = {
+#text = {
+#  exec = "$EDITOR $@"; desc = "Open with editor";
+ # exec = "xdg-open $@"; desc = "Open with default application";
+#};
+#fallback = {
+#exec = "xdg-open $@"; desc = "Open with default application";
+#};
+
+ # };
+};
 };
 
 services.gammastep = { #redshift
