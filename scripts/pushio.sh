@@ -8,4 +8,4 @@ git commit -m "regular update" || exit 1
 git push -u origin main || exit 1
 
 echo "Pushed to git successfully."
-notify-send "NixOS Configuration" "Pushed changes to GitHub."
+notify-send -t 1500 "NixOS Configuration" "Pushed changes to GitHub."

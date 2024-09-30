@@ -26,4 +26,4 @@ git stash || exit 1
 git reset --hard origin/main || exit 1
 
 echo "NixOS configuration synced from Github."
-notify-send "NixOS Configuration" "Updated from GitHub."
+notify-send  -t 1500 "NixOS Configuration" "Updated from GitHub."
