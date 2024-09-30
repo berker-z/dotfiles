@@ -3,11 +3,7 @@
 
 {
 
-imports = [
 
-    ./rclone.nix
-
-  ];
 systemd.services.rclone-gdrive-sync = {
   # Ensure the service starts after the network is up
   wantedBy = [ "multi-user.target" ];
