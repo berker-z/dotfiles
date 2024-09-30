@@ -49,6 +49,11 @@ feh #picture viewer
 ];
 
 
+programs.sioyek.config = {
+  "background_color" = "0.18 0.20 0.25";
+};
+
+
 
 wayland.windowManager.hyprland = {
 
