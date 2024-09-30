@@ -18,7 +18,7 @@ systemd.services.rclone-gdrive-sync = {
   serviceConfig = {
     Type = "oneshot";
     ExecStartPre = "/run/current-system/sw/bin/mkdir -p /home/berkerz/gDrive"; # Creates folder if it doesn't exist
-    ExecStart = "${pkgs.rclone}/bin/rclone bisync --resync --resilient drive: /home/berkerz/gDrive"; # Syncs
+    ExecStart = "${pkgs.rclone}/bin/rclone bisync  --resilient drive: /home/berkerz/gDrive"; # Syncs
     User = "berkerz";
     Group = "users";
     Environment = [ "PATH=/run/wrappers/bin/:$PATH" ]; # Required environments
