@@ -24,7 +24,6 @@ hypridle
 hyprpaper
 hyprshot
 hyprpicker #needed for hyprshot
-#nautilus
 wlogout
 playerctl
 spotify 
@@ -35,17 +34,17 @@ pinta #paint kind of
 foliate #ebook reader
 swaylock-effects # i hated hyprlock
 floorp #browser
-ferdium #whatsapp, telegram, discord
+#ferdium #i've grown to dislike this a lot
 vivaldi #like this these days
 vivaldi-ffmpeg-codecs
-sioyek
-vlc
+sioyek #pdf viewer
+vlc #media player
 deluge #torrent client
-appflowy
+appflowy #you kinda need to fuck with mime apps for this appflowy.flutter > appflowy.desktop iirc
 libsForQt5.qtstyleplugins #qt theming
 libsForQt5.qt5ct
 libsForQt5.qtstyleplugin-kvantum
-notion-app-enhanced
+telegram-desktop #web client sucks
 ];
 
 

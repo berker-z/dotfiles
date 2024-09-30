@@ -169,16 +169,16 @@ enable = true;
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   git
-  gh
-  wget
-  vscode
-  xdg-desktop-portal
-  xdg-desktop-portal-hyprland
-  xdg-utils
-  fzf
-  tlrc
+  gh #think i need this for auth but i can't remember
+  wget #self-ex
+  vscode #
+  xdg-desktop-portal #required
+  xdg-desktop-portal-hyprland #required
+  #gtk?
+  xdg-utils #required
+  fzf 
+  tlrc 
   obsidian
   neovim
   gimp
@@ -189,6 +189,7 @@ enable = true;
   ntfs3g
   rclone
   nautilus
+  feh #picture viewer
   ];
   
   ##############################################################
