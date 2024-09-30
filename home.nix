@@ -45,6 +45,7 @@ libsForQt5.qtstyleplugins #qt theming
 libsForQt5.qt5ct
 libsForQt5.qtstyleplugin-kvantum
 telegram-desktop #web client sucks
+feh #picture viewer
 ];
 
 

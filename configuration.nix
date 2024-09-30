@@ -189,7 +189,7 @@ enable = true;
   ntfs3g
   rclone
   nautilus
-  feh #picture viewer
+  mako #notifs
   ];
   
   ##############################################################
