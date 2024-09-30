@@ -7,6 +7,12 @@
 {
 
 
+  imports = [
+
+    ./rclone.nix
+    
+  ];
+
 environment = {
   variables = {
 XDG_SESSION_TYPE = "wayland";
