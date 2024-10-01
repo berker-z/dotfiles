@@ -198,7 +198,7 @@ enable = true;
   ntfs3g
   rclone
   nautilus
-  mako #notifs
+
   libnotify
   libsForQt5.qt5.qtwayland
   egl-wayland

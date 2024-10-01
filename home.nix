@@ -46,6 +46,13 @@ feh #picture viewer
 ];
 
 
+services.mako = {
+enable = true;
+defaultTimeout = 2500;
+font = "monospace 12";
+
+};
+
 programs.sioyek =
 
 {
