@@ -49,7 +49,9 @@ feh #picture viewer
 services.mako = {
 enable = true;
 defaultTimeout = 2500;
-font = "monospace 12";
+font = "monospace 11";
+anchor = "bottom-right";
+
 
 };
 
