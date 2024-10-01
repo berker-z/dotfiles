@@ -2,8 +2,6 @@
 
 
 
-
-
 {
 
   imports = [
@@ -148,9 +146,9 @@ services.hyprpaper = {
 
 qt = {
   enable = true;
-  platformTheme.name = "kvantum";
+  platformTheme.name = "qt5ct";
   style = {
-    name = "kvantum";
+    name = "qt5ct";
   };
 };
 
@@ -266,7 +264,7 @@ programs.home-manager.enable = true;
 
 home.sessionVariables = {
 
-  QT_STYLE_OVERRIDE = "kvantum";
+  QT_STYLE_OVERRIDE = "qt5ct";
 };
 
 xdg.configFile."Kvantum/kvantum.kvconfig".text = ''

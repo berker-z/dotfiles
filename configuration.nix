@@ -21,9 +21,12 @@ XDG_SESSION_TYPE = "wayland";
       XDG_CURRENT_DESKTOP = "Hyprland";
 	    XDG_SESSION_DESKTOP = "Hyprland";
 	    XDG_SESSION_TYPE = "wayland";
-      #GTK_USE_PORTAL = "1";
+      GTK_USE_PORTAL = "1";
+      GTK_THEME = "Nordic";
       NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
       WLR_NO_HARDWARE_CURSORS = "1"; # Fix cursor rendering issue on wlr nvidia.
+      QT_QPA_PLATFORM = "wayland";       # Ensures Qt apps run under Wayland
+      QT_QPA_PLATFORMTHEME="qt5ct";
     };
 };
   # Bootloader.
@@ -181,7 +184,7 @@ enable = true;
   vscode #
   xdg-desktop-portal #required
   xdg-desktop-portal-hyprland #required
-  #gtk?
+  #xdg-desktop-portal-gtk #this makes everything ugly
   xdg-utils #required
   fzf 
   tlrc 
@@ -197,6 +200,7 @@ enable = true;
   nautilus
   mako #notifs
   libnotify
+  libsForQt5.qt5.qtwayland
   ];
 
   programs.nautilus-open-any-terminal = 
