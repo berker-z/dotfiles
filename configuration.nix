@@ -276,7 +276,9 @@ programs.git = {
 };
 
 
-
+#for STEAM to work
+  hardware.graphics.enable32Bit = true;
+  hardware.pulseaudio.support32Bit = true;
 
 
 

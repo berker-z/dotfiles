@@ -43,6 +43,7 @@ libsForQt5.qt5ct
 libsForQt5.qtstyleplugin-kvantum
 telegram-desktop #web client sucks
 feh #picture viewer
+steam
 ];
 
 
@@ -77,6 +78,7 @@ config = {
 wayland.windowManager.hyprland = {
 
   enable = true;
+  xwayland.enable = true;
   systemd.enableXdgAutostart = true;
   systemd.enable = true;
   systemd.variables = ["--all"];
