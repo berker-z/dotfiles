@@ -182,7 +182,7 @@ enable = true;
   gh #think i need this for auth but i can't remember
   wget #self-ex
   vscode #
-  xdg-desktop-portal #required
+  #xdg-desktop-portal #required
   xdg-desktop-portal-hyprland #required
   #xdg-desktop-portal-gtk #this makes everything ugly
   xdg-utils #required
@@ -201,6 +201,7 @@ enable = true;
   mako #notifs
   libnotify
   libsForQt5.qt5.qtwayland
+  egl-wayland
   ];
 
   programs.nautilus-open-any-terminal = 

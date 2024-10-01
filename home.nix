@@ -132,9 +132,9 @@ services.hyprpaper = {
       package = pkgs.bibata-cursors;
       size = 24;
     };
-#    gtk2 = {
- #     configLocation = "${config.home.homeDirectory}/.gtkrc-2.0";
-  #  };
+    gtk2 = {
+      configLocation = "${config.home.homeDirectory}/.gtkrc-2.0";
+   };
   };
   home.pointerCursor =
   {
