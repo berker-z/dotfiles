@@ -51,6 +51,10 @@ enable = true;
 defaultTimeout = 2500;
 font = "monospace 11";
 anchor = "bottom-right";
+extraConfig = ''
+           [mode=do-not-disturb]
+           invisible=1
+'';
 
 
 };
