@@ -132,6 +132,7 @@ services.gnome.gnome-keyring.enable = true;
         updateio = "bash ~/.dotfiles/scripts/updateio.sh";
         rclio = "bash ~/.dotfiles/scripts/rclone.sh";
         ftlbu = "bash ~/.dotfiles/scripts/ftlbu.sh";
+        cod = "bash ~/.dotfiles/scripts/codio.sh";
   };
 
   };

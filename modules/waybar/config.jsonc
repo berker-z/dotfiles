@@ -39,6 +39,7 @@
     "group/group-right":
     {"orientation": "inherit",
 "modules":[
+    "custom/ftl",
     "custom/dnd",
   "clock",
   "battery"
@@ -179,6 +180,12 @@
         "on-click": "makoctl mode | grep 'dnd' && makoctl mode -r dnd || makoctl mode -a dnd; pkill -RTMIN+11 waybar",
         "exec": "printf '{\"alt\":\"%s\",\"tooltip\":\"mode: %s\"}' $(makoctl mode | grep -q 'dnd' && echo dnd || echo default) $(makoctl mode | tail -1)",
         "signal": 11
+    },
+
+    "custom/ftl": {
+        "format": "FTL |",
+        "on-click": "bash ~/.dotfiles/scripts/ftlbu.sh"
+
     }
 }
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Create timestamp in format YYYYMMDD_HHMMSS
 timestamp=$(date +%Y%m%d_%H%M%S)
