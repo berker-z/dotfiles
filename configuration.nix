@@ -124,12 +124,14 @@ services.gnome.gnome-keyring.enable = true;
     interactiveShellInit = ''
       set fish_greeting
       fastfetch
+
     '';
       shellAliases = {
         mergio = "bash ~/.dotfiles/scripts/mergio.sh";
         pushio = "bash ~/.dotfiles/scripts/pushio.sh";
         updateio = "bash ~/.dotfiles/scripts/updateio.sh";
         rclio = "bash ~/.dotfiles/scripts/rclone.sh";
+        ftlbu = "bash ~/.dotfiles/scripts/ftlbu.sh";
   };
 
   };
