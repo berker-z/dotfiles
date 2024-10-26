@@ -2,8 +2,9 @@
 
 
 {
+
+# RClone Google Drive service
 systemd.services.rclone-gdrive-mount = {
-  description = "rclone GDRIVE mount";
   # Ensure the service starts after the network is up
   wantedBy = [ "multi-user.target" ];
   after = [ "network-online.target" ];
@@ -12,8 +13,8 @@ systemd.services.rclone-gdrive-mount = {
   # Service configuration
   serviceConfig = {
     Type = "simple";
-    ExecStartPre = "/run/current-system/sw/bin/mkdir -p /home/berkerz/gDrive"; # Creates folder if didn't exist
-    ExecStart = "${pkgs.rclone}/bin/rclone mount drive: /home/berkerz/gDrive --vfs-cache-mode writes --daemon --allow-other"; # Mounts with improved caching
+    ExecStartPre = "/run/current-system/sw/bin/mkdir -p  /home/berkerz/gDrive"; # Creates folder if didn't exist
+    ExecStart = "${pkgs.rclone}/bin/rclone mount --vfs-cache-mode full drive: /home/berkerz/gDrive"; # Mounts
     ExecStop = "/run/current-system/sw/bin/fusermount -u /home/berkerz/gDrive"; # Dismounts
     Restart = "on-failure";
     RestartSec = "10s";
@@ -22,4 +23,4 @@ systemd.services.rclone-gdrive-mount = {
     Environment = [ "PATH=/run/wrappers/bin/:$PATH" ]; # Required environments
   };
 };
-}
+    }

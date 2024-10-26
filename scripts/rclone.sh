@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 MOUNT_POINT="/home/berkerz/gDrive"
 LOG_FILE="/home/berkerz/rclone_mount.log"
 MAX_RETRIES=5
