@@ -44,6 +44,10 @@ libsForQt5.qtstyleplugin-kvantum
 telegram-desktop #web client sucks
 feh #picture viewer
 steam
+brave
+libsForQt5.kolourpaint
+drawing
+
 ];
 
 
