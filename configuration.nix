@@ -201,6 +201,7 @@ enable = true;
   ntfs3g
   rclone
   nautilus
+  godot_4
 
   libnotify
   libsForQt5.qt5.qtwayland
