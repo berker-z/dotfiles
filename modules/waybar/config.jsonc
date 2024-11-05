@@ -161,7 +161,7 @@
     },
 	"clock": {
         "timezone": "Asia/Istanbul",
-		"format": "{:%H:%M:%OS | %A, %d %B %G}",
+		"format": "{:%H:%M:%OS<span color=\"#88c0d0\"> | </span>%A, %d %B %G<span color=\"#88c0d0\"> |</span>}",
     "interval": 1,
 		"tooltip": "false",
 //        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
@@ -174,8 +174,8 @@
         "return-type": "json",
         "format": "{}{icon}",
         "format-icons": {
-            "default": " 󰍡  | ",
-            "dnd": " 󱙍  | "
+            "default": " 󰍡  <span color=\"#88c0d0\">| </span>",
+            "dnd": " 󱙍  <span color=\"#88c0d0\">| </span>"
         },
         "on-click": "makoctl mode | grep 'dnd' && makoctl mode -r dnd || makoctl mode -a dnd; pkill -RTMIN+11 waybar",
         "exec": "printf '{\"alt\":\"%s\",\"tooltip\":\"mode: %s\"}' $(makoctl mode | grep -q 'dnd' && echo dnd || echo default) $(makoctl mode | tail -1)",
@@ -183,8 +183,9 @@
     },
 
     "custom/ftl": {
-        "format": "FTL |",
+        "format": "FTL <span color=\"#88c0d0\">|</span>",
         "on-click": "bash ~/.dotfiles/scripts/ftlbu.sh"
+
 
     }
 }
@@ -212,22 +213,22 @@
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "full": 100,
+            "meh": 80,
+            "mid": 50,
             "warning": 30,
             "critical": 15
         },
-        "format": "| {capacity}% {icon}",
-        "format-full": "| {capacity}% {icon}",
-        "format-charging": "| {capacity}% ",
-        "format-plugged": "| {capacity}% ",
-        "format-alt": "| {time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
+        "interval": 15,
+        "format": "%{capacity} {icon}",
+        "format-full": "%{capacity} {icon}",
+        "format-charging": "%{capacity}% ",
+        "format-plugged": "%{capacity}% ",
+        "format-alt": "{time} {icon}",
+        "format-good": "", // An empty format will hide the module
         "format-icons": ["", "", "", "", ""]
     },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
+1
     "power-profiles-daemon": {
       "format": "{icon}",
       "tooltip-format": "Power profile: {profile}\nDriver: {driver}",

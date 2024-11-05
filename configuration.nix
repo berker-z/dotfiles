@@ -202,6 +202,7 @@ enable = true;
   rclone
   nautilus
   godot_4
+  pavucontrol
 
   libnotify
   libsForQt5.qt5.qtwayland
