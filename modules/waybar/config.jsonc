@@ -196,11 +196,12 @@
             "warning": 30,
             "critical": 15
         },
+        "full-at": 80,
         "interval": 15,
-        "format": "| %{capacity} {icon}",
-        "format-full": "| %{capacity} {icon}",
-        "format-charging": "| %{capacity}% ",
-        "format-plugged": "| %{capacity}% ",
+        "format": "| {icon}  {capacity}%",
+        "format-full": "| {icon}  {capacity}% ",
+        "format-charging": "| {icon}  {capacity}% ",
+        "format-plugged": "| {icon}  {capacity}% ",
         "format-alt": "{time} {icon}",
         "format-good": "", // An empty format will hide the module
         "format-icons": ["", "", "", "", ""]
@@ -274,8 +275,8 @@
 "max": 100,
 "orientation": "horizontal",
 "scroll-step": 5,
-"on-click": "pavucontrol",
-"on-click-right": "pactl set-source-mute 0 toggle"
+
+"on-click-right": "pavucontrol"
 
 },
 
