@@ -47,7 +47,7 @@ steam
 brave
 libsForQt5.kolourpaint
 drawing
-
+libreoffice
 ];
 
 

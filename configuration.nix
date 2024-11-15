@@ -203,10 +203,10 @@ enable = true;
   nautilus
   godot_4
   pavucontrol
-
   libnotify
   libsForQt5.qt5.qtwayland
   egl-wayland
+  gfn-electron
   jdk
   ];
 
@@ -240,7 +240,7 @@ fonts.packages = with pkgs; [
     font-awesome
     noto-fonts
     liberation_ttf
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "Iosevka"  ]; })
 
@@ -313,7 +313,7 @@ programs.git = {
 
 
   nix = {
-	package = pkgs.nixFlakes;
+	package = pkgs.nixVersions.latest;
   extraOptions = "experimental-features = nix-command flakes";
   gc = {
     automatic = true;
