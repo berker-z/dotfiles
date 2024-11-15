@@ -185,7 +185,7 @@ enable = true;
   gh #think i need this for auth but i can't remember
   wget #self-ex
   vscode #
-  #xdg-desktop-portal #required #i guess not?
+  xdg-desktop-portal #required - i guess not?
   xdg-desktop-portal-hyprland #required
   #xdg-desktop-portal-gtk #this makes everything ugly
   xdg-utils #required
@@ -313,7 +313,7 @@ programs.git = {
 
 
   nix = {
-	package = pkgs.nixVersions.latest;
+	package = pkgs.nixVersions.git;
   extraOptions = "experimental-features = nix-command flakes";
   gc = {
     automatic = true;

@@ -229,7 +229,7 @@ programs.yazi =
 };
 
 services.gammastep = { #redshift
-  enable = true;
+  enable = false;
   provider = "manual";
   temperature.day = 5500;
   temperature.night = 3000;
