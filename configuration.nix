@@ -208,6 +208,9 @@ enable = true;
   egl-wayland
   gfn-electron
   jdk
+  #
+  nodejs
+  yarn
   ];
 
   programs.nautilus-open-any-terminal = 
@@ -313,7 +316,7 @@ programs.git = {
 
 
   nix = {
-	package = pkgs.nixVersions.latest;
+	package = pkgs.nix;
   extraOptions = "experimental-features = nix-command flakes";
   gc = {
     automatic = true;
