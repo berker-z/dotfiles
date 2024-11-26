@@ -164,6 +164,8 @@
 		"format": "{:%H:%M:%OS<span color=\"#88c0d0\"> | </span>%A, %d %B %G}",
     "interval": 1,
 		"tooltip": "false",
+        "on-click": "hyprctl clients | grep -q 'org.gnome.clocks' && pkill gnome-clocks || gnome-clocks &",
+
 //        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
   //      	"format-alt": "{:%d/%m/%Y}",
   //  "on-click-right": "bash ~/.config/rofi/calendar/calendar.sh",

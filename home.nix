@@ -48,6 +48,7 @@ brave
 libsForQt5.kolourpaint
 drawing
 libreoffice
+gnome-clocks
 ];
 
 
