@@ -18,6 +18,13 @@ hardware.graphics = {
 #  driSupport32Bit = true;  
 };
 
+
+environment.sessionVariables = {
+  
+  GSK_RENDERER = "ngl";
+};
+
+
 #20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
 
 networking.hostName = "laptop";

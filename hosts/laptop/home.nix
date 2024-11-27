@@ -19,6 +19,11 @@ wayland.windowManager.hyprland = {
     '';
    };
 
+home.sessionVariables = {
+  
+  GSK_RENDERER = "ngl";
+};
+
 programs.kitty = {
 
 settings = {
