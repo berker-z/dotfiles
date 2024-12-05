@@ -245,7 +245,8 @@ fonts.packages = with pkgs; [
     liberation_ttf
     noto-fonts-cjk-sans
     noto-fonts-emoji
-    (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "Iosevka"  ]; })
+    nerd-fonts.symbols-only
+    nerd-fonts.iosevka
 
 ];
 
