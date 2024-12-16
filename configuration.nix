@@ -211,6 +211,10 @@ enable = true;
   #
   nodejs
   yarn
+  code-cursor
+  #
+  solana-cli
+  anchor
   ];
 
   programs.nautilus-open-any-terminal = 

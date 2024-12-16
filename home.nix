@@ -133,9 +133,10 @@ services.hyprpaper = {
   splash_offset = 2.0;
 
   #preload = "~/.dotfiles/assets/lain.jpg";
-    preload = "~/.dotfiles/assets/squi.jpg";
+    preload = "~/.dotfiles/assets/adv.jpeg";
+    
 
-  wallpaper = ",~/.dotfiles/assets/squi.jpg";
+  wallpaper = ",~/.dotfiles/assets/adv.jpeg";
 };
 
 
