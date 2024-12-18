@@ -129,14 +129,14 @@ services.hyprpaper = {
   settings = 
   {
   ipc = "off";
-  splash = true;
+  splash = false;
   splash_offset = 2.0;
 
   #preload = "~/.dotfiles/assets/lain.jpg";
     preload = "~/.dotfiles/assets/adv.jpeg";
     
 
-  wallpaper = ",~/.dotfiles/assets/adv.jpeg";
+  wallpaper = "~/.dotfiles/assets/adv.jpeg";
 };
 
 
