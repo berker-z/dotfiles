@@ -64,6 +64,7 @@ boot.loader.efi = {
   time.timeZone = "Europe/Istanbul";
   # This is so windows doesn't shit the bed
   time.hardwareClockInLocalTime = true;
+  #some sync issues before hyprland launches
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -97,11 +98,12 @@ boot.loader.efi = {
   services.pipewire = {
   enable = true;
   alsa.enable = true;
+
   alsa.support32Bit = true;
   pulse.enable = true;
   wireplumber.enable = true;
 };
-
+  #hardware.alsa.enablePersistence = true;
 #keyring stuff?
 services.gnome.gnome-keyring.enable = true;
 
@@ -202,7 +204,6 @@ enable = true;
   rclone
   nautilus
   godot_4
-  pavucontrol
   libnotify
   libsForQt5.qt5.qtwayland
   egl-wayland
@@ -215,6 +216,10 @@ enable = true;
   #
   solana-cli
   anchor
+  alsa-utils
+
+  pavucontrol
+
   ];
 
   programs.nautilus-open-any-terminal = 
