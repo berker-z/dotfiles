@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, inputs, ... }:
 
 {
 
@@ -219,6 +219,8 @@ enable = true;
   alsa-utils
 
   pavucontrol
+  inputs.zen-browser.packages.${pkgs.system}.default
+
 
   ];
 
