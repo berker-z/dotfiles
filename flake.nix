@@ -46,6 +46,8 @@
           extraModules = [];
         };
         
+
+        
         laptop = mkSystem {
           hostName = "laptop";
           extraModules = [
