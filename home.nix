@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, osConfig
-, ...
+{
+  config,
+  pkgs,
+  osConfig,
+  ...
 }: {
   imports = [
     ./modules
@@ -75,7 +76,7 @@
     xwayland.enable = true;
     systemd.enableXdgAutostart = true;
     systemd.enable = true;
-    systemd.variables = [ "--all" ];
+    systemd.variables = ["--all"];
     extraConfig = ''
       ${builtins.readFile ./modules/hypr/hyprland.conf}
     '';
@@ -158,15 +159,15 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
-      "image/*" = [ "feh.desktop" ];
-      "application/pdf" = [ "sioyek.desktop" ];
-      "application/epub+zip" = [ "com.github.johnfactotum.Foliate.desktop" ];
-      "video/*" = [ "vlc.desktop" ];
-      "audio/*" = [ "vlc.desktop" ];
-      "x-scheme-handler/http" = [ "vivaldi-stable.desktop" ];
-      "x-scheme-handler/https" = [ "vivaldi-stable.desktop" ];
-      "text/html" = [ "vivaldi-stable.desktop" ];
+      "inode/directory" = ["org.gnome.Nautilus.desktop"];
+      "image/*" = ["feh.desktop"];
+      "application/pdf" = ["sioyek.desktop"];
+      "application/epub+zip" = ["com.github.johnfactotum.Foliate.desktop"];
+      "video/*" = ["vlc.desktop"];
+      "audio/*" = ["vlc.desktop"];
+      "x-scheme-handler/http" = ["vivaldi-stable.desktop"];
+      "x-scheme-handler/https" = ["vivaldi-stable.desktop"];
+      "text/html" = ["vivaldi-stable.desktop"];
     };
   };
 
