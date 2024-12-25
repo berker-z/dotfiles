@@ -1,4 +1,8 @@
-{ pkgs, inputs, ... }: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     git
     gh #think i need this for auth but i can't remember
@@ -19,7 +23,7 @@
     libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
     ntfs3g
     rclone
-    nautilus
+
     godot_4
     libnotify
     libsForQt5.qt5.qtwayland
@@ -45,7 +49,11 @@
     pavucontrol
     inputs.zen-browser.packages.${pkgs.system}.default
     dex
-
-    xfce.thunar
+    zenity
+    thunderbird
+    nemo-with-extensions
+    nautilus
+    btop
+    inputs.hyprland-qtutils.packages.${pkgs.system}.default
   ];
 }

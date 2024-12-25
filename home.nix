@@ -28,7 +28,6 @@
     pinta #paint kind of
     foliate #ebook reader
     swaylock-effects # i hated hyprlock
-    floorp #browser
     vivaldi #like this these days
     vivaldi-ffmpeg-codecs
     vlc #media player
@@ -160,14 +159,17 @@
     enable = true;
     defaultApplications = {
       "inode/directory" = ["org.gnome.Nautilus.desktop"];
-      "image/*" = ["feh.desktop"];
+      "image/png" = ["feh.desktop"];
+      "image/jpeg" = ["feh.desktop"];
+      "image/jpg" = ["feh.desktop"];
+      "image/gif" = ["feh.desktop"];
+      "image/bmp" = ["feh.desktop"];
+      "image/tiff" = ["feh.desktop"];
+      "image/webp" = ["feh.desktop"];
       "application/pdf" = ["sioyek.desktop"];
       "application/epub+zip" = ["com.github.johnfactotum.Foliate.desktop"];
       "video/*" = ["vlc.desktop"];
       "audio/*" = ["vlc.desktop"];
-      "x-scheme-handler/http" = ["vivaldi-stable.desktop"];
-      "x-scheme-handler/https" = ["vivaldi-stable.desktop"];
-      "text/html" = ["vivaldi-stable.desktop"];
     };
   };
 

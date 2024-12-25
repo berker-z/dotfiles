@@ -8,7 +8,7 @@
     zen-browser.url = "github:berker-z/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     sddm-sugar-candy-nix.url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
-
+    hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
     home-manager = {
       url = "github:nix-community/home-manager?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,6 +18,7 @@
   outputs = inputs @ {
     self,
     nixpkgs,
+    hyprland-qtutils,
     home-manager,
     nixos-hardware,
     sddm-sugar-candy-nix,
@@ -45,7 +46,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backurpsz";
+              home-manager.backupFileExtension = "backup12";
               home-manager.users.berkerz = import ./home.nix;
             }
           ]

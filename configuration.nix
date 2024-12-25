@@ -1,11 +1,12 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ lib
-, config
-, pkgs
-, inputs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
 }: {
   imports = [
     ./rclone.nix
@@ -38,7 +39,7 @@
   };
   boot.loader.grub = {
     enable = true;
-    devices = [ "nodev" ];
+    devices = ["nodev"];
     useOSProber = true;
     efiSupport = true;
 
@@ -109,9 +110,9 @@
     isNormalUser = true;
     shell = pkgs.fish;
     description = "berkerz";
-    extraGroups = [ "networkmanager" "sound" "wheel" ];
+    extraGroups = ["networkmanager" "sound" "wheel"];
     initialPassword = "1234";
-    packages = with pkgs; [ ];
+    packages = with pkgs; [];
   };
 
   # Allow unfree packages
@@ -136,7 +137,7 @@
   };
 
   #swaylock fucks up without this i think
-  security.pam.services.swaylock = { };
+  security.pam.services.swaylock = {};
 
   #sddm?
   services.displayManager.sddm = {
@@ -161,7 +162,7 @@
   #not sure why i need this but i see it around a lot
   programs.waybar = {
     package = pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
     });
   };
 
@@ -269,9 +270,9 @@
     };
 
     defaultFonts = {
-      monospace = [ "Iosevka Nerd Font" "Noto Color Emoji" "Font Awesome" ];
-      sansSerif = [ "Liberation Sans" "Noto Color Emoji" "Font Awesome" ];
-      serif = [ "Liberation Serif" "Noto Color Emoji" "Font Awesome" ];
+      monospace = ["Iosevka Nerd Font" "Noto Color Emoji" "Font Awesome"];
+      sansSerif = ["Liberation Sans" "Noto Color Emoji" "Font Awesome"];
+      serif = ["Liberation Serif" "Noto Color Emoji" "Font Awesome"];
     };
   };
 
