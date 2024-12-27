@@ -114,8 +114,8 @@
       ipc = "off";
       splash = false;
       splash_offset = 2.0;
-      preload = "~/.dotfiles/assets/squi.jpg";
-      wallpaper = ",~/.dotfiles/assets/squi.jpg";
+      preload = "~/.dotfiles/assets/aur.jpg";
+      wallpaper = ",~/.dotfiles/assets/aur.jpg";
     };
   };
 
