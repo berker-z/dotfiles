@@ -171,6 +171,12 @@
       "video/*" = ["vlc.desktop"];
       "audio/*" = ["vlc.desktop"];
     };
+
+    associations.added = {
+      "x-scheme-handler/appflowy-flutter" = "appflowy.desktop";
+      "x-scheme-handler/appflowy" = "appflowy.desktop";
+      "x-scheme-handler/appflowy-desktop" = "appflowy.desktop";
+    };
   };
 
   programs.kitty = {

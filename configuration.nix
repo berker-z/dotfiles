@@ -238,12 +238,6 @@
   # this is for trashcan i think
   services.gvfs.enable = true;
 
-  xdg.mime.enable = true;
-  xdg.mime.addedAssociations = {
-    "x-scheme-handler/appflowy-flutter" = "appflowy.desktop";
-    "x-scheme-handler/appflowy" = "appflowy.desktop";
-    "x-scheme-handler/appflowy-desktop" = "appflowy.desktop";
-  };
   # Fonts here
 
   fonts.packages = with pkgs; [
