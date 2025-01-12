@@ -45,6 +45,7 @@
     libreoffice
     gnome-clocks
     libsForQt5.breeze-icons
+    stremio
   ];
 
   services.mako = {
@@ -170,6 +171,9 @@
       "application/epub+zip" = ["com.github.johnfactotum.Foliate.desktop"];
       "video/*" = ["vlc.desktop"];
       "audio/*" = ["vlc.desktop"];
+      "x-scheme-handler/http" = "zen.desktop"; # Replace with the actual file name
+      "x-scheme-handler/https" = "zen.desktop"; # Replace with the actual file name
+      "text/html" = "zen.desktop";
     };
 
     associations.added = {
