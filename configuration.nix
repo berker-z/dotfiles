@@ -9,7 +9,7 @@
   ...
 }: {
   imports = [
-    ./rclone.nix
+    # ./rclone.nix
     ./packages.nix
   ];
 
