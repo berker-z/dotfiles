@@ -46,7 +46,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup12345";
+              home-manager.backupFileExtension = "backup123456";
               home-manager.users.berkerz = import ./home.nix;
             }
           ]

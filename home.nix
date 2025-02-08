@@ -126,8 +126,11 @@
     # font.size = 12;
     theme = {
       name = "Nordic";
-      package = pkgs.nordic;
+      package = pkgs.nordic.overrideAttrs {
+        dontCheckForBrokenSymlinks = true;
+      };
     };
+
     iconTheme = {
       name = "Nordzy";
       package = pkgs.nordzy-icon-theme;

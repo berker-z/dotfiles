@@ -39,7 +39,9 @@
     anchor
     alsa-utils
     libsForQt5.kontact
-    nordic
+    # (nordic.overrideAttrs {
+    #   dontCheckForBrokenSymlinks = true;
+    # })
 
     alejandra
     nixd
@@ -55,5 +57,9 @@
     nautilus
     btop
     inputs.hyprland-qtutils.packages.${pkgs.system}.default
+
+    dig
+    whois
+    dnsutils
   ];
 }
