@@ -39,9 +39,9 @@
     anchor
     alsa-utils
     libsForQt5.kontact
-    # (nordic.overrideAttrs {
-    #   dontCheckForBrokenSymlinks = true;
-    # })
+    (nordic.overrideAttrs {
+      dontCheckForBrokenSymlinks = true;
+    })
 
     alejandra
     nixd

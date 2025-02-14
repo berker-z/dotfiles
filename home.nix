@@ -45,7 +45,6 @@
     libreoffice
     gnome-clocks
     libsForQt5.breeze-icons
-    stremio
   ];
 
   services.mako = {
