@@ -270,6 +270,13 @@
     };
   };
 
+  services.cron = {
+    enable = true;
+    systemCronJobs = [
+      "*/1 * * * * root ~/Projects/swast/ye.sh"
+    ];
+  };
+
   fonts.fontDir = {
     enable = true;
     decompressFonts = true;

@@ -62,6 +62,5 @@
     whois
     dnsutils
 
-    cron
   ];
 }
