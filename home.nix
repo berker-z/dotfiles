@@ -60,6 +60,9 @@
     extraConfig = ''
       [mode=dnd]
       invisible=1
+
+      [urgency=critical]
+      default-timeout=0
     '';
   };
 

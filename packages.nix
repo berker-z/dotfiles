@@ -61,5 +61,7 @@
     dig
     whois
     dnsutils
+
+    cron
   ];
 }
