@@ -61,6 +61,8 @@
     dig
     whois
     dnsutils
-
+    #
+    yt-dlp
+    ffmpeg
   ];
 }
