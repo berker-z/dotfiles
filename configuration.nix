@@ -11,6 +11,7 @@
   imports = [
     # ./rclone.nix
     ./packages.nix
+    ./wireguard.nix
   ];
 
   environment = {
@@ -55,6 +56,14 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.wireguard.enable = true;
+
+  ##### DNS STUFF
+  systemd.services."systemd-resolved".enable = false;
+  # Enable the DNS stub resolver
+  networking.resolvconf.enable = false;
+  # Specify DNS servers for your system
+  networking.nameservers = ["1.1.1.1" "8.8.8.8"];
 
   # Set your time zone.
   time.timeZone = "Europe/Istanbul";
@@ -96,14 +105,15 @@
 
   #sound stuff
   security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-
     alsa.support32Bit = true;
     pulse.enable = true;
     wireplumber.enable = true;
   };
+
   #hardware.alsa.enablePersistence = true;
 
   users.users.berkerz = {

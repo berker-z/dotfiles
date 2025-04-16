@@ -64,5 +64,8 @@
     #
     yt-dlp
     ffmpeg
+    wireguard-tools
+    qrencode
+    polkit_gnome
   ];
 }
