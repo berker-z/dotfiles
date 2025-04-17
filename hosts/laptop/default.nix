@@ -25,6 +25,8 @@
 
   #20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
 
+  systemd.services."nvidia-powerd".enable = false;
+
   networking.hostName = "laptop";
   hardware.nvidia = {
     # Enable modesetting for Wayland compositors (hyprland)
