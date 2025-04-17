@@ -2,15 +2,23 @@
   pkgs,
   inputs,
   lib,
+  config,
   ...
-}: {
+}: let
+  address =
+    if config.networking.hostName == "laptop"
+    then "10.100.100.8/24"
+    else if config.networking.hostName == "nixos"
+    then "10.100.100.2/24"
+    else throw "unknown host for wireguard ip assignment: ${config.networking.hostName}";
+in {
   networking.firewall.allowedUDPPorts = [51820];
 
   networking.networkmanager.unmanaged = ["interface-name:wg0"];
+
   networking.wg-quick.interfaces.wg0 = {
     listenPort = 51820;
-    address = ["10.100.100.2/24"];
-    #dns = ["1.1.1.1" "8.8.8.8"];
+    address = [address];
     privateKeyFile = "/home/berkerz/.wg/client-private.key";
 
     peers = [
@@ -22,12 +30,9 @@
       }
     ];
 
-    # optional but smart
     table = "auto";
-    # fwmark = 51820;
   };
 
-  # system tweaks (already present afaik but confirm)
   boot.kernel.sysctl."net.ipv4.conf.all.src_valid_mark" = true;
   networking.firewall.checkReversePath = false;
 
