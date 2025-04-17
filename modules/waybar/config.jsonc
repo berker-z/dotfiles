@@ -191,8 +191,8 @@
   "return-type": "json",
   "format": " {}{icon}  <span color=\"#88c0d0\">| </span>",
   "format-icons": {
-    "off": "",  // vpn off icon
-    "on":  ""   // vpn on icon
+    "off": "",  // vpn off icon
+    "on":  ""   // vpn on icon
   },
   "exec": "systemctl is-active wg-quick-wg0.service >/dev/null && echo '{\"alt\": \"on\", \"tooltip\": \"VPN is ON\"}' || echo '{\"alt\": \"off\", \"tooltip\": \"VPN is OFF\"}'",
 "on-click": "bash -c 'if systemctl is-active --quiet wg-quick-wg0.service; then pkexec systemctl stop wg-quick-wg0.service; else pkexec systemctl start wg-quick-wg0.service; fi'"
