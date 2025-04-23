@@ -220,7 +220,7 @@
 
   services.gammastep = {
     #redshift
-    enable = false;
+    enable = true;
     provider = "manual";
     temperature.day = 5500;
     temperature.night = 3000;

@@ -10,19 +10,19 @@
     vscode #
     xdg-desktop-portal #required - i guess not?
     xdg-desktop-portal-hyprland #required
-    xdg-desktop-portal-gtk # Uncomment this
+    xdg-desktop-portal-gtk #i just fucking hate these idk i have all of them
     xdg-utils #required
     fzf
-    tlrc
-    obsidian
+    tlrc #tldr
+    obsidian #it ok
     neovim
     gimp
     networkmanagerapplet
     nix-prefetch
     nix-prefetch-git
     libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
-    ntfs3g
-    rclone
+    ntfs3g #i think this was for trashcan or usb sticks i can't remember
+    rclone #this *was* for gdrive but it's clunky i don't like it
 
     godot_4
     libnotify
@@ -33,7 +33,6 @@
     #
     nodejs
     yarn
-    code-cursor
     #
     solana-cli
     anchor
@@ -43,6 +42,7 @@
       dontCheckForBrokenSymlinks = true;
     })
 
+    #nix formatting stuff i think it's a little redundant but w.e
     alejandra
     nixd
     nixpkgs-fmt
@@ -57,7 +57,7 @@
     nautilus
     btop
     inputs.hyprland-qtutils.packages.${pkgs.system}.default
-
+    #i need these like once a year but it sucks when i don't have them
     dig
     whois
     dnsutils
@@ -65,7 +65,16 @@
     yt-dlp
     ffmpeg
     wireguard-tools
-    qrencode
+    qrencode #it's cute and lightweight
     polkit_gnome
+    libresprite #asprite
+    satty #ss tool, i'm gonna have to see how it works
+
+    code-cursor #about to get rid of this bloated bullshit
+    lxappearance #let's see
+    grim
+    slurp
+    wl-clipboard
+    clipman
   ];
 }

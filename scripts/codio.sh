@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-(cd /home/berkerz/.dotfiles && cursor .) &
+(cd /home/berkerz/.dotfiles && code .) &
 disown
