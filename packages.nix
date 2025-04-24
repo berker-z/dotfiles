@@ -70,11 +70,11 @@
     libresprite #asprite
     satty #ss tool, i'm gonna have to see how it works
 
-    code-cursor #about to get rid of this bloated bullshit
-    lxappearance #let's see
     grim
     slurp
     wl-clipboard
     clipman
+    beeper
+    pulseaudio
   ];
 }
