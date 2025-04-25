@@ -23,7 +23,7 @@
       XDG_SESSION_DESKTOP = "Hyprland";
       XDG_SESSION_TYPE = "wayland";
       GTK_USE_PORTAL = "1";
-      GTK_THEME = "Nordic";
+      #GTK_THEME = "Nordic";
       NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
       WLR_NO_HARDWARE_CURSORS = "1"; # Fix cursor rendering issue on wlr nvidia.
       QT_QPA_PLATFORM = "wayland"; # Ensures Qt apps run under Wayland
