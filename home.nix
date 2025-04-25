@@ -125,10 +125,10 @@
     enable = true;
     # font.name = "Iosevka Nerd Font";
     # font.size = 12;
-    #theme = {
-     # name = "Nordic";
-     # package = pkgs.nordic;
-    #};
+    theme = {
+   name = "Nordic";
+   package = pkgs.nordic;
+  };
 
     iconTheme = {
       name = "Nordzy";
@@ -150,15 +150,8 @@
     gtk.enable = true;
   };
 
-#have to do it like this because the nixpkgs nordic maintainer is a retard
-
-home.file.".config/gtk-3.0/gtk.css".source = ./themes/Nordic/gtk-3.0/gtk.css;
-home.file.".config/gtk-3.0/gtk-dark.css".source = ./themes/Nordic/gtk-3.0/gtk-dark.css;
-
-home.file.".config/gtk-4.0/gtk.css".source = ./themes/Nordic/gtk-4.0/gtk.css;
-home.file.".config/gtk-4.0/gtk-dark.css".source = ./themes/Nordic/gtk-4.0/gtk-dark.css;
-
-home.file.".config/assets".source = ./themes/Nordic/assets;
+#this one line fixes libadwaita theming for Nordic. all the gtk.css files already import from the store but the assets weren't symlinking to .config/
+home.file.".config/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
 
 qt = {
   enable = true;
