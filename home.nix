@@ -34,7 +34,6 @@
     deluge #torrent client
     appflowy #you kinda need to fuck with mime apps for this appflowy.flutter > appflowy.desktop iirc
     libsForQt5.qtstyleplugins #qt theming
-    libsForQt5.qt5ct
     libsForQt5.qtstyleplugin-kvantum
     telegram-desktop #web client sucks
     feh #picture viewer
@@ -153,13 +152,12 @@
     gtk.enable = true;
   };
 
-  qt = {
-    enable = true;
-    platformTheme.name = "qt5ct";
-    #style = {
-    #   name = "kvantum";
-    #};
-  };
+qt = {
+  enable = true;
+  platformTheme.name = "kvantum";
+  style.name = "kvantum";
+};
+
 
   xdg.mimeApps = {
     enable = true;
@@ -266,10 +264,14 @@
 
   programs.home-manager.enable = true;
 
-  home.sessionVariables = {
-    QT_QPA_PLATFORMTHEME = "qt5ct";
-    #  GDK_SCALE = "1"; # Adjust this value (1, 1.25, 1.5, 2, etc.)
-    # GDK_DPI_SCALE = "1";
-    # QT_STYLE_OVERRIDE = "kvantum";
-  };
+
+home.sessionVariables = {
+  QT_QPA_PLATFORMTHEME = "kvantum";
+  QT_STYLE_OVERRIDE = "kvantum";
+};
+xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+[General]
+theme=KvArcDark
+'';
+
 }
