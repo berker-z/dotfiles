@@ -15,7 +15,6 @@
     fzf
     tlrc #tldr
     obsidian #it ok
-    neovim
     gimp
     networkmanagerapplet
     nix-prefetch
@@ -76,5 +75,13 @@
     clipman
     beeper
     pulseaudio
+    xfce.mousepad
+    
+    imv
+    #
+    stremio
+
+ # basic dev
+  rustc
   ];
 }

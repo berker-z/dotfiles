@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    #zen-browser.url = "github:youwen5/zen-browser-flake";
     zen-browser.url = "github:berker-z/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     sddm-sugar-candy-nix.url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
@@ -13,6 +12,12 @@
       url = "github:nix-community/home-manager?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+  url = "github:nix-community/nixvim?ref=master";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+
+
   };
 
   outputs = inputs @ {
@@ -23,6 +28,7 @@
     nixos-hardware,
     sddm-sugar-candy-nix,
     zen-browser,
+    nixvim,
     ...
   }: let
     mkSystem = {
@@ -31,7 +37,7 @@
     }:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
+        specialArgs = { inherit inputs; };
         modules =
           [
             sddm-sugar-candy-nix.nixosModules.default
@@ -48,6 +54,9 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup123456789";
               home-manager.users.berkerz = import ./home.nix;
+              home-manager.sharedModules = [
+              nixvim.homeManagerModules.nixvim
+            ];
             }
           ]
           ++ extraModules;
@@ -66,5 +75,39 @@
         ];
       };
     };
+
+    devShells = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+        myBuildInputs = with pkgs; [
+          rustc
+          cargo
+          gcc
+          clang
+          pkg-config
+          cmake
+
+          expat
+          fontconfig
+          freetype
+          freetype.dev
+          libGL
+          vulkan-loader
+
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          xorg.libXrandr
+          wayland
+          libxkbcommon
+        ];
+      in {
+        rusticed = pkgs.mkShell {
+          buildInputs = myBuildInputs;
+
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath myBuildInputs;
+        };
+      }
+    );
   };
 }

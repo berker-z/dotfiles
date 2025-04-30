@@ -9,6 +9,7 @@
   imports = [
 
     ./fuzzel
+    ./nixvim.nix
 
   ];
 
