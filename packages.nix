@@ -22,7 +22,7 @@
     libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
     ntfs3g #i think this was for trashcan or usb sticks i can't remember
     rclone #this *was* for gdrive but it's clunky i don't like it
-
+    #sometihng
     godot_4
     libnotify
     libsForQt5.qt5.qtwayland
@@ -83,5 +83,7 @@
 
  # basic dev
   rustc
+  gcc
+  clang
   ];
 }

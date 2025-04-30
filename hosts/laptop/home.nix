@@ -27,7 +27,7 @@ home.sessionVariables = {
 programs.kitty = {
 
 settings = {
-font_size = 12;
+font_size = 14;
 };
 };
 
