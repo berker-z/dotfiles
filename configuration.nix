@@ -286,7 +286,7 @@
 
   #for STEAM to work
   hardware.graphics.enable32Bit = true;
-  hardware.pulseaudio.support32Bit = true;
+  services.pulseaudio.support32Bit = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

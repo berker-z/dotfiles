@@ -76,7 +76,7 @@
     beeper
     pulseaudio
     xfce.mousepad
-    
+    bluetuith
     imv
     #
     stremio
@@ -85,5 +85,18 @@
   rustc
   gcc
   clang
+
+
+   # language servers
+  nodePackages.typescript
+  nodePackages."typescript-language-server"
+  nodePackages.eslint
+  nodePackages."bash-language-server"
+  lua-language-server
+  nodePackages.prettier
+  rustfmt
+  nixfmt-rfc-style
+  stylua
+  ripgrep
   ];
 }

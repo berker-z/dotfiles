@@ -10,6 +10,7 @@
 
     ./fuzzel
     ./nixvim.nix
+    ./avante.nix
 
   ];
 
