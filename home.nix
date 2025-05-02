@@ -126,9 +126,9 @@
     # font.name = "Iosevka Nerd Font";
     # font.size = 12;
     theme = {
-   name = "Nordic";
-   package = pkgs.nordic;
-  };
+      name = "Nordic";
+      package = pkgs.nordic;
+    };
 
     iconTheme = {
       name = "Nordzy";
@@ -150,15 +150,14 @@
     gtk.enable = true;
   };
 
-#this one line fixes libadwaita theming for Nordic. all the gtk.css files already import from the store but the assets weren't symlinking to .config/
-home.file.".config/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
+  #this one line fixes libadwaita theming for Nordic. all the gtk.css files already import from the store but the assets weren't symlinking to .config/
+  home.file.".config/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
 
-qt = {
-  enable = true;
-  platformTheme.name = "kvantum";
-  style.name = "kvantum";
-};
-
+  qt = {
+    enable = true;
+    platformTheme.name = "kvantum";
+    style.name = "kvantum";
+  };
 
   xdg.mimeApps = {
     enable = true;
@@ -266,39 +265,38 @@ qt = {
 
   programs.home-manager.enable = true;
 
-home.sessionVariables = {
-  # Wayland and XDG session info
-  XDG_SESSION_TYPE = "wayland"; # specify that this is a wayland session
-  XDG_CURRENT_DESKTOP = "Hyprland"; # set the current desktop environment name
-  XDG_SESSION_DESKTOP = "Hyprland"; # set the session desktop name (redundant but some apps check both)
+  home.sessionVariables = {
+    # Wayland and XDG session info
+    XDG_SESSION_TYPE = "wayland"; # specify that this is a wayland session
+    XDG_CURRENT_DESKTOP = "Hyprland"; # set the current desktop environment name
+    XDG_SESSION_DESKTOP = "Hyprland"; # set the session desktop name (redundant but some apps check both)
 
-  # GTK and portals
-  GTK_USE_PORTAL = "1"; # enable portal interfaces for file pickers etc
+    # GTK and portals
+    GTK_USE_PORTAL = "1"; # enable portal interfaces for file pickers etc
 
-  # QT settings
-  QT_QPA_PLATFORM = "wayland"; # make qt apps use wayland backend
-  QT_QPA_PLATFORMTHEME = "kvantum"; # platform theme for qt (currently kvantum)
-  QT_STYLE_OVERRIDE = "kvantum"; # enforce kvantum styling
-  QT_WAYLAND_DISABLE_WINDOWDECORATION = "1"; # avoid double window borders in qt apps
+    # QT settings
+    QT_QPA_PLATFORM = "wayland"; # make qt apps use wayland backend
+    QT_QPA_PLATFORMTHEME = "kvantum"; # platform theme for qt (currently kvantum)
+    QT_STYLE_OVERRIDE = "kvantum"; # enforce kvantum styling
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = "1"; # avoid double window borders in qt apps
 
-  # Hyprland-specific cursor settings
-  XCURSOR_SIZE = "24"; # cursor size for wayland + x11 apps
-  HYPRCURSOR_SIZE = "24"; # hyprland-specific cursor size
+    # Hyprland-specific cursor settings
+    XCURSOR_SIZE = "24"; # cursor size for wayland + x11 apps
+    HYPRCURSOR_SIZE = "24"; # hyprland-specific cursor size
 
-  # Misc GUI frameworks
-  CLUTTER_BACKEND = "wayland"; # ensure clutter apps (like some gnome stuff) use wayland
-  GDK_BACKEND = "wayland,x11,*"; # gtk apps should prefer wayland backend
+    # Misc GUI frameworks
+    CLUTTER_BACKEND = "wayland"; # ensure clutter apps (like some gnome stuff) use wayland
+    GDK_BACKEND = "wayland,x11,*"; # gtk apps should prefer wayland backend
 
-  # Electron / Chromium based apps
-  NIXOS_OZONE_WL = "1"; # enable wayland backend for electron apps (vivaldi, brave, etc.)
+    # Electron / Chromium based apps
+    NIXOS_OZONE_WL = "1"; # enable wayland backend for electron apps (vivaldi, brave, etc.)
 
-  # WLR tweaks
-  WLR_NO_HARDWARE_CURSORS = "1"; # software cursor fallback, mostly important for nvidia cards
-};
+    # WLR tweaks
+    WLR_NO_HARDWARE_CURSORS = "1"; # software cursor fallback, mostly important for nvidia cards
+  };
 
-xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
-[General]
-theme=KvArcDark
-'';
-
+  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+    [General]
+    theme=KvArcDark
+  '';
 }

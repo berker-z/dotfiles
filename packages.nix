@@ -80,7 +80,8 @@
     imv
     #
     stremio
-
+    ags
+    gcalcli
  # basic dev
   rustc
   gcc
