@@ -48,27 +48,23 @@
 
   services.mako = {
     enable = true;
-    defaultTimeout = 2500;
-    font = "monospace 11";
-    anchor = "bottom-right";
-    margin = "10";
-    borderRadius = 10;
-    borderSize = 1;
-    borderColor = "#88c0d0";
-    backgroundColor = "#2e3440";
-    extraConfig = ''
-      [mode=dnd]
-      invisible=1
-
-      [urgency=critical]
-      default-timeout=0
-    '';
-  };
-
-  programs.sioyek = {
-    enable = true;
-    config = {
-      "background_color" = "0.18 0.20 0.25";
+    settings = {
+      default-timeout = 2500;
+      font = "monospace 11";
+      anchor = "bottom-right";
+      margin = "10";
+      border-radius = "10";
+      border-size = "1";
+      border-color = "#88c0d0";
+      background-color = "#2e3440";
+    };
+    criteria = {
+      "mode=dnd" = {
+        invisible = "1";
+      };
+      "urgency=critical" = {
+        default-timeout = "0";
+      };
     };
   };
 

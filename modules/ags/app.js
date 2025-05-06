@@ -48,8 +48,8 @@ App.start({
     );
   },
   css: `
-    window.control { background: #2e3440; border-radius: 12px; border: 1px solid #88c0d0; }
-    label          { color: #d8dee9; font-family: "Iosevka Nerd Font"; padding: 8px; }
+    window.control { background: #2e3440; border-radius: 12px; border: 1px solid #88c0d0; font-family: "Iosevka Nerd Font";}
+    label          { color: #d8dee9;  padding: 8px; }
     button         { padding: 4px 8px; border-radius: 6px; }
   `,
 });

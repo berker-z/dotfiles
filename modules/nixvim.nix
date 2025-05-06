@@ -6,6 +6,26 @@
     globals.mapleader = " ";
     colorschemes.nord.enable = true;
 
+    extraConfigLua = ''
+      vim.api.nvim_set_hl(0, "LspInlayHint", {
+        fg = "#81A1C1",
+        bg = "#2E3440",
+        italic = true
+      })
+
+      vim.g.rustaceanvim = {
+        tools = {
+          inlay_hints = {
+            auto = true,
+            only_current_line = false,
+            show_parameter_hints = true,
+            parameter_hints_prefix = "<- ",
+            other_hints_prefix = "=> ",
+          },
+        },
+      }
+    '';
+
     opts = {
       mouse = "a";
       clipboard = "unnamed,unnamedplus";
@@ -24,6 +44,13 @@
         action = "<cmd>Telescope find_files<cr>";
         options.desc = "find files";
       }
+      {
+        mode = "n";
+        key = "<leader>xx";
+        action = "<cmd>Telescope diagnostics<cr>";
+        options.desc = "diagnostics (Telescope)";
+      }
+
       {
         mode = "n";
         key = "<leader>fg";
@@ -81,6 +108,46 @@
           "bash"
         ];
       };
+      toggleterm = {
+        enable = true;
+        settings = {
+          open_mapping = "[[<c-n>]]";
+          direction = "float";
+          float_opts = {
+            border = "curved";
+          };
+          shade_terminals = true;
+          start_in_insert = true;
+          persist_size = true;
+        };
+      };
+
+      rustaceanvim = {
+        enable = true;
+        settings = {
+          server = {
+            on_attach = ''
+              function(client, bufnr)
+                vim.lsp.inlay_hint.enable(bufnr, true)
+              end
+            '';
+            default_settings = {
+              rust-analyzer = {
+                installCargo = false;
+                installRustc = false;
+                cargo = {
+                  allFeatures = true;
+                  features = "all";
+                };
+                check = {
+                  allFeatures = true;
+                  command = "clippy";
+                };
+              };
+            };
+          };
+        };
+      };
 
       lsp = {
         enable = true;
@@ -93,11 +160,11 @@
           lua_ls.enable = true;
           bashls.enable = true;
 
-          rust_analyzer = {
-            enable = true;
-            installCargo = false;
-            installRustc = false;
-          };
+          #rust_analyzer = {
+          #  enable = true;
+          #  installCargo = false;
+          #  installRustc = false;
+          #};
 
           gdscript = {
             enable = true;
@@ -115,6 +182,12 @@
           {name = "path";}
           {name = "luasnip";}
         ];
+        settings.mapping = {
+          "<Tab>" = "cmp.mapping.select_next_item()";
+          "<S-Tab>" = "cmp.mapping.select_prev_item()";
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+          "<C-Space>" = "cmp.mapping.complete()";
+        };
       };
 
       luasnip.enable = true;
@@ -145,12 +218,17 @@
       # file tree (without deprecated setup flags)
       nvim-tree = {
         enable = true;
+        openOnSetup = true;
+        openOnSetupFile = true;
+        autoReloadOnWrite = true;
+        disableNetrw = true;
+        hijackNetrw = true;
 
         # keep sidebar in sync with the buffer you’re editing
-        #updateFocusedFile = {
-        #  enable    = true;
-        #  updateCwd = true;
-        #};
+        updateFocusedFile = {
+          enable = true;
+          updateRoot = true;
+        };
 
         # collapse dir/with/single/child into one node
         renderer = {

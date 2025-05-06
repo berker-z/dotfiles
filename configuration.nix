@@ -127,6 +127,8 @@
       rclio = "bash ~/.dotfiles/scripts/rclone.sh";
       ftlbu = "bash ~/.dotfiles/scripts/ftlbu.sh";
       cod = "bash ~/.dotfiles/scripts/codio.sh";
+      rsh = "nix develop ~/.dotfiles#rusticed --command fish";
+
     };
   };
 

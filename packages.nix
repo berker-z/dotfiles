@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   inputs,
   ...
@@ -82,22 +83,29 @@
     stremio
     ags
     gcalcli
- # basic dev
-  rustc
-  gcc
-  clang
 
+    #vim stuff
+    # language servers
+    nodePackages.typescript
+    nodePackages."typescript-language-server"
+    nodePackages.eslint
+    nodePackages."bash-language-server"
+    lua-language-server
+    nodePackages.prettier
+    rustfmt
+    nixfmt-rfc-style
+    stylua
+    ripgrep
 
-   # language servers
-  nodePackages.typescript
-  nodePackages."typescript-language-server"
-  nodePackages.eslint
-  nodePackages."bash-language-server"
-  lua-language-server
-  nodePackages.prettier
-  rustfmt
-  nixfmt-rfc-style
-  stylua
-  ripgrep
+    # basic dev deps
+    pkg-config
+    openssl
+    cmake
+    gcc
+    clang
+    (rust-bin.stable.latest.default.override {
+      extensions = ["rust-src"];
+    })
+    rust-analyzer
   ];
 }

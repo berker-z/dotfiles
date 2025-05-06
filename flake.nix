@@ -13,11 +13,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-  url = "github:nix-community/nixvim";
-  inputs.nixpkgs.follows = "nixpkgs";
-};
-
-
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
   outputs = inputs @ {
@@ -29,15 +28,23 @@
     sddm-sugar-candy-nix,
     zen-browser,
     nixvim,
+    rust-overlay,
     ...
   }: let
+    overlayedPkgs = import nixpkgs {
+      system = "x86_64-linux";
+      overlays = [
+        rust-overlay.overlays.default
+      ];
+    };
+
     mkSystem = {
       hostName,
       extraModules ? [],
     }:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
+        specialArgs = {inherit inputs;};
         modules =
           [
             sddm-sugar-candy-nix.nixosModules.default
@@ -46,6 +53,7 @@
             {
               nixpkgs.overlays = [
                 sddm-sugar-candy-nix.overlays.default
+                rust-overlay.overlays.default
               ];
             }
             home-manager.nixosModules.home-manager
@@ -55,8 +63,8 @@
               home-manager.backupFileExtension = "backup123456789";
               home-manager.users.berkerz = import ./home.nix;
               home-manager.sharedModules = [
-              nixvim.homeManagerModules.nixvim
-            ];
+                nixvim.homeManagerModules.nixvim
+              ];
             }
           ]
           ++ extraModules;
@@ -76,11 +84,14 @@
       };
     };
 
-    devShells = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system:
-      let
-        pkgs = import nixpkgs { inherit system; };
+    devShells = nixpkgs.lib.genAttrs ["x86_64-linux"] (
+      system: let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [rust-overlay.overlays.default];
+        };
         myBuildInputs = with pkgs; [
-          rustc
+          (rust-bin.stable.latest.default.override {extensions = ["rust-src"];})
           cargo
           gcc
           clang
