@@ -12,6 +12,13 @@
   # Allow unfree packages
 
   # NVIDIA drivers are unfree.
+  boot.loader.grub = {
+    yorhaTheme = {
+      enable = true;
+      resolution = "1080p";
+    };
+    #version = 2;
+  };
   services.xserver.videoDrivers = ["nvidia"]; # If you are using a hybrid laptop add its iGPU manufacturer
   hardware.graphics = {
     enable = true;

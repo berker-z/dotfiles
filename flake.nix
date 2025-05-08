@@ -8,6 +8,7 @@
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     sddm-sugar-candy-nix.url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+    yorha.url = "github:berker-z/yorha-flake";
     home-manager = {
       url = "github:nix-community/home-manager?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +30,7 @@
     zen-browser,
     nixvim,
     rust-overlay,
+    yorha,
     ...
   }: let
     overlayedPkgs = import nixpkgs {
@@ -47,6 +49,7 @@
         specialArgs = {inherit inputs;};
         modules =
           [
+            yorha.nixosModules.yorha-grub-theme
             sddm-sugar-candy-nix.nixosModules.default
             ./configuration.nix
             ./hosts/${hostName}/default.nix

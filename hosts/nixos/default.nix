@@ -11,7 +11,13 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
-
+  boot.loader.grub = {
+    yorhaTheme = {
+      enable = true;
+      resolution = "1440p";
+    };
+    #version = 2;
+  };
   networking.hostName = "nixos";
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
