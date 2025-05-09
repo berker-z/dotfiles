@@ -154,6 +154,17 @@
     platformTheme.name = "kvantum";
     style.name = "kvantum";
   };
+  ########custom entries for launcher etc#####################
+  xdg.desktopEntries = {
+    mirror = {
+      name = "Mirror";
+      comment = "Webcam preview with no UI";
+      exec = "guvcview --gui=none";
+      terminal = false;
+      icon = "guvcview";
+      categories = ["Utility" "Video"];
+    };
+  };
 
   xdg.mimeApps = {
     enable = true;

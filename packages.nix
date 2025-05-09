@@ -107,5 +107,7 @@
       extensions = ["rust-src"];
     })
     rust-analyzer
+    nix-ld
+    guvcview
   ];
 }
