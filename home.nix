@@ -45,29 +45,30 @@
     gnome-clocks
     libsForQt5.breeze-icons
   ];
-
   services.mako = {
     enable = true;
+
     settings = {
+      # global defaults
       default-timeout = 2500;
       font = "monospace 11";
       anchor = "bottom-right";
-      margin = "10";
-      border-radius = "10";
-      border-size = "1";
+      margin = 10;
+      border-radius = 10;
+      border-size = 1;
       border-color = "#88c0d0";
       background-color = "#2e3440";
-    };
-    criteria = {
+
+      # sections (former ‘criteria’)
       "mode=dnd" = {
-        invisible = "1";
+        invisible = 1; # hide everything in dnd
       };
+
       "urgency=critical" = {
-        default-timeout = "0";
+        default-timeout = 0; # stick until dismissed
       };
     };
   };
-
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;

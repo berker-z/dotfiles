@@ -37,7 +37,7 @@
     solana-cli
     anchor
     alsa-utils
-    libsForQt5.kontact
+
     (nordic.overrideAttrs {
       dontCheckForBrokenSymlinks = true;
     })
@@ -109,5 +109,7 @@
     rust-analyzer
     nix-ld
     guvcview
+
+    google-chrome
   ];
 }
