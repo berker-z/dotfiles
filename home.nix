@@ -27,6 +27,7 @@
     blueman #bluetooth
     pinta #paint kind of
     foliate #ebook reader
+    sioyek
     swaylock-effects # i hated hyprlock
     vivaldi #like this these days
     vivaldi-ffmpeg-codecs
