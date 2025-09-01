@@ -34,8 +34,8 @@
     nodejs
     yarn
     #
-    solana-cli
-    anchor
+    #solana-cli
+    #anchor
     alsa-utils
 
     (nordic.overrideAttrs {
@@ -80,7 +80,7 @@
     bluetuith
     imv
     #
-    stremio
+    #stremio
     ags
     gcalcli
 

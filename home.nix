@@ -40,11 +40,13 @@
     feh #picture viewer
     steam
     brave
-    libsForQt5.kolourpaint
+    #libsForQt5.kolourpaint #sildim bu ibneyi pakedin adı değişmiş yine
     drawing
     libreoffice
     gnome-clocks
     libsForQt5.breeze-icons
+
+    #teams
   ];
   services.mako = {
     enable = true;
@@ -70,6 +72,14 @@
       };
     };
   };
+
+  programs.sioyek = {
+    enable = true;
+    config = {
+      "background_color" = "0.18 0.20 0.25";
+    };
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
