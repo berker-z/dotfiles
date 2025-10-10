@@ -28,7 +28,6 @@
     libnotify
     libsForQt5.qt5.qtwayland
     egl-wayland
-    gfn-electron
     jdk
     #
     nodejs
@@ -67,7 +66,7 @@
     wireguard-tools
     qrencode #it's cute and lightweight
     polkit_gnome
-    libresprite #asprite
+    #libresprite #asprite #this has a problem with cmake currently, should be fixd in a cpl weeks
     satty #ss tool, i'm gonna have to see how it works
 
     grim

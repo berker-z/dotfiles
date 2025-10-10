@@ -6,7 +6,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     zen-browser.url = "github:berker-z/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
-    sddm-sugar-candy-nix.url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
+    sddm-sugar-candy-nix.url = "github:Zhaith-Izaliel/sddm-sugar-candy-nix";
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
     yorha.url = "github:berker-z/yorha-flake";
     home-manager = {
@@ -57,16 +57,18 @@
               nixpkgs.overlays = [
                 sddm-sugar-candy-nix.overlays.default
                 rust-overlay.overlays.default
+
+                # quick fix for qt6-only sddm
               ];
             }
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup123456789";
+              home-manager.backupFileExtension = "backup";
               home-manager.users.berkerz = import ./home.nix;
               home-manager.sharedModules = [
-                nixvim.homeManagerModules.nixvim
+                nixvim.homeModules.nixvim
               ];
             }
           ]

@@ -6,26 +6,7 @@
     globals.mapleader = " ";
     colorschemes.nord.enable = true;
 
-    extraConfigLua = ''
-      vim.api.nvim_set_hl(0, "LspInlayHint", {
-        fg = "#81A1C1",
-        bg = "#2E3440",
-        italic = true
-      })
-
-      vim.g.rustaceanvim = {
-        tools = {
-          inlay_hints = {
-            auto = true,
-            only_current_line = false,
-            show_parameter_hints = true,
-            parameter_hints_prefix = "<- ",
-            other_hints_prefix = "=> ",
-          },
-        },
-      }
-    '';
-
+    # core opts
     opts = {
       mouse = "a";
       clipboard = "unnamed,unnamedplus";
@@ -37,6 +18,7 @@
       laststatus = 3;
     };
 
+    # keymaps
     keymaps = [
       {
         mode = "n";
@@ -48,16 +30,15 @@
         mode = "n";
         key = "<leader>xx";
         action = "<cmd>Telescope diagnostics<cr>";
-        options.desc = "diagnostics (Telescope)";
+        options.desc = "diagnostics (telescope)";
       }
-
       {
         mode = "n";
         key = "<leader>fg";
         action = "<cmd>Telescope live_grep<cr>";
         options.desc = "grep project";
       }
-      # focus tree, then hop back to previous window
+      # focus tree, then hop back
       {
         mode = "n";
         key = "<leader>te";
@@ -70,7 +51,6 @@
         action = "<cmd>wincmd p<cr>";
         options.desc = "back to prev win";
       }
-
       {
         mode = "n";
         key = "<leader>fb";
@@ -108,27 +88,41 @@
           "bash"
         ];
       };
+
       toggleterm = {
         enable = true;
         settings = {
           open_mapping = "[[<c-n>]]";
           direction = "float";
-          float_opts = {
-            border = "curved";
-          };
+          float_opts = {border = "curved";};
           shade_terminals = true;
           start_in_insert = true;
           persist_size = true;
         };
       };
 
+      # rust tooling
       rustaceanvim = {
         enable = true;
         settings = {
+          tools = {
+            inlay_hints = {
+              auto = true;
+              only_current_line = false;
+              show_parameter_hints = true;
+              parameter_hints_prefix = "<- ";
+              other_hints_prefix = "=> ";
+            };
+          };
           server = {
             on_attach = ''
               function(client, bufnr)
-                vim.lsp.inlay_hint.enable(bufnr, true)
+                -- neovim 0.10+: vim.lsp.inlay_hint.enable(bufnr, true)
+                local ok = pcall(function() vim.lsp.inlay_hint.enable(bufnr, true) end)
+                if not ok then
+                  -- neovim 0.9: vim.lsp.inlay_hint(bufnr, true)
+                  pcall(function() vim.lsp.inlay_hint(bufnr, true) end)
+                end
               end
             '';
             default_settings = {
@@ -159,13 +153,6 @@
           nil_ls.enable = true;
           lua_ls.enable = true;
           bashls.enable = true;
-
-          #rust_analyzer = {
-          #  enable = true;
-          #  installCargo = false;
-          #  installRustc = false;
-          #};
-
           gdscript = {
             enable = true;
             package = null;
@@ -176,17 +163,19 @@
       cmp = {
         enable = true;
         autoEnableSources = true;
-        settings.sources = [
-          {name = "nvim_lsp";}
-          {name = "buffer";}
-          {name = "path";}
-          {name = "luasnip";}
-        ];
-        settings.mapping = {
-          "<Tab>" = "cmp.mapping.select_next_item()";
-          "<S-Tab>" = "cmp.mapping.select_prev_item()";
-          "<CR>" = "cmp.mapping.confirm({ select = true })";
-          "<C-Space>" = "cmp.mapping.complete()";
+        settings = {
+          sources = [
+            {name = "nvim_lsp";}
+            {name = "buffer";}
+            {name = "path";}
+            {name = "luasnip";}
+          ];
+          mapping = {
+            "<Tab>" = "cmp.mapping.select_next_item()";
+            "<S-Tab>" = "cmp.mapping.select_prev_item()";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<C-Space>" = "cmp.mapping.complete()";
+          };
         };
       };
 
@@ -201,12 +190,14 @@
       lualine.enable = true;
       which-key.enable = true;
 
-      # none-ls for formatting only (built-ins known to nixvim)
+      # formatting via none-ls
       none-ls = {
         enable = true;
         sources.formatting = {
-          prettier.disableTsServerFormatter = true;
-          prettier.enable = true; # js / ts / html / css / json
+          prettier = {
+            enable = true;
+            disableTsServerFormatter = true;
+          };
           stylua.enable = true; # lua
           alejandra.enable = true; # nix
         };
@@ -215,43 +206,44 @@
       # auto-format on save
       lsp-format.enable = true;
 
-      # file tree (without deprecated setup flags)
+      # nvim-tree with new settings.* schema
       nvim-tree = {
         enable = true;
-        openOnSetup = true;
-        openOnSetupFile = true;
-        autoReloadOnWrite = true;
-        disableNetrw = true;
-        hijackNetrw = true;
+        settings = {
+          auto_reload_on_write = true;
+          disable_netrw = true;
+          hijack_netrw = true;
 
-        # keep sidebar in sync with the buffer you’re editing
-        updateFocusedFile = {
-          enable = true;
-          updateRoot = true;
-        };
+          update_focused_file = {
+            enable = true;
+            update_root = true;
+          };
 
-        # collapse dir/with/single/child into one node
-        renderer = {
-          groupEmpty = true;
-        };
+          renderer = {
+            group_empty = true;
+          };
 
-        # git icons and lsp diagnostic badges
-        git = {
-          enable = true;
-          ignore = false;
-        };
-        #diagnostics = {
-        # enable     = true;
-        #showOnDirs = true;
-        #};
+          git = {
+            enable = true;
+            ignore = false;
+          };
 
-        # 32-column panel on the left, no auto-stretching
-        view = {
-          width = 32;
-          side = "left";
-          preserveWindowProportions = true;
+          view = {
+            width = 32;
+            side = "left";
+            preserve_window_proportions = true;
+          };
         };
       };
     };
+
+    # small ui tweak for inlay hints highlight
+    extraConfigLua = ''
+      vim.api.nvim_set_hl(0, "LspInlayHint", {
+        fg = "#81A1C1",
+        bg = "#2E3440",
+        italic = true,
+      })
+    '';
   };
 }
