@@ -187,13 +187,13 @@
   #   networkmanagerapplet
   #   nix-prefetch
   #   nix-prefetch-git
-  #   libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
+  #   qt6Packages.qtgraphicaleffects # sddm doesn't work without this
   #   ntfs3g
   #   rclone
   #   nautilus
   #   godot_4
   #   libnotify
-  #   libsForQt5.qt5.qtwayland
+  #   qt6Packages.qtwayland
   #   egl-wayland
   #   gfn-electron
   #   jdk

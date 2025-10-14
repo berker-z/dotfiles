@@ -37,6 +37,8 @@
     appflowy #you kinda need to fuck with mime apps for this appflowy.flutter > appflowy.desktop iirc
     libsForQt5.qtstyleplugins #qt theming
     libsForQt5.qtstyleplugin-kvantum
+    qt6Packages.qtstyleplugins
+    qt6Packages.qtstyleplugin-kvantum
     telegram-desktop #web client sucks
     feh #picture viewer
     steam
@@ -164,8 +166,14 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "kvantum";
-    style.name = "kvantum";
+    platformTheme = {
+      name = "kvantum";
+      package = pkgs.qt6Packages.qtstyleplugin-kvantum;
+    };
+    style = {
+      name = "kvantum";
+      package = pkgs.qt6Packages.qtstyleplugin-kvantum;
+    };
   };
   ########custom entries for launcher etc#####################
   xdg.desktopEntries = {

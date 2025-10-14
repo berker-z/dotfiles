@@ -20,13 +20,13 @@
     networkmanagerapplet
     nix-prefetch
     nix-prefetch-git
-    libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
+    qt6Packages.qtgraphicaleffects # SDDM needs the Qt6 GraphicalEffects module now
     ntfs3g #i think this was for trashcan or usb sticks i can't remember
     rclone #this *was* for gdrive but it's clunky i don't like it
     #sometihng
     godot_4
     libnotify
-    libsForQt5.qt5.qtwayland
+    qt6Packages.qtwayland
     egl-wayland
     jdk
     #
