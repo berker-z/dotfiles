@@ -12,6 +12,8 @@
     # ./rclone.nix
     ./packages.nix
     ./wireguard.nix
+    ./sddm.nix
+    ./vars.nix
   ];
 
   # Bootloader.
@@ -31,6 +33,8 @@
     #version = 2;
   };
 
+  #FUCKING FISH DUDE
+  documentation.man.generateCaches = false;
   programs.nix-ld.enable = true;
   # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -135,26 +139,6 @@
   #swaylock fucks up without this i think
   security.pam.services.swaylock = {};
 
-  #sddm?
-  services.displayManager.sddm = {
-    enable = true;
-    wayland.enable = true;
-    sugarCandyNix = {
-      enable = true; # This set SDDM's theme to "sddm-sugar-candy-nix".
-      settings = {
-        # Set your configuration options here.
-        # Here is a simple example:
-        Background = lib.cleanSource ./assets/laininv.jpg;
-        ScreenWidth = 2560;
-        ScreenHeight = 1440;
-        FormPosition = "left";
-        HaveFormBackground = true;
-        PartialBlur = true;
-        # ...
-      };
-    };
-  };
-
   #not sure why i need this but i see it around a lot
   programs.waybar = {
     package = pkgs.waybar.overrideAttrs (oldAttrs: {
@@ -167,56 +151,6 @@
     xwayland.enable = true;
     systemd.setPath.enable = true;
   };
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   git
-  #   gh #think i need this for auth but i can't remember
-  #   wget #self-ex
-  #   vscode #
-  #   xdg-desktop-portal #required - i guess not?
-  #   xdg-desktop-portal-hyprland #required
-  #   xdg-desktop-portal-gtk # Uncomment this
-  #   xdg-utils #required
-  #   fzf
-  #   tlrc
-  #   obsidian
-  #   neovim
-  #   gimp
-  #   networkmanagerapplet
-  #   nix-prefetch
-  #   nix-prefetch-git
-  #   libsForQt5.qt5.qtgraphicaleffects # sddm doesn't work without this
-  #   ntfs3g
-  #   rclone
-  #   nautilus
-  #   godot_4
-  #   libnotify
-  #   libsForQt5.qt5.qtwayland
-  #   egl-wayland
-  #   gfn-electron
-  #   jdk
-  #   #
-  #   nodejs
-  #   yarn
-  #   code-cursor
-  #   #
-  #   solana-cli
-  #   anchor
-  #   alsa-utils
-  #   libsForQt5.kontact
-  #   nordic
-  #
-  #   alejandra
-  #   nixd
-  #   nixpkgs-fmt
-  #
-  #   gnome-calendar
-  #   pavucontrol
-  #   inputs.zen-browser.packages.${pkgs.system}.default
-  #   dex
-  # ];
 
   programs.nautilus-open-any-terminal = {
     enable = true;

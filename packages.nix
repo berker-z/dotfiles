@@ -26,7 +26,6 @@
     #sometihng
     godot_4
     libnotify
-    libsForQt5.qt5.qtwayland
     egl-wayland
     jdk
     #
@@ -110,5 +109,16 @@
     guvcview
 
     google-chrome
+
+    # qt5 theming bits
+    libsForQt5.qtstyleplugin-kvantum
+    libsForQt5.breeze-icons
+    kdePackages.qtstyleplugin-kvantum
+    kdePackages.qt6ct
+    libsForQt5.qt5.qtwayland
+    libsForQt5.qt5.qtgraphicaleffects
+    libsForQt5.qt5ct # sddm doesn't work without this
+    adwaita-qt6
+    qlementine
   ];
 }

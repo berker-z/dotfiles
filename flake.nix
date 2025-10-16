@@ -4,39 +4,51 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     zen-browser.url = "github:berker-z/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
-    sddm-sugar-candy-nix.url = "github:Zhaith-Izaliel/sddm-sugar-candy-nix";
+
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+
+    # qt-6 platform-theme plugin for hyprland
+    hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
+
     yorha.url = "github:berker-z/yorha-flake";
+
     home-manager = {
       url = "github:nix-community/home-manager?ref=master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nixvim = {
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
   outputs = inputs @ {
     self,
     nixpkgs,
-    hyprland-qtutils,
+    hyprqt6engine,
     home-manager,
     nixos-hardware,
-    sddm-sugar-candy-nix,
     zen-browser,
     nixvim,
     rust-overlay,
     yorha,
     ...
   }: let
+    hyprqt6Overlay = final: prev: {
+      hyprqt6engine = hyprqt6engine.packages.${prev.system}.default;
+    };
+
     overlayedPkgs = import nixpkgs {
       system = "x86_64-linux";
       overlays = [
         rust-overlay.overlays.default
+        hyprqt6Overlay
       ];
     };
 
@@ -50,15 +62,12 @@
         modules =
           [
             yorha.nixosModules.yorha-grub-theme
-            sddm-sugar-candy-nix.nixosModules.default
             ./configuration.nix
             ./hosts/${hostName}/default.nix
             {
               nixpkgs.overlays = [
-                sddm-sugar-candy-nix.overlays.default
                 rust-overlay.overlays.default
-
-                # quick fix for qt6-only sddm
+                hyprqt6Overlay
               ];
             }
             home-manager.nixosModules.home-manager
@@ -89,41 +98,41 @@
       };
     };
 
-    devShells = nixpkgs.lib.genAttrs ["x86_64-linux"] (
-      system: let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [rust-overlay.overlays.default];
-        };
-        myBuildInputs = with pkgs; [
-          (rust-bin.stable.latest.default.override {extensions = ["rust-src"];})
-          cargo
-          gcc
-          clang
-          pkg-config
-          cmake
-
-          expat
-          fontconfig
-          freetype
-          freetype.dev
-          libGL
-          vulkan-loader
-
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXi
-          xorg.libXrandr
-          wayland
-          libxkbcommon
+    devShells = nixpkgs.lib.genAttrs ["x86_64-linux"] (system: let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          rust-overlay.overlays.default
+          hyprqt6Overlay
         ];
-      in {
-        rusticed = pkgs.mkShell {
-          buildInputs = myBuildInputs;
+      };
 
-          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath myBuildInputs;
-        };
-      }
-    );
+      myBuildInputs = with pkgs; [
+        (rust-bin.stable.latest.default.override {extensions = ["rust-src"];})
+        cargo
+        gcc
+        clang
+        pkg-config
+        cmake
+
+        expat
+        fontconfig
+        freetype
+        freetype.dev
+        libGL
+        vulkan-loader
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrandr
+        wayland
+        libxkbcommon
+      ];
+    in {
+      rusticed = pkgs.mkShell {
+        buildInputs = myBuildInputs;
+        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath myBuildInputs;
+      };
+    });
   };
 }
