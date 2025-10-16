@@ -153,7 +153,7 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "qt6ct"; # switched from kvantum
+    #platformTheme.name = "qt6ct"; # switched from kvantum
     style.name = "kvantum"; # keep kvantum style
   };
 
