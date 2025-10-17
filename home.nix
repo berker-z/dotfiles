@@ -150,6 +150,7 @@
 
   # symlink Nordic assets for libadwaita
   home.file.".config/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
+  home.file.".local/share/themes/Nordic/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
 
   qt = {
     enable = true;

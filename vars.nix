@@ -10,8 +10,7 @@
     XDG_SESSION_DESKTOP = "Hyprland";
 
     # portals & gtk
-    #GTK_USE_PORTAL = "1";
-    GTK_THEME = "Nordic:dark";
+    GTK_USE_PORTAL = "1";
 
     # qt / wayland
     #QT_QPA_PLATFORM = "wayland";
