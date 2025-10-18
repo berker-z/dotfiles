@@ -119,6 +119,8 @@
     libsForQt5.qt5.qtgraphicaleffects
     libsForQt5.qt5ct # sddm doesn't work without this
     adwaita-qt6
-    qlementine
+
+    hyprpanel
+    hyprpolkitagent
   ];
 }

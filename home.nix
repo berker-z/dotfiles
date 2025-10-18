@@ -154,7 +154,8 @@
 
   qt = {
     enable = true;
-    #platformTheme.name = "qt6ct"; # switched from kvantum
+    platformTheme.name = "hyprqt6engine";
+    #style.name = "adwaita-dark";
     style.name = "kvantum"; # keep kvantum style
   };
 
