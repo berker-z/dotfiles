@@ -1,6 +1,6 @@
 @define-color bar-bg rgba(31,35,40,0.95);
 
-@define-color main-bg #101419;
+@define-color main-bg #2B313E;
 @define-color main-fg #93cee9;
 
 @define-color wb-act-bg #93cee9;
@@ -13,7 +13,9 @@
 
 * {
     background-image: none;
-    font-size: 16px;
+    font-family: "Iosevka Nerd Font Mono";
+    font-size: 20px;
+    font-weight: 500;
 }
 
 window {
@@ -38,6 +40,7 @@ button {
 button:focus {
     background-color: @wb-act-bg;
     background-size: 30%;
+    border-radius: 14px;
 }
 
 button:hover {
