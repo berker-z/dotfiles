@@ -20,7 +20,7 @@
       {
         label = "logout";
         action = "loginctl kill-session $XDG_SESSION_ID";
-        text = "Pogout";
+        text = "Logout";
         keybind = "e";
       }
       {
