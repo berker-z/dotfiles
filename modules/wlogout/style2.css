@@ -50,7 +50,7 @@ button:hover {
 }
 
 
-/* HOVER OVERRIDES (450px + radius 16) */
+/* FOCUS OVERRIDES (450px + radius 16) */
 button:focus#lock     { margin: 450px 0px 450px 500px; border-radius: 16px; }
 button:focus#logout   { margin: 450px 0px 450px 0px;   border-radius: 16px;          }
 button:focus#shutdown { margin: 450px 0px 450px 0px;   border-radius: 16px;          }
