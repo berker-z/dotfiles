@@ -115,8 +115,8 @@
       ipc = "off";
       splash = false;
       splash_offset = 2.0;
-      preload = "~/.dotfiles/assets/aur.jpg";
-      wallpaper = ",~/.dotfiles/assets/aur.jpg";
+      preload = "~/.dotfiles/assets/fog.jpg";
+      wallpaper = ",~/.dotfiles/assets/fog.jpg";
     };
   };
 

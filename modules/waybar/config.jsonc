@@ -40,7 +40,7 @@
     {"orientation": "inherit",
 "modules":[
     "custom/vpn",
-    "custom/ftl",
+    
     "custom/dnd",
   "clock",
   "battery"
