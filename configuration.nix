@@ -175,7 +175,7 @@
     noto-fonts
     liberation_ttf
     noto-fonts-cjk-sans
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     nerd-fonts.symbols-only
     nerd-fonts.iosevka
   ];
