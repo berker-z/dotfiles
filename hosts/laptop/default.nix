@@ -30,6 +30,42 @@
     GSK_RENDERER = "ngl";
   };
 
+  {
+  # ensure wireplumber is the session manager
+  services.pipewire = {
+    enable = true;
+    wireplumber.enable = true;
+  };
+
+  environment.etc."wireplumber/main.lua.d/90-hdmi-autoswitch.lua".text = ''
+    rule = {
+      matches = {
+        {
+          { "device.profile", "matches", "*hdmi*" }
+        }
+      },
+      apply_properties = {
+        ["device.autoconnect"] = true,
+        ["device.disabled"] = false,
+        ["priority.session"] = 2000
+      }
+    }
+
+    table.insert(alsa_monitor.rules, rule)
+
+    -- also switch default sink automatically
+    subscribe = {
+      event = "object-added",
+      callback = function (object)
+        local t = object["media.class"]
+        if t == "Audio/Sink" and string.find(object["node.name"], "hdmi") then
+          Node.set_default(object)
+        end
+      end
+    }
+  '';
+}
+
   #20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
 
   systemd.services."nvidia-powerd".enable = false;
