@@ -5,10 +5,14 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    zen-browser.url = "github:berker-z/zen-browser-flake";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
-
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
+
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # qt-6 platform-theme plugin for hyprland
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";

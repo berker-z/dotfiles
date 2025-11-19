@@ -106,7 +106,7 @@
     })
     rust-analyzer
     nix-ld
-    guvcview
+    #guvcview #was failing to build???
 
     google-chrome
 
@@ -122,5 +122,7 @@
 
     hyprpanel
     hyprpolkitagent
+    #antigravity
+    inputs.antigravity-nix.packages.${pkgs.system}.default
   ];
 }
