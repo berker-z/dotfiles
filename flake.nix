@@ -45,7 +45,7 @@
     ...
   }: let
     hyprqt6Overlay = final: prev: {
-      hyprqt6engine = hyprqt6engine.packages.${prev.system}.default;
+      hyprqt6engine = hyprqt6engine.packages.${prev.stdenv.hostPlatform.system}.default;
     };
 
     overlayedPkgs = import nixpkgs {

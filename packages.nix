@@ -47,13 +47,13 @@
 
     gnome-calendar
     pavucontrol
-    inputs.zen-browser.packages.${pkgs.system}.default
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     dex
     zenity
     thunderbird
     nautilus
     btop
-    inputs.hyprland-qtutils.packages.${pkgs.system}.default
+    inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
     #i need these like once a year but it sucks when i don't have them
     dig
     whois
@@ -121,7 +121,7 @@
     hyprpanel
     hyprpolkitagent
     #antigravity
-    inputs.antigravity-nix.packages.${pkgs.system}.default
+    inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ffmpeg-full # full codec set, incl. aac, h264 etc
     gst_all_1.gst-libav # extra gstreamer codecs firefox uses
   ];
