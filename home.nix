@@ -13,46 +13,6 @@
   home.username = "berkerz";
   home.homeDirectory = "/home/berkerz";
 
-  home.packages = with pkgs; [
-    # core ui
-    waybar
-    kitty
-
-    # hypr ecosystem
-    hyprlock
-    hypridle
-    hyprpaper
-    hyprshot
-    hyprpicker
-    hyprqt6engine
-    hyprland-qtutils # new qt-6 platform theme
-    hyprland-qt-support
-    syspower
-
-    # everyday tools
-    wlogout
-    playerctl
-    spotify
-    bluez
-    blueman
-    pinta
-    foliate
-    sioyek
-    swaylock-effects
-    vivaldi
-    vivaldi-ffmpeg-codecs
-    brave
-    vlc
-    deluge
-    steam
-    appflowy
-    telegram-desktop
-    feh
-    drawing
-    libreoffice
-    gnome-clocks
-  ];
-
   services.mako = {
     enable = true;
     settings = {

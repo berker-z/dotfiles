@@ -51,7 +51,6 @@
     dex
     zenity
     thunderbird
-    nemo-with-extensions
     nautilus
     btop
     inputs.hyprland-qtutils.packages.${pkgs.system}.default
@@ -116,7 +115,6 @@
     kdePackages.qtstyleplugin-kvantum
     kdePackages.qt6ct
     libsForQt5.qt5.qtwayland
-    libsForQt5.qt5.qtgraphicaleffects
     libsForQt5.qt5ct # sddm doesn't work without this
     adwaita-qt6
 
@@ -126,5 +124,43 @@
     inputs.antigravity-nix.packages.${pkgs.system}.default
     ffmpeg-full # full codec set, incl. aac, h264 etc
     gst_all_1.gst-libav # extra gstreamer codecs firefox uses
+  ];
+
+  home-manager.users.berkerz.home.packages = with pkgs; [
+    # core ui
+    waybar
+    kitty
+
+    # hypr ecosystem
+    hyprlock
+    hypridle
+    hyprpaper
+    hyprshot
+    hyprpicker
+    hyprqt6engine
+    hyprland-qt-support
+    syspower
+
+    # everyday tools
+    wlogout
+    playerctl
+    spotify
+    bluez
+    blueman
+    pinta
+    foliate
+    swaylock-effects
+    vivaldi
+    vivaldi-ffmpeg-codecs
+    brave
+    vlc
+    deluge
+    steam
+    appflowy
+    telegram-desktop
+    feh
+    drawing
+    libreoffice
+    gnome-clocks
   ];
 }
