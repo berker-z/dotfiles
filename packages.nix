@@ -124,5 +124,7 @@
     hyprpolkitagent
     #antigravity
     inputs.antigravity-nix.packages.${pkgs.system}.default
+    ffmpeg-full # full codec set, incl. aac, h264 etc
+    gst_all_1.gst-libav # extra gstreamer codecs firefox uses
   ];
 }
