@@ -164,7 +164,7 @@
     settings.General.Experimental = true;
   };
 
-  # this is for trashcan i think
+  # this is for
   services.gvfs.enable = true;
 
   # Fonts here
