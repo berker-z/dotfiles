@@ -7,6 +7,7 @@
   environment.systemPackages = with pkgs; [
     # --- Core System & Utils ---
     git
+    gh # Restored
     wget
     fzf
     ripgrep
@@ -29,6 +30,7 @@
     whois
     dnsutils
     wireguard-tools
+    bluetuith # Restored
 
     # --- Audio & Video ---
     pavucontrol
@@ -86,6 +88,8 @@
     obsidian
     gnome-calendar
     zenity
+    xfce.mousepad # Restored
+    nautilus
 
     # Graphics & Media
     gimp
