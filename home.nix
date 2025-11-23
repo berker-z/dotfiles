@@ -230,11 +230,4 @@
   '';
 
   xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
-
-  # Fix for Dolphin/KDE apps (mixed theme issue)
-  xdg.dataFile."color-schemes/Nordic.colors".source = "${pkgs.nordic}/share/color-schemes/Nordic.colors";
-  xdg.configFile."kdeglobals".text = ''
-    [General]
-    ColorScheme=Nordic
-  '';
 }
