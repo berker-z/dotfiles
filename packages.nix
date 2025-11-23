@@ -116,6 +116,7 @@
     libsForQt5.breeze-icons
     libsForQt5.qt5ct
     kdePackages.qtstyleplugin-kvantum
+    kdePackages.qqc2-desktop-style
     kdePackages.qt6ct
     inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
 
@@ -143,7 +144,7 @@
     hyprpaper
     hyprshot
     hyprpicker
-    hyprqt6engine
+
     hyprland-qt-support
     syspower
 

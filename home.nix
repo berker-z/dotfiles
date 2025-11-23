@@ -114,10 +114,21 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "hyprqt6engine";
-    #style.name = "adwaita-dark";
-    style.name = "kvantum"; # keep kvantum style
+    platformTheme.name = "qtct";
+    style.name = "kvantum";
   };
+
+  xdg.configFile."qt5ct/qt5ct.conf".text = ''
+    [Appearance]
+    style=kvantum
+    icon_theme=Nordzy
+  '';
+
+  xdg.configFile."qt6ct/qt6ct.conf".text = ''
+    [Appearance]
+    style=kvantum
+    icon_theme=Nordzy
+  '';
 
   ######## custom entries for launcher etc. ########
   xdg.desktopEntries.mirror = {
@@ -215,6 +226,15 @@
   xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
     [General]
 
-    theme=Nordic-Dark
+    theme=Nordic
+  '';
+
+  xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
+
+  # Fix for Dolphin/KDE apps (mixed theme issue)
+  xdg.dataFile."color-schemes/Nordic.colors".source = "${pkgs.nordic}/share/color-schemes/Nordic.colors";
+  xdg.configFile."kdeglobals".text = ''
+    [General]
+    ColorScheme=Nordic
   '';
 }

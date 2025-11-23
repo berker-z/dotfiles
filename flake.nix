@@ -14,9 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # qt-6 platform-theme plugin for hyprland
-    hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
-
     yorha.url = "github:berker-z/yorha-flake";
 
     home-manager = {
@@ -35,7 +32,6 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    hyprqt6engine,
     home-manager,
     nixos-hardware,
     zen-browser,
@@ -44,15 +40,10 @@
     yorha,
     ...
   }: let
-    hyprqt6Overlay = final: prev: {
-      hyprqt6engine = hyprqt6engine.packages.${prev.stdenv.hostPlatform.system}.default;
-    };
-
     overlayedPkgs = import nixpkgs {
       system = "x86_64-linux";
       overlays = [
         rust-overlay.overlays.default
-        hyprqt6Overlay
       ];
     };
 
@@ -71,7 +62,6 @@
             {
               nixpkgs.overlays = [
                 rust-overlay.overlays.default
-                hyprqt6Overlay
               ];
             }
             home-manager.nixosModules.home-manager
@@ -107,7 +97,6 @@
         inherit system;
         overlays = [
           rust-overlay.overlays.default
-          hyprqt6Overlay
         ];
       };
 
