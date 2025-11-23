@@ -18,7 +18,6 @@
     zip
     ntfs3g # Kept per user request
     libnotify
-    polkit_gnome # Kept per user request (check if redundant later)
     xdg-utils
     xdg-desktop-portal
     xdg-desktop-portal-hyprland
