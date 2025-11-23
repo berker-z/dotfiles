@@ -9,7 +9,6 @@
   ...
 }: {
   imports = [
-    # ./rclone.nix
     ./packages.nix
     ./wireguard.nix
     ./sddm.nix
@@ -129,10 +128,10 @@
       mergio = "bash ~/.dotfiles/scripts/mergio.sh";
       pushio = "bash ~/.dotfiles/scripts/pushio.sh";
       updateio = "bash ~/.dotfiles/scripts/updateio.sh";
-      rclio = "bash ~/.dotfiles/scripts/rclone.sh";
-      ftlbu = "bash ~/.dotfiles/scripts/ftlbu.sh";
+
       cod = "bash ~/.dotfiles/scripts/codio.sh";
       rsh = "nix develop ~/.dotfiles#rusticed --command fish";
+      garbagio = "bash ~/.dotfiles/scripts/garbagio.sh";
     };
   };
 
