@@ -103,7 +103,6 @@
     slurp
     wl-clipboard
     cliphist # Replaces clipman
-    # clipman # Removed in favor of cliphist
     satty
 
     # --- Theming (Qt/GTK) ---
