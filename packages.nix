@@ -128,7 +128,8 @@
     ags
 
     # Antigravity
-    inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    antigravity
+    #inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   home-manager.users.berkerz.home.packages = with pkgs; [
