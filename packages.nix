@@ -119,7 +119,7 @@
     kdePackages.qqc2-desktop-style
     kdePackages.qt6ct
     inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
-
+    utterly-nord-plasma
     # --- Misc / Other ---
     godot_4
     dex

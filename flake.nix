@@ -8,7 +8,10 @@
     zen-browser.url = "github:youwen5/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
-
+    stylix = {
+      url = "github:nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,6 +41,7 @@
     nixvim,
     rust-overlay,
     yorha,
+    stylix,
     ...
   }: let
     overlayedPkgs = import nixpkgs {
@@ -56,6 +60,7 @@
         specialArgs = {inherit inputs;};
         modules =
           [
+            stylix.nixosModules.stylix
             yorha.nixosModules.yorha-grub-theme
             ./configuration.nix
             ./hosts/${hostName}/default.nix

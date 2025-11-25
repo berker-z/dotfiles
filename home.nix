@@ -130,6 +130,14 @@
     icon_theme=Nordzy
   '';
 
+  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
+    [General]
+
+    theme=Nordic
+  '';
+
+  xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
+
   ######## custom entries for launcher etc. ########
   xdg.desktopEntries.mirror = {
     name = "Mirror";
@@ -221,13 +229,4 @@
 
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
-
-  #theme=KvArcDark
-  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
-    [General]
-
-    theme=Nordic
-  '';
-
-  xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
 }
