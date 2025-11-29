@@ -127,6 +127,7 @@
     gcalcli
     ags
 
+    unityhub
     # Antigravity
     antigravity
     #inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
