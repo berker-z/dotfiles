@@ -41,6 +41,7 @@
       "pipewire-pulse" = {
         "pulse.modules" = [
           {name = "module-switch-on-port-available";}
+          {name = "module-switch-on-connect";}
         ];
       };
     };
