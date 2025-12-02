@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-target_directory=~/.dotfiles
+target_directory=~/dotfiles
 
 cd "$target_directory" || exit 1
 

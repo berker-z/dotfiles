@@ -75,8 +75,8 @@
       ipc = "off";
       splash = false;
       splash_offset = 2.0;
-      preload = "~/.dotfiles/assets/fog.jpg";
-      wallpaper = ",~/.dotfiles/assets/fog.jpg";
+      preload = "~/dotfiles/assets/fog.jpg";
+      wallpaper = ",~/dotfiles/assets/fog.jpg";
     };
   };
 
@@ -201,7 +201,7 @@
   programs.fastfetch = {
     enable = true;
     settings = {
-      logo.source = "~/.dotfiles/assets/ascii.txt";
+      logo.source = "~/dotfiles/assets/ascii.txt";
       modules = [
         "title"
         "separator"

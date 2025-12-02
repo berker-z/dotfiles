@@ -66,22 +66,22 @@ button:hover#suspend  { margin: 450px 0px 450px 0px;   border-radius: 16px;     
 button:hover#reboot   { margin: 450px 500px 450px 0px; border-radius: 16px; }
 */
 /* BASE POSITIONS (500px + radius 16) */
-#lock     { background-image: image(url("/home/berkerz/.dotfiles/modules/wlogout/icons/lock_white.png"));
+#lock     { background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/lock_white.png"));
             border-radius: 16px 0 0 16px;
             margin: 500px 0px 500px 500px; }
 
-#logout   { background-image: image(url("/home/berkerz/.dotfiles/modules/wlogout/icons/logout_white.png"));
+#logout   { background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/logout_white.png"));
             border-radius: 0;
             margin: 500px 0px; }
 
-#shutdown { background-image: image(url("/home/berkerz/.dotfiles/modules/wlogout/icons/shutdown_white.png"));
+#shutdown { background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/shutdown_white.png"));
             border-radius: 0;
             margin: 500px 0px; }
 
-#suspend  { background-image: image(url("/home/berkerz/.dotfiles/modules/wlogout/icons/suspend_white.png"));
+#suspend  { background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/suspend_white.png"));
             border-radius: 0;
             margin: 500px 0px; }
 
-#reboot   { background-image: image(url("/home/berkerz/.dotfiles/modules/wlogout/icons/reboot_white.png"));
+#reboot   { background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/reboot_white.png"));
             border-radius: 0 16px 16px 0;
             margin: 500px 500px 500px 0px; }

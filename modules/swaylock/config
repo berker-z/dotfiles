@@ -19,7 +19,7 @@ datestr=%a, %e of %B
 # screenshots
 
 # Add an image as a background 
-image=~/.dotfiles/assets/lain.jpg
+image=~/dotfiles/assets/lain.jpg
 
 # Fade in time
 #fade-in=0.5

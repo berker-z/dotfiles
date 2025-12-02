@@ -92,7 +92,7 @@
 
   "custom/power": {
     "format": " ⏻  ",
-    "on-click": "wlogout -b 5 -c 0 -r 0 -m 0 -C /home/berkerz/.dotfiles/modules/wlogout/style2.css --protocol layer-shell",
+    "on-click": "wlogout -b 5 -c 0 -r 0 -m 0 -C /home/berkerz/dotfiles/modules/wlogout/style2.css --protocol layer-shell",
     "tooltip": false
   },
 
