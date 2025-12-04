@@ -128,7 +128,6 @@
     dex
     btop
     gcalcli
-    ags
   ];
 
   home-manager.users.berkerz.home.packages = with pkgs; [
@@ -149,12 +148,10 @@
     syspower
 
     # --- Everyday Tools ---
-    onlyoffice-desktopeditors
     playerctl
     spotify
     bluez
     blueman
-    pinta
     foliate
     vivaldi
     vivaldi-ffmpeg-codecs
@@ -165,8 +162,8 @@
     appflowy
     telegram-desktop
     feh
-    drawing
     libreoffice
     gnome-clocks
+    kolourpaint
   ];
 }
