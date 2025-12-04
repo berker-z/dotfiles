@@ -30,23 +30,6 @@
     GSK_RENDERER = "ngl";
   };
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = false;
-
-    extraConfig = {
-      "pipewire-pulse" = {
-        "pulse.modules" = [
-          {name = "module-switch-on-port-available";}
-          {name = "module-switch-on-connect";}
-        ];
-      };
-    };
-  };
-
   #20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
 
   systemd.services."nvidia-powerd".enable = false;

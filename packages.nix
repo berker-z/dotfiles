@@ -33,7 +33,6 @@
 
     # --- Audio & Video ---
     pavucontrol
-    pulseaudio
     alsa-utils
     ffmpeg
     ffmpeg-full
@@ -72,6 +71,11 @@
     # Editors & Tools
     vscode
     nix-ld
+    claude-code
+    unityhub
+    antigravity
+    gemini-cli
+    codex
 
     # --- GUI Applications ---
     # Browsers
@@ -81,7 +85,6 @@
 
     # Communication
     beeper
-    thunderbird
 
     # Productivity
     obsidian
@@ -126,11 +129,6 @@
     btop
     gcalcli
     ags
-
-    unityhub
-    # Antigravity
-    antigravity
-    #inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   home-manager.users.berkerz.home.packages = with pkgs; [
@@ -151,6 +149,7 @@
     syspower
 
     # --- Everyday Tools ---
+    onlyoffice-desktopeditors
     playerctl
     spotify
     bluez

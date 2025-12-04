@@ -86,9 +86,9 @@
   security.pam.services.greetd.enableGnomeKeyring = true;
   programs.dconf.enable = true;
   services.gnome = {
-    evolution-data-server.enable = true;
-    gnome-keyring.enable = true; # You already have this
-    gnome-online-accounts.enable = true;
+    evolution-data-server.enable = false;
+    gnome-keyring.enable = true; # keep keyring for secrets
+    gnome-online-accounts.enable = false;
   };
 
   #sound stuff
@@ -99,7 +99,16 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    jack.enable = false;
     wireplumber.enable = true;
+    extraConfig = {
+      "pipewire-pulse" = {
+        "pulse.modules" = [
+          {name = "module-switch-on-port-available";}
+          {name = "module-switch-on-connect";}
+        ];
+      };
+    };
   };
 
   #hardware.alsa.enablePersistence = true;
@@ -161,7 +170,10 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-    settings.General.Experimental = true;
+    settings.General = {
+      Experimental = true;
+      Enable = "Source,Sink,Media,Socket";
+    };
   };
 
   # this is for
@@ -221,7 +233,6 @@
 
   #for STEAM to work
   hardware.graphics.enable32Bit = true;
-  services.pulseaudio.support32Bit = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
