@@ -73,7 +73,7 @@
     nix-ld
     claude-code
     unityhub
-    antigravity
+    antigravity-fhs
     gemini-cli
     codex
 
@@ -164,6 +164,6 @@
     feh
     libreoffice
     gnome-clocks
-    kolourpaint
+    kdePackages.kolourpaint
   ];
 }

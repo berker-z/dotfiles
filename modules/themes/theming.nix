@@ -3,6 +3,7 @@
   pkgs,
   ...
 }: {
+
   gtk = {
     enable = true;
     theme = {
@@ -35,29 +36,29 @@
   home.file.".config/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
   home.file.".local/share/themes/Nordic/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
 
+
   qt = {
     enable = true;
-    platformTheme.name = "qtct";
+platformTheme.name = "qtct";
     style.name = "kvantum";
   };
 
-  xdg.configFile."qt5ct/qt5ct.conf".text = ''
-    [Appearance]
-    style=kvantum
-    icon_theme=Nordzy
-  '';
+  xdg.configFile = {
+    # Tell Kvantum which theme to use
+    "Kvantum/kvantum.kvconfig".text = ''
+      [General]
+      theme=Utterly-Nord-Solid
+    '';
 
-  xdg.configFile."qt6ct/qt6ct.conf".text = ''
-    [Appearance]
-    style=kvantum
-    icon_theme=Nordzy
-  '';
+    # Make sure the theme files are visible under ~/.config/Kvantum
+    # Adjust the derivation path if your flake imports pkgs differently
+    "Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.kvconfig".source =
+      "${pkgs.utterly-nord-plasma}/share/Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.kvconfig";
 
-  xdg.configFile."Kvantum/kvantum.kvconfig".text = ''
-    [General]
+    "Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.svg".source =
+      "${pkgs.utterly-nord-plasma}/share/Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.svg";
 
-    theme=Nordic
-  '';
-
-  xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
+    "Kvantum/Utterly-Nord-Solid/Nord.patchconfig".source =
+      "${pkgs.utterly-nord-plasma}/share/Kvantum/Utterly-Nord-Solid/Nord.patchconfig";
+  };
 }

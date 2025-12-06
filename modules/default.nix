@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
+    ./themes
     ./wlogout
     ./fuzzel
     ./nixvim.nix
