@@ -1,0 +1,284 @@
+{
+  // "layer": "top", // Waybar at top layer
+  // "position": "bottom", // Waybar position (top|bottom|left|right)
+  //"height": 30, // Waybar height (to be removed for auto height)
+  // "width": 1280, // Waybar width
+  "spacing": 4, // Gaps between modules (4px)
+  // Choose the order of the modules
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/mode",
+    "hyprland/scratchpad",
+    "custom/media",
+    "group/group-sound"
+  ],
+  "modules-center": ["hyprland/window"],
+  "modules-right": [
+    //"mpd",
+    //"idle_inhibitor",
+    //"pulseaudio",
+    //"network",
+    //"power-profiles-daemon",
+    //"cpu",
+    //"memory",
+    //"temperature",
+    //"backlight",
+    //"keyboard-state",
+    //"hyprland/language",
+    //"battery",
+    //"battery#bat2",
+    "group/group-right",
+    "tray",
+    "custom/power"
+  ],
+
+  "group/group-right": {
+    "orientation": "inherit",
+    "modules": ["custom/vpn", "custom/dnd", "clock", "battery"]
+  },
+
+  "group/group-sound": {
+    "orientation": "inherit",
+    "modules": ["pulseaudio/slider", "custom/playerctl"]
+  },
+
+  "custom/playerctl": {
+    "format": " ::  <span>{}</span>",
+    "return-type": "json",
+    "max-length": 42,
+    "exec": "playerctl --player=spotify metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+    "on-click": "playerctl --player=spotify play-pause",
+    "on-scroll-down": "playerctl --player=spotify previous",
+    "on-scroll-up": "playerctl --player=spotify next",
+    "format-icons": {
+      "Playing": "󰝚",
+      "Paused": "󰝛"
+    }
+  },
+  // Modules configuration
+  "hyprland/workspaces": {
+    "disable-scroll": false,
+    "all-outputs": true,
+    "on-scroll-up": "hyprctl dispatch workspace -1",
+    "on-scroll-down": "hyprctl dispatch workspace +1",
+    "format": "{icon}",
+    "format-icons": {
+      "1": "🌑",
+      "2": "🌘",
+      "3": "🌗",
+      "4": "🌖",
+      "5": "🌕",
+      "6": "六",
+      "7": "七",
+      "8": "八",
+      "9": "九",
+      "10": "〇"
+      //		"active": "",
+      //		"default": "󰧞"
+    },
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+
+  "hyprland/window": {
+    "format": "> {initialClass}",
+    "max-length": 24
+  },
+
+  "custom/power": {
+    "format": " ⏻  ",
+    "on-click": "wlogout -b 5 -c 0 -r 0 -m 0 -C /home/berkerz/dotfiles/modules/wlogout/style2.css --protocol layer-shell",
+    "tooltip": false
+  },
+
+  "hyprland/mode": {
+    "format": "<span style=\"italic\">{}</span>"
+  },
+  "hyprland/scratchpad": {
+    "format": "{icon} {count}",
+    "show-empty": true,
+    "format-icons": ["", ""],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
+  "mpd": {
+    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+    "format-disconnected": "Disconnected ",
+    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+    "unknown-tag": "N/A",
+    "interval": 5,
+    "consume-icons": {
+      "on": " "
+    },
+    "random-icons": {
+      "off": "<span color=\"#f53c3c\"></span> ",
+      "on": " "
+    },
+    "repeat-icons": {
+      "on": " "
+    },
+    "single-icons": {
+      "on": "1 "
+    },
+    "state-icons": {
+      "paused": "",
+      "playing": ""
+    },
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 10
+  },
+  "clock": {
+    "timezone": "Asia/Istanbul",
+    "format": "{:%H:%M:%OS<span color=\"#88c0d0\"> | </span>%A, %d %B %G}",
+    "interval": 1,
+    "tooltip": "false",
+    "on-click": "hyprctl clients | grep -q 'org.gnome.clocks' && pkill gnome-clocks || gnome-clocks &"
+
+    //        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    //      	"format-alt": "{:%d/%m/%Y}",
+    //  "on-click-right": "bash ~/.config/rofi/calendar/calendar.sh",
+  },
+
+  "custom/dnd": {
+    "interval": "once",
+    "return-type": "json",
+    "format": "{}{icon}",
+    "format-icons": {
+      "default": " 󰍡  <span color=\"#88c0d0\">| </span>",
+      "dnd": " 󱙍  <span color=\"#88c0d0\">| </span>"
+    },
+    "on-click": "makoctl mode | grep 'dnd' && makoctl mode -r dnd || makoctl mode -a dnd; pkill -RTMIN+11 waybar",
+    "exec": "printf '{\"alt\":\"%s\",\"tooltip\":\"mode: %s\"}' $(makoctl mode | grep -q 'dnd' && echo dnd || echo default) $(makoctl mode | tail -1)",
+    "signal": 11
+  },
+
+  "custom/vpn": {
+    "interval": 1,
+    "return-type": "json",
+    "format": " {}{icon}  <span color=\"#88c0d0\">| </span>",
+    "format-icons": {
+      "off": "", // vpn off icon
+      "on": "" // vpn on icon
+    },
+    "exec": "systemctl is-active wg-quick-wg0.service >/dev/null && echo '{\"alt\": \"on\", \"tooltip\": \"VPN is ON\"}' || echo '{\"alt\": \"off\", \"tooltip\": \"VPN is OFF\"}'",
+    "on-click": "bash -c 'if systemctl is-active --quiet wg-quick-wg0.service; then pkexec systemctl stop wg-quick-wg0.service; else pkexec systemctl start wg-quick-wg0.service; fi'"
+  },
+
+  "battery": {
+    "states": {
+      "full": 100,
+      "meh": 80,
+      "mid": 50,
+      "warning": 30,
+      "critical": 15
+    },
+    "full-at": 80,
+    "interval": 15,
+    "format": "| {icon}  {capacity}%",
+    "format-full": "| {icon}  {capacity}% ",
+    "format-charging": "| {icon}  {capacity}% ",
+    "format-plugged": "| {icon}  {capacity}% ",
+    "format-alt": "{time} {icon}",
+    "format-good": "", // An empty format will hide the module
+    "format-icons": ["", "", "", "", ""]
+  },
+
+  "cpu": {
+    "format": "{usage}% ",
+    "tooltip": false
+  },
+  "memory": {
+    "format": "{}%  "
+  },
+  "temperature": {
+    // "thermal-zone": 2,
+    // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "critical-threshold": 80,
+    // "format-critical": "{temperatureC}°C {icon}",
+    "format": "{temperatureC}°C {icon}",
+    "format-icons": ["", "", ""]
+  },
+  "backlight": {
+    // "device": "acpi_video1",
+    "format": "{percent}% {icon}",
+    "format-icons": ["", "", "", "", "", "", "", "", ""]
+  },
+
+  "power-profiles-daemon": {
+    "format": "{icon}",
+    "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+    "tooltip": true,
+    "format-icons": {
+      "default": "",
+      "performance": "",
+      "balanced": "",
+      "power-saver": ""
+    }
+  },
+  "network": {
+    // "interface": "wlp2*", // (Optional) To force the use of this interface
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  },
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{volume}% {icon} {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+
+  "pulseaudio/slider": {
+    "min": 0,
+    "max": 100,
+    "orientation": "horizontal",
+    "scroll-step": 5,
+
+    "on-click-right": "pavucontrol"
+  },
+
+  "custom/media": {
+    "format": "{icon} {}",
+    "return-type": "json",
+    "max-length": 40,
+    "format-icons": {
+      "spotify": "",
+      "default": "🎜"
+    },
+    "escape": true,
+    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+    // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+  }
+}

@@ -1,0 +1,112 @@
+@define-color bar-bg rgba(31,35,40,0.95);
+
+@define-color main-bg #2B313E;
+@define-color main-fg #93cee9;
+
+@define-color wb-act-bg #93cee9;
+@define-color wb-act-fg #1f2328;
+
+@define-color wb-hvr-bg #93cee9;
+@define-color wb-hvr-fg #1f2328;
+
+
+
+* {
+    background-image: none;
+    font-family: "Iosevka Nerd Font Mono";
+    font-size: 20px;
+    font-weight: 500;
+}
+
+window {
+    background-color: transparent;
+}
+
+button {
+    color: white;
+    background-color: @main-bg;
+    outline-style: none;
+    border: none;
+    border-width: 0px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20%;
+    border-radius: 0px;
+    box-shadow: none;
+    text-shadow: none;
+    /* animation: gradient_f 20s ease-in infinite; */
+}
+
+button:focus {
+    background-color: @wb-act-bg;
+    background-size: 30%;
+    border-radius: 14px;
+}
+
+button:hover {
+    background-color: @wb-hvr-bg;
+    background-size: 40%;
+    border-radius: 14px;
+    /* animation: gradient_f 20s ease-in infinite; */
+    transition: all 0.3s cubic-bezier(.55,0.0,.28,1.682);
+}
+
+button:hover#lock {
+    border-radius: 14px;
+    margin : 6px 0px 6px 10px;
+}
+
+button:hover#logout {
+    border-radius: 14px;
+    margin : 6px 0px 6px 0px;
+}
+
+button:hover#suspend {
+    border-radius: 14px;
+    margin : 6px 0px 6px 0px;
+}
+
+button:hover#shutdown {
+    border-radius: 14px;
+    margin : 6px 0px 6px 0px;
+}
+
+button:hover#hibernate {
+    border-radius: 14px;
+    margin : 6px 0px 6px 0px;
+}
+
+button:hover#reboot {
+    border-radius: 14px;
+    margin : 6px 10px 6px 0px;
+}
+
+#lock {
+    background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/lock_white.png"));
+    border-radius: 10px 0px 0px 10px;
+    margin : 10px 0px 10px 10px;
+}
+
+#logout {
+    background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/logout_white.png"));
+    border-radius: 0px 0px 0px 0px;
+    margin : 10px 0px 10px 0px;
+}
+
+#suspend {
+    background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/suspend_white.png"));
+    border-radius: 0px 0px 0px 0px;
+    margin : 10px 0px 10px 0px;
+}
+
+#shutdown {
+    background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/shutdown_white.png"));
+    border-radius: 0px 0px 0px 0px;
+    margin : 10px 0px 10px 0px;
+}
+
+#reboot {
+    background-image: image(url("/home/berkerz/dotfiles/modules/wlogout/icons/reboot_white.png"));
+    border-radius: 0px 10px 10px 0px;
+    margin : 10px 10px 10px 0px;
+}
