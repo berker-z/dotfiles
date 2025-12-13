@@ -90,7 +90,10 @@
     exec = "guvcview --gui=none";
     terminal = false;
     icon = "guvcview";
-    categories = ["Utility" "Video"];
+    categories = [
+      "Utility"
+      "Video"
+    ];
   };
 
   xdg.mimeApps = {

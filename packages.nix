@@ -42,7 +42,7 @@
     # --- Development ---
     # Languages & Compilers
     nodejs
-    yarn
+    bun
     gcc
     clang
     cmake
@@ -76,19 +76,17 @@
     antigravity-fhs
     gemini-cli
     codex
+    zed-editor
 
     # --- GUI Applications ---
     # Browsers
     google-chrome
-    chromium
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # Communication
-    beeper
 
     # Productivity
     obsidian
-    gnome-calendar
     zenity
     xfce.mousepad # Restored
     nautilus
@@ -123,6 +121,7 @@
     kdePackages.qt6ct
     inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
     utterly-nord-plasma
+
     # --- Misc / Other ---
     godot_4
     dex
@@ -147,7 +146,6 @@
     hyprpicker
 
     hyprland-qt-support
-    syspower
 
     # --- Everyday Tools ---
     playerctl
@@ -167,6 +165,5 @@
     libreoffice
     gnome-clocks
     kdePackages.kolourpaint
-    prismlauncher
   ];
 }
