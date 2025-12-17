@@ -74,6 +74,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
+              home-manager.overwriteBackup = true; #THANK GOD FOR THIS
               home-manager.users.berkerz = import ./home.nix;
               home-manager.sharedModules = [
                 nixvim.homeModules.nixvim

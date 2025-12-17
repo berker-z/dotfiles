@@ -8,6 +8,7 @@
     # --- Core System & Utils ---
     git
     gh # Restored
+    curl
     wget
     fzf
     ripgrep
@@ -49,9 +50,11 @@
     pkg-config
     openssl
     jdk
-    (rust-bin.stable.latest.default.override {
-      extensions = ["rust-src"];
-    })
+    # Rust
+    (rust-bin.stable.latest.default.override {extensions = ["rust-src"];})
+    rust-analyzer
+    rustfmt
+    sqlite
 
     # Language Servers & Formatters
     nodePackages.typescript
@@ -60,13 +63,14 @@
     nodePackages.bash-language-server
     nodePackages.prettier
     lua-language-server
-    rust-analyzer
-    rustfmt
     nixfmt-rfc-style
     alejandra
     nixd
     nixpkgs-fmt
     stylua
+    # API / Proto tooling
+    protobuf
+    grpcurl
 
     # Editors & Tools
     vscode
@@ -75,7 +79,6 @@
     unityhub
     antigravity-fhs
     gemini-cli
-    codex
     zed-editor
 
     # --- GUI Applications ---
