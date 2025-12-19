@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
-#
+
 # Garbage collection for system (requires sudo)
 echo "Collecting system garbage..."
-sudo nix-collect-garbage -d
+system_gc_output=$(sudo nix-collect-garbage -d 2>&1)
+echo "$system_gc_output"
 
 # Garbage collection for user
 echo "Collecting user garbage..."
-nix-collect-garbage -d
+user_gc_output=$(nix-collect-garbage -d 2>&1)
+echo "$user_gc_output"
+
 # Optimize nix store (deduplicate)
 echo "Optimizing nix store..."
-sudo nix-store --optimise
+opt_output=$(sudo nix-store --optimise 2>&1)
+echo "$opt_output"
 
-# Notify user
-notify-send "Garbagio" "Garbage collection and optimization complete."
+# Extract the "XYZ MiB/GiB freed" snippets for a quick tally
+system_freed=$(echo "$system_gc_output" | grep -Eo '[0-9.]+ (GiB|MiB) freed' | tail -n1)
+user_freed=$(echo "$user_gc_output" | grep -Eo '[0-9.]+ (GiB|MiB) freed' | tail -n1)
+opt_freed=$(echo "$opt_output" | grep -Eo '[0-9.]+ (GiB|MiB) freed' | tail -n1)
+
+echo "Tally: system=${system_freed:-unknown}; user=${user_freed:-unknown}; optimise=${opt_freed:-unknown}"
