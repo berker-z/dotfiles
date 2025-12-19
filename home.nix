@@ -128,6 +128,14 @@
     enable = true;
     themeFile = "Nord";
     settings.confirm_os_window_close = 0;
+    keybindings = {
+      "ctrl+t" = "new_tab";
+      "ctrl+n" = "new_window";
+      "alt+tab" = "next_window";
+      "ctrl+tab" = "next_tab";
+      "ctrl+w" = "close_window";
+      "ctrl+q" = "close_tab";
+    };
   };
 
   programs.yazi = {
