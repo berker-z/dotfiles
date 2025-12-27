@@ -6,6 +6,7 @@
 }: {
   environment.systemPackages = with pkgs; [
     # --- Core System & Utils ---
+    openrgb-with-all-plugins
     git
     gh # Restored
     curl
@@ -23,6 +24,7 @@
     xdg-desktop-portal
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk # Kept per user request
+    ncdu
 
     # --- Networking & DNS ---
     networkmanagerapplet

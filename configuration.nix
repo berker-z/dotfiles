@@ -14,7 +14,9 @@
     ./sddm.nix
     ./vars.nix
   ];
-
+  services.hardware.openrgb.enable = true;
+  hardware.i2c.enable = true;
+  boot.kernelModules = ["i2c-dev"];
   # Bootloader.
   #boot.loader.systemd-boot.enable = true;
   #boot.loader.systemd-boot.configurationLimit = 5;
