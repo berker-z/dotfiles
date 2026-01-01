@@ -7,7 +7,8 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     ./packages.nix
     ./wireguard.nix
@@ -16,7 +17,7 @@
   ];
   services.hardware.openrgb.enable = true;
   hardware.i2c.enable = true;
-  boot.kernelModules = ["i2c-dev"];
+  boot.kernelModules = [ "i2c-dev" ];
   # Bootloader.
   #boot.loader.systemd-boot.enable = true;
   #boot.loader.systemd-boot.configurationLimit = 5;
@@ -27,7 +28,7 @@
   };
   boot.loader.grub = {
     enable = true;
-    devices = ["nodev"];
+    devices = [ "nodev" ];
     useOSProber = true;
     efiSupport = true;
 
@@ -53,7 +54,10 @@
   # Enable the DNS stub resolver
   networking.resolvconf.enable = false;
   # Specify DNS servers for your system
-  networking.nameservers = ["1.1.1.1" "8.8.8.8"];
+  networking.nameservers = [
+    "1.1.1.1"
+    "8.8.8.8"
+  ];
 
   # Set your time zone.
   time.timeZone = "Europe/Istanbul";
@@ -106,8 +110,8 @@
     extraConfig = {
       "pipewire-pulse" = {
         "pulse.modules" = [
-          {name = "module-switch-on-port-available";}
-          {name = "module-switch-on-connect";}
+          { name = "module-switch-on-port-available"; }
+          { name = "module-switch-on-connect"; }
         ];
       };
     };
@@ -119,9 +123,13 @@
     isNormalUser = true;
     shell = pkgs.fish;
     description = "berkerz";
-    extraGroups = ["networkmanager" "sound" "wheel"];
+    extraGroups = [
+      "networkmanager"
+      "sound"
+      "wheel"
+    ];
     initialPassword = "1234";
-    packages = with pkgs; [];
+    packages = with pkgs; [ ];
   };
 
   # Allow unfree packages
@@ -147,12 +155,12 @@
   };
 
   #swaylock fucks up without this i think
-  security.pam.services.swaylock = {};
+  security.pam.services.swaylock = { };
 
   #not sure why i need this but i see it around a lot
   programs.waybar = {
     package = pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
+      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
     });
   };
 
@@ -184,10 +192,11 @@
   # Fonts here
 
   fonts.packages = with pkgs; [
+    etBook
     font-awesome
-    noto-fonts
+    #  noto-fonts
     liberation_ttf
-    noto-fonts-cjk-sans
+    #  noto-fonts-cjk-sans
     noto-fonts-color-emoji
     nerd-fonts.symbols-only
     nerd-fonts.iosevka
@@ -207,9 +216,21 @@
     };
 
     defaultFonts = {
-      monospace = ["Iosevka Nerd Font" "Noto Color Emoji" "Font Awesome"];
-      sansSerif = ["Liberation Sans" "Noto Color Emoji" "Font Awesome"];
-      serif = ["Liberation Serif" "Noto Color Emoji" "Font Awesome"];
+      monospace = [
+        "Iosevka Nerd Font"
+        "Noto Color Emoji"
+        "Font Awesome"
+      ];
+      sansSerif = [
+        "Liberation Sans"
+        "Noto Color Emoji"
+        "Font Awesome"
+      ];
+      serif = [
+        "Liberation Serif"
+        "Noto Color Emoji"
+        "Font Awesome"
+      ];
     };
   };
 

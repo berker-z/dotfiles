@@ -96,6 +96,17 @@
     ];
   };
 
+  #APPARENTLY THIS IS THE ONLY WAY TO OVERRIDE DESKTOP ENTRIES??
+  xdg.dataFile."applications/com.github.johnfactotum.Foliate.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=Foliate
+    Exec=env GDK_BACKEND=x11 foliate %U
+    Icon=com.github.johnfactotum.Foliate
+    Categories=Office;Viewer;
+    MimeType=application/epub+zip;
+  '';
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
