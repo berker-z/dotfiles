@@ -141,7 +141,6 @@
     waybar
     kitty
     wlogout
-    swaylock-effects # Kept per user request
 
     # --- Hypr Ecosystem ---
     hyprlock

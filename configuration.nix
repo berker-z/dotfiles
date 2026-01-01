@@ -7,8 +7,7 @@
   pkgs,
   inputs,
   ...
-}:
-{
+}: {
   imports = [
     ./packages.nix
     ./wireguard.nix
@@ -17,7 +16,7 @@
   ];
   services.hardware.openrgb.enable = true;
   hardware.i2c.enable = true;
-  boot.kernelModules = [ "i2c-dev" ];
+  boot.kernelModules = ["i2c-dev"];
   # Bootloader.
   #boot.loader.systemd-boot.enable = true;
   #boot.loader.systemd-boot.configurationLimit = 5;
@@ -28,7 +27,7 @@
   };
   boot.loader.grub = {
     enable = true;
-    devices = [ "nodev" ];
+    devices = ["nodev"];
     useOSProber = true;
     efiSupport = true;
 
@@ -110,8 +109,8 @@
     extraConfig = {
       "pipewire-pulse" = {
         "pulse.modules" = [
-          { name = "module-switch-on-port-available"; }
-          { name = "module-switch-on-connect"; }
+          {name = "module-switch-on-port-available";}
+          {name = "module-switch-on-connect";}
         ];
       };
     };
@@ -129,7 +128,7 @@
       "wheel"
     ];
     initialPassword = "1234";
-    packages = with pkgs; [ ];
+    packages = with pkgs; [];
   };
 
   # Allow unfree packages
@@ -154,13 +153,10 @@
     };
   };
 
-  #swaylock fucks up without this i think
-  security.pam.services.swaylock = { };
-
   #not sure why i need this but i see it around a lot
   programs.waybar = {
     package = pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
     });
   };
 

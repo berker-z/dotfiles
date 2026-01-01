@@ -10,7 +10,7 @@
 ## Project Structure & Module Organization
 
 - `flake.nix`, `configuration.nix`, and `home.nix` define the base NixOS + Home Manager configuration; host-specific overlays live in `hosts/<host>/`.
-- `modules/` holds reusable modules (Hyprland, waybar, swaylock, themes). Add new services as separate files and list them in `modules/default.nix` to keep imports tidy.
+- `modules/` holds reusable modules (Hyprland, waybar, themes). Add new services as separate files and list them in `modules/default.nix` to keep imports tidy.
 - `packages.nix` centralizes system and home package selections; prefer edits here over scattering package adds.
 - `scripts/` contains small helpers (e.g., `updateio.sh` for rebuilds); keep new scripts idempotent and echo status.
 - `assets/` stores wallpapers and theme assets. Avoid committing large binaries; reference paths from modules instead.
@@ -34,7 +34,7 @@
 
 - Minimum gate: `nix flake check` plus a build for each affected host (`nix build .#nixosConfigurations.<host>...`).
 - For risky changes, run `sudo nixos-rebuild test --flake .#<host>` to boot-validate without persisting.
-- UI tweaks (Hyprland/waybar/swaylock) should be smoke-tested in a VM or non-critical session when possible; capture screenshots for review.
+- UI tweaks (Hyprland/waybar) should be smoke-tested in a VM or non-critical session when possible; capture screenshots for review.
 
 ## Commit & Pull Request Guidelines
 

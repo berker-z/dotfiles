@@ -13,7 +13,7 @@
     layout = [
       {
         label = "lock";
-        action = "loginctl lock-session";
+        action = "hyprlock";
         text = "Lock";
         keybind = "l";
       }

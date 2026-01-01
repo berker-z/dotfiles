@@ -57,13 +57,13 @@
       general = {
         after_sleep_cmd = "hyprctl dispatch dpms on";
         ignore_dbus_inhibit = false;
-        lock_cmd = "swaylock -f";
+        lock_cmd = "hyprlock";
       };
 
       listener = [
         {
           timeout = 900;
-          on-timeout = "swaylock -f";
+          on-timeout = "hyprlock";
         }
         {timeout = 1200;}
       ];
@@ -191,8 +191,6 @@
       ];
     };
   };
-
-  xdg.configFile."swaylock/config".source = ./modules/swaylock/config;
 
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
