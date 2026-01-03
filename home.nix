@@ -50,6 +50,12 @@
   };
 
   xdg.configFile."hypr/hyprlock.conf".source = ./modules/hypr/hyprlock.conf;
+  xdg.configFile."waybar/style.css".source = ./modules/waybar/style.css;
+  xdg.configFile."waybar/config.jsonc".source =
+    let
+      host = osConfig.networking.hostName;
+    in
+      if host == "laptop" then ./modules/waybar/config-laptop.jsonc else ./modules/waybar/config.jsonc;
 
   services.hypridle = {
     enable = true;
