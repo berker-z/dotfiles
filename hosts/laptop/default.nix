@@ -5,49 +5,55 @@
   ...
 }: {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
 
-  # Allow unfree packages
-
-  # NVIDIA drivers are unfree.
   boot.loader.grub = {
     yorhaTheme = {
       enable = true;
       resolution = "1080p";
     };
-    #version = 2;
   };
-  services.xserver.videoDrivers = ["nvidia"]; # If you are using a hybrid laptop add its iGPU manufacturer
-  hardware.graphics = {
-    enable = true;
-    #  driSupport = true;
-    #  driSupport32Bit = true;
+
+  networking.hostName = "laptop";
+
+  # Hybrid graphics: make AMD the primary display GPU, keep NVIDIA for offload.
+  services.xserver.videoDrivers = ["amdgpu" "nvidia"];
+
+  hardware.graphics.enable = true;
+
+  # Ensure amdgpu initializes early so boot isn't a coin flip.
+  boot.initrd.kernelModules = ["amdgpu"];
+  boot.kernelModules = ["amdgpu"];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = false;
+
+    powerManagement.enable = true;
+    # powerManagement.finegrained = true;
+
+    nvidiaSettings = true;
+
+    # Prefer stable on laptops unless you're chasing a specific beta fix.
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+    prime = {
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+
+      # From your lspci:
+      # NVIDIA 01:00.0 -> PCI:1:0:0
+      # AMD    04:00.0 -> PCI:4:0:0
+      nvidiaBusId = "PCI:1:0:0";
+      amdgpuBusId = "PCI:4:0:0";
+    };
   };
 
   environment.sessionVariables = {
     GSK_RENDERER = "ngl";
   };
-
-  #20bdb3cd-f7e8-4811-8200-ca2d7c232ad1
-
-  systemd.services."nvidia-powerd".enable = false;
-
-  networking.hostName = "laptop";
-  hardware.nvidia = {
-    # Enable modesetting for Wayland compositors (hyprland)
-    modesetting.enable = true;
-    # Use the open source version of the kernel module (for driver 515.43.04+)
-    open = false;
-    powerManagement.enable = false;
-    #powerManagement.finegrained = true;
-    # Enable the Nvidia settings menu
-    nvidiaSettings = true;
-    # Select the appropriate driver version for your specific GPU
-    package = config.boot.kernelPackages.nvidiaPackages.beta;
-  };
-
+  systemd.services.nvidia-powerd.enable = false;
   # Enable Hyprland
   programs.hyprland.enable = true;
 }
