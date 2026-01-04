@@ -16,6 +16,7 @@
     tldr # tlrc
     nix-prefetch
     nix-prefetch-git
+
     unzip
     zip
     ntfs3g # Kept per user request
