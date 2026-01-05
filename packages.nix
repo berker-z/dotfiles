@@ -95,7 +95,7 @@
     # Productivity
     obsidian
     zenity
-    xfce.mousepad # Restored
+    mousepad # Restored
     nautilus
 
     # Graphics & Media

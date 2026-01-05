@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # Garbage collection for system (requires sudo)
 echo "Collecting system garbage..."

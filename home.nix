@@ -79,11 +79,16 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      ipc = "off";
+      ipc = false;
       splash = false;
       splash_offset = 2.0;
-      preload = "~/dotfiles/assets/fog.jpg";
-      wallpaper = ",~/dotfiles/assets/fog.jpg";
+      wallpaper = [
+        {
+          monitor = "";
+          path = "~/dotfiles/assets/fog.jpg";
+          fit_mode = "cover";
+        }
+      ];
     };
   };
 
@@ -193,7 +198,6 @@
         "cpu"
         "disk"
         "break"
-        "colors"
       ];
     };
   };
