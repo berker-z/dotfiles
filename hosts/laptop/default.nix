@@ -50,6 +50,12 @@
     };
   };
 
+  # Pin greeter-side Wayland DRM device to the iGPU (AMD eDP) regardless of /dev/dri/card* order.
+  systemd.services."display-manager".environment = {
+    WLR_DRM_DEVICES = "/dev/dri/by-path/pci-0000:04:00.0-card";
+    KWIN_DRM_DEVICES = "/dev/dri/by-path/pci-0000:04:00.0-card";
+  };
+
   services.power-profiles-daemon.enable = true;
 
   # Ensure EC/platform fan table starts quiet on boot.
