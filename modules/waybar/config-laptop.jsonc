@@ -156,8 +156,8 @@
     "interval": 4,
     "return-type": "json",
     "format": " {text}<span color=\"#88c0d0\">  | </span>",
-    "exec": "p=$(/run/current-system/sw/bin/powerprofilesctl get 2>/dev/null || echo unknown); if [ \"$p\" = performance ]; then echo '{\"text\":\"\",\"tooltip\":\"Gaming (performance)\"}'; else echo '{\"text\":\"\",\"tooltip\":\"Quiet ('\"$p\"')\"}'; fi",
-    "on-click": "bash -c 'p=$(/run/current-system/sw/bin/powerprofilesctl get 2>/dev/null || echo unknown); if [ \"$p\" = performance ]; then /run/current-system/sw/bin/powerprofilesctl set power-saver && /run/current-system/sw/bin/asusctl profile -P Quiet; else /run/current-system/sw/bin/powerprofilesctl set performance && /run/current-system/sw/bin/asusctl profile -P Performance; fi'",
+    "exec": "p=$(/run/current-system/sw/bin/powerprofilesctl get 2>/dev/null || echo unknown); if [ \"$p\" = power-saver ]; then echo '{\"text\":\"\",\"tooltip\":\"Quiet (power-saver + Quiet)\"}'; elif [ \"$p\" = balanced ]; then echo '{\"text\":\"\",\"tooltip\":\"Balanced (balanced + Balanced)\"}'; elif [ \"$p\" = performance ]; then echo '{\"text\":\"\",\"tooltip\":\"Turbo (performance + Performance)\"}'; else echo '{\"text\":\"?\",\"tooltip\":\"Unknown ('\"$p\"')\"}'; fi",
+    "on-click": "bash -c 'p=$(/run/current-system/sw/bin/powerprofilesctl get 2>/dev/null || echo unknown); if [ \"$p\" = power-saver ]; then /run/current-system/sw/bin/powerprofilesctl set balanced && /run/current-system/sw/bin/asusctl profile -P Balanced; elif [ \"$p\" = balanced ]; then /run/current-system/sw/bin/powerprofilesctl set performance && /run/current-system/sw/bin/asusctl profile -P Performance; else /run/current-system/sw/bin/powerprofilesctl set power-saver && /run/current-system/sw/bin/asusctl profile -P Quiet; fi'",
   },
 
   "custom/vpn": {
