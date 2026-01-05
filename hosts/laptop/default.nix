@@ -50,31 +50,18 @@
     };
   };
 
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_BOOST_ON_AC = 0;
-      CPU_BOOST_ON_BAT = 0;
-      CPU_MAX_PERF_ON_AC = 70;
-      CPU_MAX_PERF_ON_BAT = 60;
+  services.power-profiles-daemon.enable = true;
+
+  # Ensure EC/platform fan table starts quiet on boot.
+  systemd.services.asus-profile-quiet = {
+    description = "Set ASUS platform profile to Quiet at boot";
+    wantedBy = ["multi-user.target"];
+    after = ["multi-user.target" "asusd.service"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/run/current-system/sw/bin/asusctl profile -P Quiet";
     };
   };
-
-  security.sudo.extraRules = [
-    {
-      users = ["berkerz"];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/systemctl start tlp";
-          options = ["NOPASSWD"];
-        }
-        {
-          command = "/run/current-system/sw/bin/systemctl stop tlp";
-          options = ["NOPASSWD"];
-        }
-      ];
-    }
-  ];
 
   environment.sessionVariables = {
     GSK_RENDERER = "ngl";

@@ -26,6 +26,7 @@
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk # Kept per user request
     ncdu
+    asusctl
 
     # --- Networking & DNS ---
     networkmanagerapplet
