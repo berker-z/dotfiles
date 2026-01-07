@@ -20,9 +20,24 @@ If you want to opt out later, switch to **Quiet** once to reset curves, then rem
 Balanced and Performance are set to reuse the Quiet curve at low temperatures, then ramp harder at high temps.
 
 Balanced (quiet until 66c):
-- CPU: 47c:10,50c:20,53c:20,57c:35,61c:35,66c:51,70c:122,98c:142
-- GPU: 47c:20,50c:30,53c:30,57c:45,61c:45,66c:68,70c:127,98c:147
+- CPU: 45c:0,50c:15,53c:18,57c:28,61c:40,70c:70,82c:100,98c:142
+- GPU: 45c:0,50c:20,53c:24,57c:34,61c:48,66c:80,70c:110,98c:147
 
-Performance (quiet until 64c):
-- CPU: 20c:10,48c:20,52c:20,56c:35,60c:35,64c:51,68c:153,98c:163
-- GPU: 20c:20,48c:30,52c:30,56c:45,60c:45,64c:68,68c:160,98c:175
+Performance (quiet until 45c):
+- CPU: 45c:0,48c:18,52c:22,56c:32,60c:45,64c:80,68c:120,98c:163
+- GPU: 45c:0,48c:20,52c:26,56c:36,60c:52,64c:90,68c:130,98c:175
+
+## Balanced max frequency cap
+
+Balanced mode applies a CPU max frequency cap to keep boost spikes down:
+
+- Balanced: `3200000` (3.2 GHz)
+- Performance: `restore` (use `cpuinfo_max_freq`)
+- Quiet: `3200000` (3.2 GHz)
+
+Applied via systemd:
+
+- `systemctl start cpu-max-freq@3200000.service`
+- `systemctl start cpu-max-freq@restore.service`
+
+NOPASSWD sudo rule allows `systemctl start cpu-max-freq@*.service` without a password.

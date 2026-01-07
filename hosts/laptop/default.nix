@@ -6,6 +6,7 @@
 }: {
   imports = [
     ./hardware-configuration.nix
+    ../../ly.nix
   ];
 
   boot.loader.grub = {
@@ -50,12 +51,6 @@
     };
   };
 
-  # Pin greeter-side Wayland DRM device to the iGPU (AMD eDP) regardless of /dev/dri/card* order.
-  systemd.services."display-manager".environment = {
-    WLR_DRM_DEVICES = "/dev/dri/by-path/pci-0000:04:00.0-card";
-    KWIN_DRM_DEVICES = "/dev/dri/by-path/pci-0000:04:00.0-card";
-  };
-
   services.power-profiles-daemon.enable = true;
 
   # Ensure EC/platform fan table starts quiet on boot.
@@ -68,6 +63,26 @@
       ExecStart = "/run/current-system/sw/bin/asusctl profile -P Quiet";
     };
   };
+
+  systemd.services."cpu-max-freq@" = {
+    description = "Set CPU max frequency (kHz) or restore default";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/set-cpu-max-freq.sh %i";
+    };
+  };
+
+  security.sudo.extraRules = [
+    {
+      users = ["berkerz"];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/systemctl start cpu-max-freq@*.service";
+          options = ["NOPASSWD"];
+        }
+      ];
+    }
+  ];
 
   environment.sessionVariables = {
     GSK_RENDERER = "ngl";

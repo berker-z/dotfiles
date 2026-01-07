@@ -1,4 +1,4 @@
-# Repository Guidelines
+You are a coding agent living in my computer. Whenever you need logs, tests, etc, remember that you are capable of running commands like journalctl and the like. As long as it's non-invasive, you can do these things without asking me for permission, for example for diagnostic purposes.
 
 # Purity & Respect
 
@@ -39,5 +39,3 @@
 ## Commit & Pull Request Guidelines
 
 - Use short, present-tense commit messages (`fix hyprpaper preload path`, `refine laptop power settings`); avoid generic “update” where a specific scope fits.
-- In PRs describe scope, touched hosts/modules, and commands run (flake check/build/test). Link issues if they exist and attach visuals for UI changes.
-- Keep diffs focused: separate formatting-only commits from behavioral changes, and note any follow-up debt in the PR description.

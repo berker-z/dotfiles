@@ -16,6 +16,7 @@
     tldr # tlrc
     nix-prefetch
     nix-prefetch-git
+    lm_sensors
 
     unzip
     zip

@@ -1,10 +1,15 @@
 {
   pkgs,
+  config,
   lib,
   ...
 }: let
+  sddmTheme =
+    if config.networking.hostName == "laptop"
+    then "japanese_aesthetic"
+    else "hyprland_kath";
   sddm-astronaut = pkgs.sddm-astronaut.override {
-    embeddedTheme = "hyprland_kath";
+    embeddedTheme = sddmTheme;
     # themeConfig = { }  # put extra keys here if you want
   };
 in {

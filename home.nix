@@ -85,7 +85,7 @@
       wallpaper = [
         {
           monitor = "";
-          path = "~/dotfiles/assets/fog.jpg";
+          path = "${config.home.homeDirectory}/dotfiles/assets/fog.jpg";
           fit_mode = "cover";
         }
       ];
