@@ -9,5 +9,6 @@
     ./fuzzel
     ./nixvim.nix
     ./avante.nix
+    ./claude-code.nix
   ];
 }
