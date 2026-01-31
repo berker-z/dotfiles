@@ -252,6 +252,7 @@
 
   #for STEAM to work
   hardware.graphics.enable32Bit = true;
+  programs.steam.enable = true;  # Provides steam-run for SMAPI
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
