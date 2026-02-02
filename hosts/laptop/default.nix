@@ -60,7 +60,7 @@
     after = ["multi-user.target" "asusd.service"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/asusctl profile -P Quiet";
+      ExecStart = "/run/current-system/sw/bin/asusctl profile set Quiet";
     };
   };
 
