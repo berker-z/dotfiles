@@ -13,6 +13,7 @@
     ./wireguard.nix
     ./sddm.nix
     ./vars.nix
+    ./emulator.nix
   ];
   services.hardware.openrgb.enable = true;
   hardware.i2c.enable = true;
@@ -188,7 +189,7 @@
   # Fonts here
 
   fonts.packages = with pkgs; [
-    etBook
+    et-book
     font-awesome
     #  noto-fonts
     liberation_ttf
@@ -252,7 +253,7 @@
 
   #for STEAM to work
   hardware.graphics.enable32Bit = true;
-  programs.steam.enable = true;  # Provides steam-run for SMAPI
+  programs.steam.enable = true; # Provides steam-run for SMAPI
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

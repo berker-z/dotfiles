@@ -68,7 +68,7 @@
     nodePackages.bash-language-server
     nodePackages.prettier
     lua-language-server
-    nixfmt-rfc-style
+    nixfmt
     alejandra
     nixd
     nixpkgs-fmt
