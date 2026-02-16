@@ -38,4 +38,4 @@ You are a coding agent living in my computer. Whenever you need logs, tests, etc
 
 ## Commit & Pull Request Guidelines
 
-- Use short, present-tense commit messages (`fix hyprpaper preload path`, `refine laptop power settings`); avoid generic “update” where a specific scope fits.
+- Use short, present-tense commit messages (`fix hyprpaper preload path`, `refine laptop power settings`).
