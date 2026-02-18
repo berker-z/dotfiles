@@ -155,6 +155,7 @@
     hyprland-qt-support
 
     # --- Everyday Tools ---
+    slack
     playerctl
     spotify
     bluez
