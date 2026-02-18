@@ -13,7 +13,6 @@
     ./wireguard.nix
     ./sddm.nix
     ./vars.nix
-    ./emulator.nix
   ];
   services.hardware.openrgb.enable = true;
   hardware.i2c.enable = true;
@@ -37,7 +36,12 @@
 
   #FUCKING FISH DUDE
   documentation.man.generateCaches = false;
+  # nix-ld: compatibility shim for running prebuilt/non-Nix binaries
+  # (e.g. Zed's codex-acp). Add shared libs they need here.
   programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    libcap
+  ];
   # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 

@@ -92,6 +92,7 @@ in {
     libxcb
     pulseaudio
     alsa-lib
+    libcap
   ];
 
   # Add user to required groups
