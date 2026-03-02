@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-24.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     zen-browser.url = "github:youwen5/zen-browser-flake";
@@ -35,6 +36,7 @@
   outputs = inputs @ {
     self,
     nixpkgs,
+    nixpkgs-stable,
     home-manager,
     nixos-hardware,
     zen-browser,
@@ -44,11 +46,20 @@
     stylix,
     ...
   }: let
+    stablePkgs = import nixpkgs-stable {
+      system = "x86_64-linux";
+    };
+
+    overlays = [
+      rust-overlay.overlays.default
+      (final: _prev: {
+        libreoffice = stablePkgs.libreoffice-still;
+      })
+    ];
+
     overlayedPkgs = import nixpkgs {
       system = "x86_64-linux";
-      overlays = [
-        rust-overlay.overlays.default
-      ];
+      inherit overlays;
     };
 
     mkSystem = {
@@ -64,11 +75,7 @@
             yorha.nixosModules.yorha-grub-theme
             ./configuration.nix
             ./hosts/${hostName}/default.nix
-            {
-              nixpkgs.overlays = [
-                rust-overlay.overlays.default
-              ];
-            }
+            {nixpkgs.overlays = overlays;}
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -100,10 +107,7 @@
 
     devShells = nixpkgs.lib.genAttrs ["x86_64-linux"] (system: let
       pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          rust-overlay.overlays.default
-        ];
+        inherit system overlays;
       };
 
       myBuildInputs = with pkgs; [

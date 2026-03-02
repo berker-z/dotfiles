@@ -35,7 +35,7 @@
   };
 
   #FUCKING FISH DUDE
-  documentation.man.generateCaches = false;
+  documentation.man.cache.enable = false;
   # nix-ld: compatibility shim for running prebuilt/non-Nix binaries
   # (e.g. Zed's codex-acp). Add shared libs they need here.
   programs.nix-ld.enable = true;
