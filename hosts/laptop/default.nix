@@ -51,7 +51,7 @@
     };
   };
 
-  services.power-profiles-daemon.enable = true;
+  services.power-profiles-daemon.enable = false;
 
   # Ensure EC/platform fan table starts quiet on boot.
   systemd.services.asus-profile-quiet = {
