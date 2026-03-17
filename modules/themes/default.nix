@@ -5,6 +5,5 @@
 }: {
   imports = [
     ./theming.nix
-    #./stylix.nix
   ];
 }

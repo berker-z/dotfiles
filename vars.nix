@@ -13,15 +13,10 @@
     GTK_USE_PORTAL = "1";
 
     # qt / wayland
-    #QT_QPA_PLATFORM = "wayland";
-    QT_QPA_PLATFORMTHEME = "qt6ct"; # switched from kvantum
-    #QT_STYLE_OVERRIDE = "kvantum";
-    #QT_STYLE_OVERRIDE = "adwaita-dark";
+    QT_QPA_PLATFORMTHEME = "qt6ct";
+    QT_STYLE_OVERRIDE = "kvantum";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-    #QT_PLUGIN_PATH = "${pkgs.qt6.qtbase}/${pkgs.qt6.qtbase.qtPluginPrefix}:${pkgs.hyprqt6engine}/lib/qt6/plugins";
-    #QT_STYLE_OVERRIDE_QT5 = "kvantum";
-    #experimental
-    #QT_QUICK_CONTROLS_STYLE = "org.hyprland.style";
+
     # cursors
     XCURSOR_SIZE = "24";
     HYPRCURSOR_SIZE = "24";

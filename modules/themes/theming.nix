@@ -1,9 +1,9 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: {
-
   gtk = {
     enable = true;
     theme = {
@@ -36,29 +36,50 @@
   home.file.".config/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
   home.file.".local/share/themes/Nordic/assets".source = "${pkgs.nordic}/share/themes/Nordic/assets";
 
-
   qt = {
     enable = true;
-platformTheme.name = "qtct";
+    platformTheme.name = "qtct";
     style.name = "kvantum";
   };
 
   xdg.configFile = {
+    "qt5ct/qt5ct.conf".text = ''
+      [Appearance]
+      style=kvantum
+      icon_theme=Nordzy
+      standard_dialogs=xdgdesktopportal
+    '';
+
+    "qt6ct/qt6ct.conf".text = ''
+      [Appearance]
+      style=kvantum
+      icon_theme=Nordzy
+      standard_dialogs=xdgdesktopportal
+    '';
+
     # Tell Kvantum which theme to use
     "Kvantum/kvantum.kvconfig".text = ''
       [General]
-      theme=Utterly-Nord-Solid
+      theme=Nordic-Darker
     '';
 
-    # Make sure the theme files are visible under ~/.config/Kvantum
-    # Adjust the derivation path if your flake imports pkgs differently
-    "Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.kvconfig".source =
-      "${pkgs.utterly-nord-plasma}/share/Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.kvconfig";
+    # Kvantum does not reliably discover the Nordic theme inside the store on
+    # its own, so expose the selected variant under ~/.config/Kvantum.
+    "Kvantum/Nordic-Darker".source = "${pkgs.nordic}/share/Kvantum/Nordic-Darker";
 
-    "Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.svg".source =
-      "${pkgs.utterly-nord-plasma}/share/Kvantum/Utterly-Nord-Solid/Utterly-Nord-Solid.svg";
+    # KDE apps like Dolphin also use KDE color schemes. Without a matching dark
+    # scheme, text can stay black while widgets are drawn with a dark Kvantum
+    # theme.
+    "kdeglobals".text = ''
+      [General]
+      ColorScheme=NordicDarker
+      Name=NordicDarker
 
-    "Kvantum/Utterly-Nord-Solid/Nord.patchconfig".source =
-      "${pkgs.utterly-nord-plasma}/share/Kvantum/Utterly-Nord-Solid/Nord.patchconfig";
+      [Icons]
+      Theme=Nordzy
+    '';
   };
+
+  xdg.dataFile."color-schemes/NordicDarker.colors".source =
+    "${pkgs.nordic}/share/color-schemes/NordicDarker.colors";
 }

@@ -118,15 +118,10 @@
     (nordic.overrideAttrs {
       dontCheckForBrokenSymlinks = true;
     })
-    adwaita-qt6
     libsForQt5.qt5.qtwayland
     libsForQt5.qt5.qtgraphicaleffects # Potentially redundant if not using SDDM effects
-    libsForQt5.qtstyleplugin-kvantum
     libsForQt5.breeze-icons
-    libsForQt5.qt5ct
-    kdePackages.qtstyleplugin-kvantum
     kdePackages.qqc2-desktop-style
-    kdePackages.qt6ct
     inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
     utterly-nord-plasma
 
@@ -169,7 +164,10 @@
     steam
     appflowy
     telegram-desktop
-    feh
+    loupe
+    kdePackages.dolphin
+    kdePackages.kio-extras
+    kdePackages.ffmpegthumbs
     libreoffice
     gnome-clocks
     kdePackages.kolourpaint

@@ -1,22 +1,13 @@
-{pkgs, ...}: {
+{config, pkgs, ...}: let
+  codexConfigPath = "${config.home.homeDirectory}/dotfiles/codex/config.toml";
+in {
   home.packages = [
+    pkgs.codex
     pkgs.mcp-proxy
   ];
 
-  programs.codex = {
-    enable = true;
-
-    settings = {
-      sandbox_mode = "workspace-write";
-      approval_policy = "on-request";
-
-      sandbox_workspace_write = {
-        network_access = true;
-      };
-
-      features = {
-        web_search_request = true;
-      };
-    };
+  home.file.".codex/config.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink codexConfigPath;
+    force = true;
   };
 }
