@@ -16,3 +16,9 @@ status_line = [
   "context-remaining",
   "current-dir",
 ]
+
+[projects."/home/berkerz/Projects/Multiplayer/ChapterGO"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/dotfiles"]
+trust_level = "trusted"

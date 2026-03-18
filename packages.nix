@@ -36,10 +36,12 @@
     dnsutils
     wireguard-tools
     bluetuith # Restored
+    impala
 
     # --- Audio & Video ---
     pavucontrol
     alsa-utils
+    wiremix
     ffmpeg
     ffmpeg-full
     gst_all_1.gst-libav

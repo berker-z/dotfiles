@@ -51,11 +51,12 @@
 
   xdg.configFile."hypr/hyprlock.conf".source = ./modules/hypr/hyprlock.conf;
   xdg.configFile."waybar/style.css".source = ./modules/waybar/style.css;
-  xdg.configFile."waybar/config.jsonc".source =
-    let
-      host = osConfig.networking.hostName;
-    in
-      if host == "laptop" then ./modules/waybar/config-laptop.jsonc else ./modules/waybar/config.jsonc;
+  xdg.configFile."waybar/config.jsonc".source = let
+    host = osConfig.networking.hostName;
+  in
+    if host == "laptop"
+    then ./modules/waybar/config-laptop.jsonc
+    else ./modules/waybar/config.jsonc;
 
   services.hypridle = {
     enable = true;
@@ -98,6 +99,11 @@
 
   #xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
 
+  home.file.".local/bin/control-center-tui" = {
+    source = ./scripts/control-center-tui.sh;
+    executable = true;
+  };
+
   ######## custom entries for launcher etc. ########
   xdg.desktopEntries.mirror = {
     name = "Mirror";
@@ -108,6 +114,19 @@
     categories = [
       "Utility"
       "Video"
+    ];
+  };
+
+  xdg.desktopEntries.control-center-tui = {
+    name = "Control Center TUI";
+    comment = "Bluetooth, audio, and network tools in a terminal launcher";
+    exec = "kitty -e ${config.home.homeDirectory}/.local/bin/control-center-tui";
+    terminal = false;
+    icon = "utilities-terminal";
+    categories = [
+      "System"
+      "Settings"
+      "Utility"
     ];
   };
 
