@@ -20,7 +20,8 @@ You are a coding agent living in my computer. Whenever you need logs, tests, etc
 
 - Validate flake and module integrity: `nix flake check`.
 - Build or switch a host: `sudo nixos-rebuild switch --flake .#nixos` (or `.#laptop`). Use `--build-host`/`--target-host` when deploying remotely.
-- Quick build without switching: `nix build .#nixosConfigurations.<host>.config.system.build.toplevel`.
+- Quick build without switching: `nix build --no-link .#nixosConfigurations.<host>.config.system.build.toplevel`.
+- Prefer `nix build --no-link` for validation builds so Nix does not create a `result` symlink in the repo root.
 - Enter the Rust-friendly dev shell: `nix develop .#rusticed`.
 - Update + rebuild helper: `./scripts/updateio.sh` (assumes `.#` default system); keep it in sync with flake changes.
 

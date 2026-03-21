@@ -36,7 +36,6 @@
     dnsutils
     wireguard-tools
     bluetuith # Restored
-    impala
 
     # --- Audio & Video ---
     pavucontrol

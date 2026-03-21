@@ -99,8 +99,8 @@
 
   #xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
 
-  home.file.".local/bin/control-center-tui" = {
-    source = ./scripts/control-center-tui.sh;
+  home.file.".local/bin/ccbz" = {
+    source = ./scripts/ccbz.sh;
     executable = true;
   };
 
@@ -117,10 +117,10 @@
     ];
   };
 
-  xdg.desktopEntries.control-center-tui = {
-    name = "Control Center TUI";
-    comment = "Bluetooth, audio, and network tools in a terminal launcher";
-    exec = "kitty -e ${config.home.homeDirectory}/.local/bin/control-center-tui";
+  xdg.desktopEntries.ccbz = {
+    name = "CCBZ";
+    comment = "Open wiremix, bluetuith, and nmcli in Kitty windows";
+    exec = "${config.home.homeDirectory}/.local/bin/ccbz";
     terminal = false;
     icon = "utilities-terminal";
     categories = [

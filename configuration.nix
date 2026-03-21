@@ -51,6 +51,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  #networking.networkmanager.wifi.backend = "iwd";
   networking.wireguard.enable = true;
 
   ##### DNS STUFF
