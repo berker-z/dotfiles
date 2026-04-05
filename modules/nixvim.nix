@@ -197,6 +197,7 @@
           prettier = {
             enable = true;
             disableTsServerFormatter = true;
+            package = pkgs.prettier;
           };
           stylua.enable = true; # lua
           alejandra.enable = true; # nix

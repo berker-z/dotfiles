@@ -63,11 +63,11 @@
     sqlite
 
     # Language Servers & Formatters
-    nodePackages.typescript
-    nodePackages.typescript-language-server
-    nodePackages.eslint
-    nodePackages.bash-language-server
-    nodePackages.prettier
+    typescript
+    typescript-language-server
+    eslint
+    bash-language-server
+    prettier
     lua-language-server
     nixfmt
     alejandra
@@ -81,7 +81,6 @@
     # Editors & Tools
     vscode
     nix-ld
-    claude-code
     unityhub
     antigravity-fhs
     gemini-cli
