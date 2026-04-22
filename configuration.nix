@@ -25,6 +25,7 @@
     efiSysMountPoint = "/boot";
     canTouchEfiVariables = true;
   };
+  boot.loader.timeout = 2;
   boot.loader.grub = {
     enable = true;
     devices = ["nodev"];
