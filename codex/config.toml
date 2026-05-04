@@ -1,7 +1,7 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model = "gpt-5.4"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
 web_search = "live"
 personality = "pragmatic"
 
@@ -16,6 +16,9 @@ status_line = [
   "context-remaining",
   "current-dir",
 ]
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
 
 [projects."/home/berkerz/Projects/Multiplayer/ChapterGO"]
 trust_level = "trusted"
@@ -33,6 +36,9 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/berkerz/Projects/slacky"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/hermesbox"]
 trust_level = "trusted"
 
 [plugins."canva@openai-curated"]
