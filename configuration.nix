@@ -11,6 +11,7 @@
   imports = [
     ./packages.nix
     ./wireguard.nix
+    ./tailscale.nix
     ./sddm.nix
     ./vars.nix
   ];

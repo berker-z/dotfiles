@@ -35,6 +35,7 @@
     whois
     dnsutils
     wireguard-tools
+    tailscale
     bluetuith # Restored
 
     # --- Audio & Video ---
