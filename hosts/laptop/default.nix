@@ -50,7 +50,11 @@
     };
   };
 
+  # nixos-hardware's generic laptop module enables TLP by default. Keep ASUS
+  # platform profiles owned by asusd/the Waybar script instead of another
+  # daemon rewriting profiles on AC/Battery transitions.
   services.power-profiles-daemon.enable = false;
+  services.tlp.enable = false;
 
   # Ensure EC/platform fan table starts quiet on boot.
   systemd.services.asus-profile-quiet = {
@@ -59,7 +63,7 @@
     after = ["multi-user.target" "asusd.service"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/asusctl profile set Quiet";
+      ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/asus-power-profile.sh set Quiet";
     };
   };
 

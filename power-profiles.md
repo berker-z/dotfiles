@@ -2,18 +2,25 @@
 
 ## Profiles and mapping
 
-- Quiet: `powerprofilesctl set power-saver` + `asusctl profile -P Quiet`
-- Balanced: `powerprofilesctl set balanced` + `asusctl profile -P Balanced`
-- Turbo: `powerprofilesctl set performance` + `asusctl profile -P Performance`
+- Quiet: `asus-power-profile.sh set Quiet`
+- Balanced: `asus-power-profile.sh set Balanced`
+- Turbo: `asus-power-profile.sh set Performance`
+
+`services.power-profiles-daemon` and `services.tlp` are disabled for the laptop.
+`asusd` is the only daemon that should own `/sys/firmware/acpi/platform_profile`.
+The helper script sets both `asusctl profile set --ac <profile>` and
+`asusctl profile set --battery <profile>` so the profile does not flip when the
+charger is connected or removed.
 
 ## Fan curve notes (opt-in behavior)
 
 Custom fan curves are persistent once set. The Waybar toggle is wired so:
 
-- **Quiet** resets Balanced/Performance curves back to ASUS defaults.
+- **Quiet** disables custom Balanced/Performance curves so BIOS defaults are used.
 - **Balanced/Performance** applies custom low-noise curves for those profiles.
 
-If you want to opt out later, switch to **Quiet** once to reset curves, then remove the Waybar module.
+If you want to opt out later, switch to **Quiet** once to disable custom curves,
+then remove the Waybar module.
 
 ## Quiet-derived curve blending
 
