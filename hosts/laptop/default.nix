@@ -6,7 +6,6 @@
 }: {
   imports = [
     ./hardware-configuration.nix
-    ../../ly.nix
   ];
 
   boot.loader.grub = {

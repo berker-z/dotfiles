@@ -12,7 +12,7 @@
     ./packages.nix
     ./wireguard.nix
     ./tailscale.nix
-    ./sddm.nix
+    ./ly.nix
     ./vars.nix
   ];
   services.hardware.openrgb.enable = true;
