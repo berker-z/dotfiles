@@ -1,7 +1,7 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 model = "gpt-5.5"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "xhigh"
 web_search = "live"
 personality = "pragmatic"
 

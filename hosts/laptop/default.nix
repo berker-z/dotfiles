@@ -26,6 +26,13 @@
   boot.initrd.kernelModules = ["amdgpu"];
   boot.kernelModules = ["amdgpu"];
 
+  # Hyprland 0.54 uses Aquamarine's AQ_DRM_DEVICES for GPU selection. The
+  # stable by-path names contain colons, so expose a colon-free symlink for
+  # the AMD iGPU and make the compositor pin to that from hyp2.conf.
+  services.udev.extraRules = ''
+    KERNEL=="card*", KERNELS=="0000:04:00.0", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", SYMLINK+="dri/amd-igpu"
+  '';
+
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
@@ -64,6 +71,20 @@
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/asus-power-profile.sh set Quiet";
+    };
+  };
+
+  # Re-apply ASUS Aura keyboard power state after boot. Without this, asusd can
+  # report a non-off brightness while the physical keyboard LEDs stay dark.
+  systemd.services.asus-kbd-backlight-restore = {
+    description = "Restore ASUS keyboard backlight at boot";
+    wantedBy = ["multi-user.target"];
+    wants = ["asusd.service"];
+    after = ["multi-user.target" "asusd.service"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStartPre = "/run/current-system/sw/bin/sleep 10";
+      ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/asus-kbd-backlight.sh restore";
     };
   };
 
