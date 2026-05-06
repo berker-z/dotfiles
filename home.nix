@@ -183,6 +183,23 @@
     };
   };
 
+  programs.ssh = {
+    enable = true;
+    matchBlocks.otto = {
+      hostname = "100.118.69.26";
+      user = "hermes";
+      identityFile = "${config.home.homeDirectory}/Projects/hermesbox/ssh-key-2026-05-01.key";
+      identitiesOnly = true;
+      serverAliveInterval = 30;
+      serverAliveCountMax = 3;
+      extraOptions = {
+        HostKeyAlias = "hermesbox";
+        StrictHostKeyChecking = "accept-new";
+        UserKnownHostsFile = "/tmp/hermesbox_known_hosts";
+      };
+    };
+  };
+
   programs.yazi = {
     enable = true;
     enableFishIntegration = true;

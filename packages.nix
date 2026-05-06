@@ -36,6 +36,7 @@
     dnsutils
     wireguard-tools
     tailscale
+    mosh
     bluetuith # Restored
 
     # --- Audio & Video ---

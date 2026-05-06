@@ -154,6 +154,8 @@
       mergio = "bash ~/dotfiles/scripts/mergio.sh";
       pushio = "bash ~/dotfiles/scripts/pushio.sh";
       updateio = "bash ~/dotfiles/scripts/updateio.sh";
+      otto = "mosh otto -- tmux new -A -s hermes";
+      otto-ssh = "ssh otto -t 'tmux new -A -s hermes'";
 
       cod = "bash ~/dotfiles/scripts/codio.sh";
       rsh = "nix develop ~/dotfiles#rusticed --command fish";

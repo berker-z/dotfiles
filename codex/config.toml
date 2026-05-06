@@ -46,3 +46,6 @@ enabled = true
 
 [plugins."github@openai-curated"]
 enabled = true
+
+[notice]
+hide_rate_limit_model_nudge = true
