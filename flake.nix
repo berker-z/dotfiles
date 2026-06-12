@@ -8,6 +8,10 @@
 
     zen-browser.url = "github:youwen5/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
+    helium-browser = {
+      url = "github:oxcl/nix-flake-helium-browser";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
     antigravity-nix = {
       url = "github:jacopone/antigravity-nix";
@@ -15,6 +19,10 @@
     };
     codex-cli-nix = {
       url = "github:sadjow/codex-cli-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -40,6 +48,7 @@
     home-manager,
     nixos-hardware,
     zen-browser,
+    helium-browser,
     nixvim,
     rust-overlay,
     yorha,
@@ -84,6 +93,7 @@
               home-manager.overwriteBackup = true; #THANK GOD FOR THIS
               home-manager.users.berkerz = import ./home.nix;
               home-manager.sharedModules = [
+                helium-browser.homeModules.default
                 nixvim.homeModules.nixvim
               ];
             }

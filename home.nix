@@ -38,6 +38,13 @@
     };
   };
 
+  programs.helium = {
+    enable = true;
+    flags = [
+      "--ozone-platform-hint=auto"
+    ];
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -104,6 +111,55 @@
     executable = true;
   };
 
+  home.file.".local/bin/hermes-desktop-remote" = {
+    text = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      env_file="''${XDG_CONFIG_HOME:-$HOME/.config}/hermes-desktop/remote.env"
+
+      if [[ -f "$env_file" ]]; then
+        set -a
+        # shellcheck disable=SC1090
+        . "$env_file"
+        set +a
+      fi
+
+      if [[ -z "''${HERMES_DESKTOP_REMOTE_URL:-}" || -z "''${HERMES_DESKTOP_REMOTE_TOKEN:-}" ]]; then
+        printf 'Hermes Desktop remote access is not configured.\n' >&2
+        printf 'Create %s with HERMES_DESKTOP_REMOTE_URL and HERMES_DESKTOP_REMOTE_TOKEN.\n' "$env_file" >&2
+        exit 1
+      fi
+
+      if command -v curl >/dev/null 2>&1; then
+        status="$(
+          curl --silent --output /dev/null --write-out '%{http_code}' \
+            --connect-timeout 2 --max-time 4 \
+            --header "Authorization: Bearer $HERMES_DESKTOP_REMOTE_TOKEN" \
+            "''${HERMES_DESKTOP_REMOTE_URL%/}/api/profiles/sessions" || true
+        )"
+
+        if [[ "$status" == "404" ]]; then
+          printf 'Hermes Desktop remote API is incompatible; falling back to local backend.\n' >&2
+          unset HERMES_DESKTOP_REMOTE_URL HERMES_DESKTOP_REMOTE_TOKEN
+        fi
+      fi
+
+      export HERMES_HOME="''${HERMES_HOME:-$HOME/.hermes}"
+      mkdir -p "$HERMES_HOME"
+
+      exec /run/current-system/sw/bin/hermes-desktop "$@"
+    '';
+    executable = true;
+  };
+
+  xdg.configFile."hermes-desktop/remote.env.example".text = ''
+    # Copy this to ~/.config/hermes-desktop/remote.env and chmod 600 it.
+    # Keep the real token out of Git and out of the Nix store.
+    HERMES_DESKTOP_REMOTE_URL=https://hermes.example.com
+    HERMES_DESKTOP_REMOTE_TOKEN=replace-with-remote-gateway-token
+  '';
+
   ######## custom entries for launcher etc. ########
   xdg.desktopEntries.mirror = {
     name = "Mirror";
@@ -127,6 +183,18 @@
       "System"
       "Settings"
       "Utility"
+    ];
+  };
+
+  xdg.desktopEntries.hermes-desktop-remote = {
+    name = "Hermes Desktop Remote";
+    comment = "Connect Hermes Desktop to the remote Hermes gateway";
+    exec = "${config.home.homeDirectory}/.local/bin/hermes-desktop-remote";
+    terminal = false;
+    icon = "hermes";
+    categories = [
+      "Utility"
+      "Development"
     ];
   };
 

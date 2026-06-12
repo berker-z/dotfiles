@@ -89,6 +89,8 @@
     antigravity-fhs
     gemini-cli
     zed-editor
+    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
 
     # --- GUI Applications ---
     # Browsers
@@ -123,9 +125,9 @@
     (nordic.overrideAttrs {
       dontCheckForBrokenSymlinks = true;
     })
-    libsForQt5.qt5.qtwayland
-    libsForQt5.qt5.qtgraphicaleffects # Potentially redundant if not using SDDM effects
-    libsForQt5.breeze-icons
+    qt5.qtwayland
+    qt5.qtgraphicaleffects # Potentially redundant if not using SDDM effects
+    kdePackages.breeze-icons
     kdePackages.qqc2-desktop-style
     inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
     utterly-nord-plasma
