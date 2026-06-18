@@ -135,7 +135,6 @@
       "sound"
       "wheel"
     ];
-    initialPassword = "1234";
     packages = with pkgs; [];
   };
 

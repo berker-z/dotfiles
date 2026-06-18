@@ -13,11 +13,12 @@
     GTK_USE_PORTAL = "1";
 
     # qt / wayland
-    QT_QPA_PLATFORMTHEME = "qt6ct";
+    QT_QPA_PLATFORMTHEME = "qt5ct";
     QT_STYLE_OVERRIDE = "kvantum";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 
     # cursors
+    XCURSOR_THEME = "Bibata-Modern-Ice";
     XCURSOR_SIZE = "24";
     HYPRCURSOR_SIZE = "24";
     HYPRCURSOR_THEME = "Bibata-Modern-Ice"; # new
