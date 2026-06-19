@@ -7,3 +7,4 @@
 ## TODO
 
 - 2026-03-08: Investigate broken IPv6 on laptop Wi-Fi (no global IPv6 route; IPv6 connections fail). Check router/ISP IPv6 config and consider proper IPv6 enablement or disabling IPv6 advertisement if upstream is broken.
+- 2026-06-19: ? Investigate whether `org/gnome/desktop/interface.document-font-name` should be managed at all; it may be redundant with `font-name` or affect app/browser font behavior unexpectedly.

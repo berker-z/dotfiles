@@ -26,6 +26,7 @@
     xdg-desktop-portal
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk # Kept per user request
+    kdePackages.xdg-desktop-portal-kde
     ncdu
     asusctl
 

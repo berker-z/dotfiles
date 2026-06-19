@@ -79,7 +79,6 @@ in {
 
   dconf.settings."org/gnome/desktop/interface" = {
     color-scheme = "prefer-dark";
-    document-font-name = "${uiFont} ${toString uiFontSize}";
     font-name = "${uiFont} ${toString uiFontSize}";
     monospace-font-name = "${fixedFont} ${toString uiFontSize}";
   };
