@@ -230,9 +230,9 @@
       "application/epub+zip" = ["com.github.johnfactotum.Foliate.desktop"];
       "video/*" = ["vlc.desktop"];
       "audio/*" = ["vlc.desktop"];
-      "x-scheme-handler/http" = "zen.desktop";
-      "x-scheme-handler/https" = "zen.desktop";
-      "text/html" = "zen.desktop";
+      "x-scheme-handler/http" = "helium.desktop";
+      "x-scheme-handler/https" = "helium.desktop";
+      "text/html" = "helium.desktop";
       "text/plain" = "org.xfce.mousepad.desktop";
     };
 

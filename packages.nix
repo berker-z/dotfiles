@@ -175,7 +175,11 @@
     telegram-desktop
     loupe
     kdePackages.dolphin
+    kdePackages.kde-cli-tools
+    kdePackages.kded
+    kdePackages.kio
     kdePackages.kio-extras
+    kdePackages.kservice
     kdePackages.ffmpegthumbs
     libreoffice
     gnome-clocks

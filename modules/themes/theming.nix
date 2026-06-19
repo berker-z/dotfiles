@@ -5,7 +5,50 @@
   ...
 }: let
   gtkThemeName = "Nordic-darker";
+  gtkIconTheme = "Nordzy";
   kdeColorScheme = "Nordic-Darker";
+  kdeIconTheme = "breeze-dark";
+  uiFont = "Iosevka Nerd Font";
+  fixedFont = "Iosevka Nerd Font Mono";
+  uiFontSize = 12;
+  smallFontSize = 11;
+  fontSpec = family: size: weight: "${family},${toString size},-1,5,${toString weight},0,0,0,0,0";
+  kdeFontSpec = fontSpec uiFont uiFontSize 50;
+  kdeTitleFontSpec = fontSpec uiFont uiFontSize 57;
+  kdeSmallFontSpec = fontSpec uiFont smallFontSize 50;
+  kdeFixedFontSpec = fontSpec fixedFont uiFontSize 50;
+  nordicKdeColors = builtins.readFile "${pkgs.nordic}/share/color-schemes/NordicDarker.colors";
+  kdeGlobals =
+    lib.replaceStrings
+    [
+      "[General]\n"
+      "[KDE]\n"
+      "[WM]\n"
+    ]
+    [
+      ''
+        [General]
+        fixed=${kdeFixedFontSpec}
+        font=${kdeFontSpec}
+        menuFont=${kdeFontSpec}
+        smallestReadableFont=${kdeSmallFontSpec}
+        toolBarFont=${kdeFontSpec}
+        widgetStyle=Breeze
+      ''
+      ''
+        [KDE]
+        AnimationDurationFactor=0
+        ShowIconsInMenuItems=true
+        ShowIconsOnPushButtons=true
+        SingleClick=false
+        widgetStyle=Breeze
+      ''
+      ''
+        [WM]
+        activeFont=${kdeTitleFontSpec}
+      ''
+    ]
+    nordicKdeColors;
 in {
   gtk = {
     enable = true;
@@ -16,8 +59,13 @@ in {
     gtk4.theme = config.gtk.theme;
 
     iconTheme = {
-      name = "Nordzy";
+      name = gtkIconTheme;
       package = pkgs.nordzy-icon-theme;
+    };
+
+    font = {
+      name = uiFont;
+      size = uiFontSize;
     };
 
     cursorTheme = {
@@ -31,6 +79,9 @@ in {
 
   dconf.settings."org/gnome/desktop/interface" = {
     color-scheme = "prefer-dark";
+    document-font-name = "${uiFont} ${toString uiFontSize}";
+    font-name = "${uiFont} ${toString uiFontSize}";
+    monospace-font-name = "${fixedFont} ${toString uiFontSize}";
   };
 
   home.pointerCursor = {
@@ -55,15 +106,25 @@ in {
 
   xdg.configFile = {
     # Qt apps now use KDE's platform theme and Breeze widgets. The Nordic KDE
-    # color scheme keeps the palette aligned with the GTK/Quickshell Nord stack.
-    "kdeglobals".text = ''
-      [General]
-      ColorScheme=${kdeColorScheme}
-      Name=${kdeColorScheme}
-      widgetStyle=Breeze
+    # color groups are embedded so KDE apps do not fall back to dark text while
+    # resolving the external color-scheme file.
+    "kdeglobals".text =
+      kdeGlobals
+      + ''
 
-      [Icons]
-      Theme=Nordzy
+        [Icons]
+        Theme=${kdeIconTheme}
+
+        [Toolbar style]
+        ToolButtonStyle=TextBesideIcon
+        ToolButtonStyleOtherToolbars=TextBesideIcon
+      '';
+
+    "breezerc".text = ''
+      [Style]
+      AnimationsDuration=0
+      AnimationsEnabled=false
+      MenuOpacity=100
     '';
   };
 
