@@ -5,7 +5,6 @@
   ...
 }: let
   gtkThemeName = "Nordic-darker";
-  kvantumThemeName = "Nordic-Darker";
   kdeColorScheme = "Nordic-Darker";
 in {
   gtk = {
@@ -47,42 +46,21 @@ in {
 
   qt = {
     enable = true;
-    platformTheme.name = "qtct";
-    style.name = "kvantum";
+    platformTheme.name = "kde";
+    style = {
+      name = "breeze";
+      package = pkgs.kdePackages.breeze;
+    };
   };
 
   xdg.configFile = {
-    "qt5ct/qt5ct.conf".text = ''
-      [Appearance]
-      style=kvantum
-      icon_theme=Nordzy
-      standard_dialogs=xdgdesktopportal
-    '';
-
-    "qt6ct/qt6ct.conf".text = ''
-      [Appearance]
-      style=kvantum
-      icon_theme=Nordzy
-      standard_dialogs=xdgdesktopportal
-    '';
-
-    # Tell Kvantum which theme to use
-    "Kvantum/kvantum.kvconfig".text = ''
-      [General]
-      theme=${kvantumThemeName}
-    '';
-
-    # Kvantum does not reliably discover the Nordic theme inside the store on
-    # its own, so expose the selected variant under ~/.config/Kvantum.
-    "Kvantum/${kvantumThemeName}".source = "${pkgs.nordic}/share/Kvantum/${kvantumThemeName}";
-
-    # KDE apps like Dolphin also use KDE color schemes. Without a matching dark
-    # scheme, text can stay black while widgets are drawn with a dark Kvantum
-    # theme.
+    # Qt apps now use KDE's platform theme and Breeze widgets. The Nordic KDE
+    # color scheme keeps the palette aligned with the GTK/Quickshell Nord stack.
     "kdeglobals".text = ''
       [General]
       ColorScheme=${kdeColorScheme}
       Name=${kdeColorScheme}
+      widgetStyle=Breeze
 
       [Icons]
       Theme=Nordzy

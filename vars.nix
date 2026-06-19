@@ -13,8 +13,7 @@
     GTK_USE_PORTAL = "1";
 
     # qt / wayland
-    QT_QPA_PLATFORMTHEME = "qt5ct";
-    QT_STYLE_OVERRIDE = "kvantum";
+    QT_QPA_PLATFORMTHEME = "kde";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 
     # cursors

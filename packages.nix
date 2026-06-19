@@ -127,7 +127,9 @@
     })
     qt5.qtwayland
     qt5.qtgraphicaleffects # Potentially redundant if not using SDDM effects
+    kdePackages.breeze
     kdePackages.breeze-icons
+    kdePackages.plasma-integration
     kdePackages.qqc2-desktop-style
     inputs.hyprland-qtutils.packages.${pkgs.stdenv.hostPlatform.system}.default
     utterly-nord-plasma
