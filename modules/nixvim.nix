@@ -2,6 +2,7 @@
 {pkgs, ...}: {
   programs.nixvim = {
     enable = true;
+    nixpkgs.source = pkgs.path;
 
     globals.mapleader = " ";
     colorschemes.nord.enable = true;

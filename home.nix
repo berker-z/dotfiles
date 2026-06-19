@@ -259,14 +259,28 @@
 
   programs.ssh = {
     enable = true;
-    matchBlocks.otto = {
-      hostname = "100.118.69.26";
-      user = "hermes";
-      identityFile = "${config.home.homeDirectory}/Projects/hermesbox/ssh-key-2026-05-01.key";
-      identitiesOnly = true;
-      serverAliveInterval = 30;
-      serverAliveCountMax = 3;
-      extraOptions = {
+    enableDefaultConfig = false;
+    settings = {
+      "*" = {
+        ForwardAgent = false;
+        AddKeysToAgent = "no";
+        Compression = false;
+        ServerAliveInterval = 0;
+        ServerAliveCountMax = 3;
+        HashKnownHosts = false;
+        UserKnownHostsFile = "~/.ssh/known_hosts";
+        ControlMaster = "no";
+        ControlPath = "~/.ssh/master-%r@%n:%p";
+        ControlPersist = "no";
+      };
+
+      otto = {
+        HostName = "100.118.69.26";
+        User = "hermes";
+        IdentityFile = "${config.home.homeDirectory}/Projects/hermesbox/ssh-key-2026-05-01.key";
+        IdentitiesOnly = true;
+        ServerAliveInterval = 30;
+        ServerAliveCountMax = 3;
         HostKeyAlias = "hermesbox";
         StrictHostKeyChecking = "accept-new";
         UserKnownHostsFile = "/tmp/hermesbox_known_hosts";

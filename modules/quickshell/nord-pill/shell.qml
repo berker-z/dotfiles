@@ -21,6 +21,7 @@ ShellRoot {
     property string sidebarMon: ""
     property bool keepAwake: false
     property string activeWindowLabel: "desktop"
+    property int hyprSerial: 0
 
     readonly property color nord0: "#2e3440"
     readonly property color nord1: "#3b4252"
@@ -40,6 +41,11 @@ ShellRoot {
     readonly property color nord15: "#b48ead"
     readonly property string uiFont: "Iosevka Nerd Font"
     readonly property string iconFont: "Font Awesome 6 Free"
+    readonly property string vpnService: "wg-quick-wg0.service"
+    readonly property string dndStatusCommand: "makoctl mode 2>/dev/null | grep -q dnd && printf dnd || printf default"
+    readonly property string dndToggleCommand: "if makoctl mode 2>/dev/null | grep -q dnd; then makoctl mode -r dnd; else makoctl mode -a dnd; fi; pkill -RTMIN+11 waybar 2>/dev/null || true"
+    readonly property string vpnStatusCommand: "systemctl is-active " + vpnService + " >/dev/null 2>&1 && printf on || printf off"
+    readonly property string vpnToggleCommand: "svc=" + vpnService + "; pkexec_cmd=$(command -v pkexec || printf /run/current-system/sw/bin/pkexec); if systemctl is-active --quiet $svc; then $pkexec_cmd systemctl stop $svc; else $pkexec_cmd systemctl start $svc; fi; pkill -RTMIN+10 waybar 2>/dev/null || true"
 
     function refresh() {
         Hyprland.refreshMonitors();
@@ -71,6 +77,61 @@ ShellRoot {
         }
     }
 
+    function visibleWorkspaceNumbers(mon) {
+        var serial = root.hyprSerial;
+        var seen = {};
+        var out = [];
+
+        function add(n) {
+            n = Number(n);
+            if (!isFinite(n) || n <= 0)
+                return;
+            n = Math.floor(n);
+            if (seen[n])
+                return;
+            seen[n] = true;
+            out.push(n);
+        }
+
+        for (var base = 1; base <= 5; base++)
+            add(base);
+
+        var monitors = Hyprland.monitors.values || [];
+        for (var m = 0; m < monitors.length; m++) {
+            if (monitors[m].name === mon && monitors[m].activeWorkspace) {
+                add(monitors[m].activeWorkspace.id);
+                add(monitors[m].activeWorkspace.name);
+            }
+        }
+
+        var workspaces = Hyprland.workspaces.values || [];
+        for (var i = 0; i < workspaces.length; i++) {
+            var ws = workspaces[i];
+            if (!ws)
+                continue;
+            var name = String(ws.name || "");
+            if (name.indexOf("special") === 0)
+                continue;
+            add(ws.id);
+            add(name);
+        }
+
+        out.sort(function(a, b) { return a - b; });
+        return out;
+    }
+
+    function workspaceStripWidth(workspaces, activeWorkspace, scaleFactor, compact) {
+        var list = workspaces || [];
+        if (list.length === 0)
+            return 0;
+        var total = 0;
+        var active = String(activeWorkspace);
+        for (var i = 0; i < list.length; i++)
+            total += String(list[i]) === active ? (compact ? 16 : 20) : (compact ? 8 : 10);
+        total += Math.max(0, list.length - 1) * (compact ? 3 : 4);
+        return total * scaleFactor;
+    }
+
     function hideAll() {
         root.peekMon = "";
         root.close();
@@ -84,7 +145,6 @@ ShellRoot {
         }
         root.sidebarMon = mon;
         root.sidebarShown = true;
-        root.peekMon = "";
         root.close();
     }
 
@@ -93,7 +153,50 @@ ShellRoot {
     }
 
     function toggleDnd() {
-        root.run("makoctl mode 2>/dev/null | grep -q dnd && makoctl mode -r dnd || makoctl mode -a dnd");
+        root.run(root.dndToggleCommand);
+    }
+
+    function toggleVpn() {
+        root.run(root.vpnToggleCommand);
+    }
+
+    function toggleIdleInhibitor() {
+        root.keepAwake = !root.keepAwake;
+    }
+
+    function isSpotifyPlayer(player) {
+        if (!player)
+            return false;
+        var fields = [
+            player.identity || "",
+            player.desktopEntry || "",
+            player.dbusName || ""
+        ];
+        return fields.join(" ").toLowerCase().indexOf("spotify") !== -1;
+    }
+
+    function spotifyPlayer() {
+        var list = Mpris.players.values || [];
+        for (var i = 0; i < list.length; i++) {
+            if (isSpotifyPlayer(list[i]))
+                return list[i];
+        }
+        return null;
+    }
+
+    function playerArtist(player) {
+        if (!player)
+            return "";
+        var artists = player.trackArtists;
+        if (artists && typeof artists.join === "function" && artists.length > 0)
+            return artists.join(", ");
+        if (artists && String(artists).length > 0)
+            return String(artists);
+        return player.trackArtist ? String(player.trackArtist) : "";
+    }
+
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     function thumbPath(id) {
@@ -130,6 +233,7 @@ ShellRoot {
                 monitorremoved: true
             }[event.name]) {
                 root.refresh();
+                root.hyprSerial += 1;
                 root.refreshActiveWindow();
             }
         }
@@ -269,6 +373,54 @@ ShellRoot {
         }
     }
 
+    component WorkspaceStrip: Row {
+        id: strip
+
+        property var workspaces: []
+        property string activeWorkspace: ""
+        property real scaleFactor: 1
+        property bool compact: false
+
+        spacing: (compact ? 3 : 4) * scaleFactor
+
+        Repeater {
+            model: strip.workspaces
+
+            Rectangle {
+                required property int modelData
+
+                readonly property bool active: strip.activeWorkspace === String(modelData)
+
+                width: active ? (strip.compact ? 16 : 20) * strip.scaleFactor : (strip.compact ? 8 : 10) * strip.scaleFactor
+                height: (strip.compact ? 16 : 18) * strip.scaleFactor
+                radius: 5 * strip.scaleFactor
+                color: wsArea.containsMouse ? root.nord2 : "transparent"
+
+                Behavior on width {
+                    NumberAnimation { duration: 140; easing.type: Easing.OutCubic }
+                }
+
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: parent.active ? (strip.compact ? 12 : 15) * strip.scaleFactor : 5 * strip.scaleFactor
+                    height: 5 * strip.scaleFactor
+                    radius: 2 * strip.scaleFactor
+                    color: parent.active ? root.nord8 : root.nord4
+                    opacity: parent.active ? 1 : (wsArea.containsMouse ? 0.75 : 0.35)
+                }
+
+                MouseArea {
+                    id: wsArea
+
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Hyprland.dispatch("workspace " + modelData)
+                }
+            }
+        }
+    }
+
     component ToggleSwitch: Rectangle {
         id: toggle
 
@@ -306,6 +458,203 @@ ShellRoot {
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: toggle.toggled()
+        }
+    }
+
+    component MediaSidecar: Rectangle {
+        id: media
+
+        property real scaleFactor: 1
+        property int volumePct: 0
+        property bool muted: false
+
+        readonly property var spotify: root.spotifyPlayer()
+        readonly property bool hasSpotify: spotify !== null
+        readonly property string artist: root.playerArtist(spotify)
+        readonly property string title: hasSpotify && spotify.trackTitle ? spotify.trackTitle : "Spotify"
+        readonly property string label: hasSpotify
+            ? ((artist.length > 0 ? artist + " - " : "") + title)
+            : "Spotify"
+        readonly property bool playing: hasSpotify && spotify.isPlaying
+
+        height: 34 * scaleFactor
+        radius: 8 * scaleFactor
+        color: Qt.rgba(root.nord1.r, root.nord1.g, root.nord1.b, 0.96)
+        border.width: 1
+        border.color: root.nord10
+        clip: true
+
+        Behavior on width {
+            NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+        }
+
+        function toggleSpotify() {
+            if (hasSpotify && spotify.canTogglePlaying) {
+                spotify.togglePlaying();
+            } else {
+                root.run("spotify");
+            }
+        }
+
+        function spotifyStep(next) {
+            if (!hasSpotify)
+                return;
+            if (next && spotify.canGoNext)
+                spotify.next();
+            else if (!next && spotify.canGoPrevious)
+                spotify.previous();
+        }
+
+        function nudgeVolume(up) {
+            if (up) {
+                root.run("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+");
+                volumePct = Math.round(root.clamp(volumePct + 5, 0, 100));
+                muted = false;
+            } else {
+                root.run("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-");
+                volumePct = Math.round(root.clamp(volumePct - 5, 0, 100));
+            }
+            volumeRefresh.restart();
+        }
+
+        function setVolumeFromX(x) {
+            var pct = Math.round(root.clamp(x / Math.max(1, volumeSlider.width), 0, 1) * 100);
+            volumePct = pct;
+            muted = false;
+            root.run("wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ " + pct + "%");
+            volumeRefresh.restart();
+        }
+
+        function refreshVolume() {
+            if (!volumeProc.running)
+                volumeProc.running = true;
+        }
+
+        Component.onCompleted: refreshVolume()
+
+        Timer {
+            interval: 2500
+            running: true
+            repeat: true
+            onTriggered: media.refreshVolume()
+        }
+
+        Timer {
+            id: volumeRefresh
+
+            interval: 350
+            repeat: false
+            onTriggered: media.refreshVolume()
+        }
+
+        Process {
+            id: volumeProc
+
+            command: ["sh", "-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | awk '{v=int($2*100+0.5); printf v; if ($0 ~ /MUTED/) printf \" muted\"}'"]
+            stdout: StdioCollector {
+                onStreamFinished: {
+                    var out = this.text.trim();
+                    var parts = out.split(/\s+/);
+                    var pct = Number(parts[0]);
+                    if (isFinite(pct))
+                        media.volumePct = Math.round(root.clamp(pct, 0, 100));
+                    media.muted = out.indexOf("muted") !== -1;
+                }
+            }
+        }
+
+        Rectangle {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: 1
+            anchors.leftMargin: parent.radius * 0.65
+            anchors.rightMargin: parent.radius * 0.65
+            height: 1
+            color: Qt.rgba(root.nord6.r, root.nord6.g, root.nord6.b, 0.10)
+        }
+
+        RowLayout {
+            anchors.fill: parent
+            anchors.leftMargin: 10 * media.scaleFactor
+            anchors.rightMargin: 10 * media.scaleFactor
+            spacing: 8 * media.scaleFactor
+
+            Text {
+                id: mediaLabel
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: 60 * media.scaleFactor
+                Layout.alignment: Qt.AlignVCenter
+                text: media.label
+                color: media.hasSpotify ? root.nord6 : root.nord4
+                elide: Text.ElideRight
+                font.family: root.uiFont
+                font.pixelSize: 14 * media.scaleFactor
+                font.weight: media.playing ? Font.DemiBold : Font.Normal
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
+                    onClicked: function(mouse) {
+                        if (mouse.button === Qt.RightButton)
+                            media.spotifyStep(true);
+                        else if (mouse.button === Qt.MiddleButton)
+                            media.spotifyStep(false);
+                        else
+                            media.toggleSpotify();
+                    }
+                    onWheel: function(wheel) {
+                        media.spotifyStep(wheel.angleDelta.y > 0);
+                    }
+                }
+            }
+
+            Rectangle {
+                id: volumeSlider
+
+                Layout.preferredWidth: 84 * media.scaleFactor
+                Layout.preferredHeight: 8 * media.scaleFactor
+                Layout.alignment: Qt.AlignVCenter
+                radius: 5 * media.scaleFactor
+                color: root.nord0
+                clip: true
+
+                Rectangle {
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: Math.max(10 * media.scaleFactor, parent.width * media.volumePct / 100)
+                    radius: parent.radius
+                    color: media.muted ? root.nord3 : "#90b1b1"
+
+                    Behavior on width {
+                        NumberAnimation { duration: 90 }
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onPressed: function(mouse) {
+                        if (mouse.button === Qt.RightButton)
+                            root.run("pavucontrol");
+                        else
+                            media.setVolumeFromX(mouse.x);
+                    }
+                    onPositionChanged: function(mouse) {
+                        if (pressed)
+                            media.setVolumeFromX(mouse.x);
+                    }
+                    onWheel: function(wheel) {
+                        media.nudgeVolume(wheel.angleDelta.y > 0);
+                    }
+                }
+            }
         }
     }
 
@@ -455,13 +804,15 @@ ShellRoot {
 
         readonly property var items: SystemTray.items.values
         readonly property int itemCount: items.length
+        readonly property real itemSize: (expandedRows ? 32 : 28) * scaleFactor
+        readonly property real itemGap: 5 * scaleFactor
 
         visible: itemCount > 0
-        width: visible ? Math.min(maxStripWidth, row.implicitWidth) : 0
-        height: row.implicitHeight
+        width: visible ? (expandedRows ? maxStripWidth : Math.min(maxStripWidth, trayRow.implicitWidth)) : 0
+        height: visible ? (expandedRows ? trayFlow.implicitHeight : trayRow.implicitHeight) : 0
         clip: true
-        implicitWidth: row.implicitWidth
-        implicitHeight: row.implicitHeight
+        implicitWidth: visible ? (expandedRows ? maxStripWidth : trayRow.implicitWidth) : 0
+        implicitHeight: height
 
         function showMenu(item, anchorItem) {
             if (!item || !item.hasMenu)
@@ -477,78 +828,99 @@ ShellRoot {
             id: opener
         }
 
-        RowLayout {
-            id: row
+        Component {
+            id: traySlotDelegate
 
-            spacing: 5 * tray.scaleFactor
+            Rectangle {
+                id: slot
+
+                required property var modelData
+
+                width: tray.itemSize
+                height: tray.itemSize
+                Layout.preferredWidth: width
+                Layout.preferredHeight: height
+                radius: 7 * tray.scaleFactor
+                color: trayMouse.containsMouse ? root.nord2 : Qt.rgba(root.nord0.r, root.nord0.g, root.nord0.b, 0.45)
+                border.width: 1
+                border.color: trayMouse.containsMouse ? root.nord8 : root.nord3
+
+                Image {
+                    id: trayIcon
+
+                    anchors.centerIn: parent
+                    width: 17 * tray.scaleFactor
+                    height: 17 * tray.scaleFactor
+                    source: slot.modelData && slot.modelData.icon ? slot.modelData.icon : ""
+                    sourceSize.width: 36
+                    sourceSize.height: 36
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    smooth: true
+                    mipmap: true
+                    visible: source.toString().length > 0
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    visible: !trayIcon.visible
+                    text: "•"
+                    color: root.nord8
+                    font.family: root.uiFont
+                    font.pixelSize: 16 * tray.scaleFactor
+                    font.weight: Font.Bold
+                }
+
+                MouseArea {
+                    id: trayMouse
+
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
+                    onClicked: function(mouse) {
+                        if (!slot.modelData)
+                            return;
+                        if (mouse.button === Qt.RightButton) {
+                            tray.showMenu(slot.modelData, slot);
+                        } else if (mouse.button === Qt.MiddleButton && typeof slot.modelData.secondaryActivate === "function") {
+                            slot.modelData.secondaryActivate();
+                        } else if (slot.modelData.onlyMenu) {
+                            tray.showMenu(slot.modelData, slot);
+                        } else if (typeof slot.modelData.activate === "function") {
+                            slot.modelData.activate();
+                        }
+                    }
+                    onWheel: function(wheel) {
+                        if (slot.modelData && typeof slot.modelData.scroll === "function")
+                            slot.modelData.scroll(wheel.angleDelta.y, false);
+                    }
+                }
+            }
+        }
+
+        RowLayout {
+            id: trayRow
+
+            visible: !tray.expandedRows
+            spacing: tray.itemGap
 
             Repeater {
                 model: SystemTray.items
+                delegate: traySlotDelegate
+            }
+        }
 
-                delegate: Rectangle {
-                    id: slot
+        Flow {
+            id: trayFlow
 
-                    required property var modelData
+            visible: tray.expandedRows
+            width: tray.width
+            spacing: tray.itemGap
 
-                    Layout.preferredWidth: tray.expandedRows ? 32 * tray.scaleFactor : 30 * tray.scaleFactor
-                    Layout.preferredHeight: tray.expandedRows ? 32 * tray.scaleFactor : 30 * tray.scaleFactor
-                    radius: 7 * tray.scaleFactor
-                    color: trayMouse.containsMouse ? root.nord2 : Qt.rgba(root.nord0.r, root.nord0.g, root.nord0.b, 0.45)
-                    border.width: 1
-                    border.color: trayMouse.containsMouse ? root.nord8 : root.nord3
-
-                    Image {
-                        id: trayIcon
-
-                        anchors.centerIn: parent
-                        width: 18 * tray.scaleFactor
-                        height: 18 * tray.scaleFactor
-                        source: slot.modelData && slot.modelData.icon ? slot.modelData.icon : ""
-                        sourceSize.width: 36
-                        sourceSize.height: 36
-                        fillMode: Image.PreserveAspectFit
-                        asynchronous: true
-                        smooth: true
-                        mipmap: true
-                        visible: source.toString().length > 0
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        visible: !trayIcon.visible
-                        text: "•"
-                        color: root.nord8
-                        font.family: root.uiFont
-                        font.pixelSize: 16 * tray.scaleFactor
-                        font.weight: Font.Bold
-                    }
-
-                    MouseArea {
-                        id: trayMouse
-
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-                        onClicked: function(mouse) {
-                            if (!slot.modelData)
-                                return;
-                            if (mouse.button === Qt.RightButton) {
-                                tray.showMenu(slot.modelData, slot);
-                            } else if (mouse.button === Qt.MiddleButton && typeof slot.modelData.secondaryActivate === "function") {
-                                slot.modelData.secondaryActivate();
-                            } else if (slot.modelData.onlyMenu) {
-                                tray.showMenu(slot.modelData, slot);
-                            } else if (typeof slot.modelData.activate === "function") {
-                                slot.modelData.activate();
-                            }
-                        }
-                        onWheel: function(wheel) {
-                            if (slot.modelData && typeof slot.modelData.scroll === "function")
-                                slot.modelData.scroll(wheel.angleDelta.y, false);
-                        }
-                    }
-                }
+            Repeater {
+                model: SystemTray.items
+                delegate: traySlotDelegate
             }
         }
 
@@ -1419,29 +1791,54 @@ ShellRoot {
                 bottom: true
             }
 
-            mask: surfaceOpen || forceOpen ? fullRegion : pillRegion
+            mask: interactiveRegion
 
             Region {
-                id: fullRegion
-                width: overlay.width
-                height: overlay.height
-            }
+                id: interactiveRegion
 
-            Region {
-                id: pillRegion
-                x: pill.x
-                y: pill.y
-                width: pill.width
-                height: pill.height
+                Region {
+                    id: pillRegion
+                    x: pill.x
+                    y: pill.y
+                    width: pill.width
+                    height: pill.height
+                }
+
+                Region {
+                    id: surfaceRegion
+                    x: pill.x + surfacePanel.x
+                    y: pill.y + surfacePanel.y
+                    width: surfacePanel.visible ? surfacePanel.width : 0
+                    height: surfacePanel.visible ? surfacePanel.height : 0
+                }
+
+                Region {
+                    id: mediaRegion
+                    x: mediaPill.x
+                    y: mediaPill.y
+                    width: mediaPill.visible ? mediaPill.width : 0
+                    height: mediaPill.visible ? mediaPill.height : 0
+                }
             }
 
             MouseArea {
+                id: closeArea
+
                 anchors.fill: parent
-                enabled: overlay.surfaceOpen || overlay.forceOpen
+                enabled: overlay.surfaceOpen
                 acceptedButtons: Qt.AllButtons
-                onPressed: {
-                    root.peekMon = "";
-                    root.close();
+                onPressed: function(mouse) {
+                    var local = pill.mapFromItem(closeArea, mouse.x, mouse.y);
+                    if (local.x >= 0 && local.x <= pill.width && local.y >= 0 && local.y <= pill.height)
+                        return;
+                    var surfaceLocal = surfacePanel.mapFromItem(closeArea, mouse.x, mouse.y);
+                    if (surfacePanel.visible && surfaceLocal.x >= 0 && surfaceLocal.x <= surfacePanel.width && surfaceLocal.y >= 0 && surfaceLocal.y <= surfacePanel.height)
+                        return;
+                    var mediaLocal = mediaPill.mapFromItem(closeArea, mouse.x, mouse.y);
+                    if (mediaPill.visible && mediaLocal.x >= 0 && mediaLocal.x <= mediaPill.width && mediaLocal.y >= 0 && mediaLocal.y <= mediaPill.height)
+                        return;
+                    if (overlay.surfaceOpen)
+                        root.close();
                 }
             }
 
@@ -1485,52 +1882,58 @@ ShellRoot {
                         if (artists && String(artists).length > 0)
                             return String(artists);
                         return player.trackArtist ? String(player.trackArtist) : "";
-                    }
-                    readonly property string activeWorkspace: {
-                        var mons = Hyprland.monitors.values;
-                        for (var i = 0; i < mons.length; i++) {
-                            if (mons[i].name === overlay.mon)
-                                return mons[i].activeWorkspace ? mons[i].activeWorkspace.name : "";
-                        }
-                        return "";
-                    }
+	                    }
+	                    readonly property string activeWorkspace: {
+	                        var serial = root.hyprSerial;
+	                        var mons = Hyprland.monitors.values;
+	                        for (var i = 0; i < mons.length; i++) {
+	                            if (mons[i].name === overlay.mon)
+	                                return mons[i].activeWorkspace ? mons[i].activeWorkspace.name : "";
+	                        }
+	                        return "";
+	                    }
+	                    readonly property var workspaceNumbers: root.visibleWorkspaceNumbers(overlay.mon)
 
-                    property bool dnd: false
-                    property bool vpn: false
+	                    property bool dnd: false
+	                    property bool vpn: false
 
-                    readonly property real maxW: Math.max(260 * overlay.s, overlay.width - 32 * overlay.s)
-                    readonly property real frameRadius: pill.surface.length > 0 ? 10 * overlay.s : 8 * overlay.s
-                    readonly property real compactLabelW: Math.min(126 * overlay.s, Math.max(48 * overlay.s, Math.min(root.activeWindowLabel.length, 16) * 8.5 * overlay.s))
-                    readonly property real compactClockW: 86 * overlay.s
-                    readonly property real restW: Math.min(maxW, Math.max(178 * overlay.s, compactLabelW + compactClockW + 40 * overlay.s))
-                    readonly property real restH: 38 * overlay.s
-                    readonly property real hoverW: Math.min(760 * overlay.s, maxW)
-                    readonly property real hoverH: 52 * overlay.s
-                    readonly property real calendarW: Math.min(390 * overlay.s, maxW)
-                    readonly property real calendarH: 300 * overlay.s
-                    readonly property real clipboardW: Math.min(520 * overlay.s, maxW)
-                    readonly property real clipboardH: Math.min(430 * overlay.s, overlay.height - 120 * overlay.s)
-                    readonly property real mediaW: Math.min(500 * overlay.s, maxW)
+	                    readonly property real maxW: Math.max(260 * overlay.s, overlay.width - 32 * overlay.s)
+	                    readonly property real frameRadius: pill.surface.length > 0 ? 10 * overlay.s : 8 * overlay.s
+	                    readonly property real compactLabelW: Math.min(116 * overlay.s, Math.max(34 * overlay.s, Math.min(root.activeWindowLabel.length, 15) * 7.7 * overlay.s))
+	                    readonly property real compactClockW: 78 * overlay.s
+	                    readonly property real compactWorkspaceW: root.workspaceStripWidth(workspaceNumbers, activeWorkspace, overlay.s, true)
+	                    readonly property real expandedWorkspaceW: root.workspaceStripWidth(workspaceNumbers, activeWorkspace, overlay.s, false)
+	                    readonly property real trayInlineW: SystemTray.items.values.length > 0 ? Math.min(138 * overlay.s, SystemTray.items.values.length * 33 * overlay.s) : 0
+	                    readonly property real controlStripW: 248 * overlay.s
+	                    readonly property real restW: Math.min(maxW, Math.max(188 * overlay.s, compactLabelW + compactWorkspaceW + compactClockW + 24 * overlay.s))
+	                    readonly property real restH: 34 * overlay.s
+	                    readonly property real hoverW: Math.min(maxW, Math.max(restW, compactLabelW + expandedWorkspaceW + compactClockW + controlStripW + trayInlineW + 56 * overlay.s))
+	                    readonly property real hoverH: 46 * overlay.s
+	                    readonly property real calendarW: Math.min(390 * overlay.s, maxW)
+	                    readonly property real calendarH: 300 * overlay.s
+	                    readonly property real clipboardW: Math.min(520 * overlay.s, maxW)
+	                    readonly property real clipboardH: Math.min(430 * overlay.s, overlay.height - 120 * overlay.s)
+	                    readonly property real mediaW: Math.min(500 * overlay.s, maxW)
                     readonly property real mediaH: 260 * overlay.s
-                    readonly property real linksW: Math.min(540 * overlay.s, maxW)
-                    readonly property real linksH: Math.min(500 * overlay.s, overlay.height - 120 * overlay.s)
-                    readonly property real powerW: Math.min(390 * overlay.s, maxW)
-                    readonly property real powerH: 165 * overlay.s
+	                    readonly property real linksW: Math.min(540 * overlay.s, maxW)
+	                    readonly property real linksH: Math.min(500 * overlay.s, overlay.height - 120 * overlay.s)
+	                    readonly property real powerW: Math.min(390 * overlay.s, maxW)
+	                    readonly property real powerH: 165 * overlay.s
+	                    readonly property real surfaceW: surface === "calendar" ? calendarW
+	                        : surface === "clipboard" ? clipboardW
+	                        : surface === "mixer" || surface === "media" ? mediaW
+	                        : surface === "links" ? linksW
+	                        : surface === "power" ? powerW
+	                        : 0
+	                    readonly property real surfaceH: surface === "calendar" ? calendarH
+	                        : surface === "clipboard" ? clipboardH
+	                        : surface === "mixer" || surface === "media" ? mediaH
+	                        : surface === "links" ? linksH
+	                        : surface === "power" ? powerH
+	                        : 0
 
-                    width: surface === "calendar" ? calendarW
-                        : surface === "clipboard" ? clipboardW
-                        : surface === "mixer" || surface === "media" ? mediaW
-                        : surface === "links" ? linksW
-                        : surface === "power" ? powerW
-                        : expanded ? hoverW
-                        : restW
-                    height: surface === "calendar" ? calendarH
-                        : surface === "clipboard" ? clipboardH
-                        : surface === "mixer" || surface === "media" ? mediaH
-                        : surface === "links" ? linksH
-                        : surface === "power" ? powerH
-                        : expanded ? hoverH
-                        : restH
+	                    width: expanded ? hoverW : restW
+	                    height: expanded ? hoverH : restH
 
                     Behavior on width {
                         NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
@@ -1570,7 +1973,7 @@ ShellRoot {
 
                     Process {
                         id: dndProc
-                        command: ["sh", "-c", "makoctl mode 2>/dev/null | grep -q dnd && printf dnd || printf default"]
+                        command: ["sh", "-c", root.dndStatusCommand]
                         stdout: StdioCollector {
                             onStreamFinished: pill.dnd = this.text.trim() === "dnd"
                         }
@@ -1578,7 +1981,7 @@ ShellRoot {
 
                     Process {
                         id: vpnProc
-                        command: ["sh", "-c", "systemctl is-active wg-quick-wg0.service >/dev/null 2>&1 && printf on || printf off"]
+                        command: ["sh", "-c", root.vpnStatusCommand]
                         stdout: StdioCollector {
                             onStreamFinished: pill.vpn = this.text.trim() === "on"
                         }
@@ -1612,44 +2015,44 @@ ShellRoot {
 
                     MouseArea {
                         anchors.fill: parent
-                        enabled: pill.surface.length === 0
+                        enabled: false
                         acceptedButtons: Qt.LeftButton
-                        onClicked: root.togglePeek(overlay.mon)
                     }
 
-                    Item {
-                        anchors.fill: parent
-                        anchors.margins: 7 * overlay.s
-                        visible: pill.surface.length === 0
-                        opacity: pill.expanded ? 0 : 1
+	                    Item {
+	                        anchors.fill: parent
+	                        anchors.margins: 5 * overlay.s
+	                        visible: pill.surface.length === 0
+	                        opacity: pill.expanded ? 0 : 1
 
                         Behavior on opacity {
                             NumberAnimation { duration: 100 }
                         }
 
-                        Row {
-                            anchors.centerIn: parent
-                            spacing: 8 * overlay.s
+	                        Row {
+	                            anchors.centerIn: parent
+	                            spacing: 6 * overlay.s
 
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
+	                            Text {
+	                                anchors.verticalCenter: parent.verticalCenter
                                 width: pill.compactLabelW
                                 text: root.activeWindowLabel
                                 color: root.nord8
                                 elide: Text.ElideRight
                                 font.family: root.uiFont
                                 font.pixelSize: 14 * overlay.s
-                                font.weight: Font.DemiBold
-                            }
+	                                font.weight: Font.DemiBold
+	                            }
 
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 1
-                                height: 18 * overlay.s
-                                color: root.nord3
-                            }
+	                            WorkspaceStrip {
+	                                anchors.verticalCenter: parent.verticalCenter
+	                                workspaces: pill.workspaceNumbers
+	                                activeWorkspace: pill.activeWorkspace
+	                                compact: true
+	                                scaleFactor: overlay.s
+	                            }
 
-                            Text {
+	                            Text {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: pill.compactClockW
                                 horizontalAlignment: Text.AlignRight
@@ -1663,78 +2066,48 @@ ShellRoot {
                         }
                     }
 
-                    Item {
-                        anchors.fill: parent
-                        anchors.margins: 8 * overlay.s
-                        visible: pill.surface.length === 0
-                        opacity: pill.expanded ? 1 : 0
-                        clip: true
+	                    Item {
+	                        anchors.fill: parent
+	                        anchors.margins: 6 * overlay.s
+	                        visible: pill.expanded
+	                        opacity: pill.expanded ? 1 : 0
+	                        clip: true
 
                         Behavior on opacity {
                             NumberAnimation { duration: 120 }
                         }
 
-                        Row {
-                            id: hoverRow
-                            anchors.centerIn: parent
-                            spacing: 8 * overlay.s
+	                        RowLayout {
+	                            id: hoverRow
+	                            anchors.fill: parent
+	                            spacing: 6 * overlay.s
 
-                            Row {
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: pill.width >= 620 * overlay.s
-                                spacing: 4 * overlay.s
+	                            Text {
+	                                Layout.preferredWidth: visible ? pill.compactLabelW : 0
+	                                Layout.alignment: Qt.AlignVCenter
+	                                visible: pill.width >= 430 * overlay.s
+	                                text: root.activeWindowLabel
+	                                color: root.nord8
+	                                elide: Text.ElideRight
+	                                font.family: root.uiFont
+	                                font.pixelSize: 14 * overlay.s
+	                                font.weight: Font.DemiBold
+	                            }
 
-                                Repeater {
-                                    model: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	                            WorkspaceStrip {
+	                                Layout.preferredWidth: implicitWidth
+	                                Layout.alignment: Qt.AlignVCenter
+	                                workspaces: pill.workspaceNumbers
+	                                activeWorkspace: pill.activeWorkspace
+	                                scaleFactor: overlay.s
+	                            }
 
-                                    Rectangle {
-                                        required property int modelData
+	                            Column {
+	                                Layout.preferredWidth: pill.compactClockW
+	                                Layout.alignment: Qt.AlignVCenter
+	                                spacing: 1 * overlay.s
 
-                                        readonly property bool active: pill.activeWorkspace === String(modelData)
-
-                                        width: active ? 20 * overlay.s : 10 * overlay.s
-                                        height: 18 * overlay.s
-                                        radius: 5 * overlay.s
-                                        color: wsArea.containsMouse ? root.nord2 : "transparent"
-
-                                        Behavior on width {
-                                            NumberAnimation { duration: 140; easing.type: Easing.OutCubic }
-                                        }
-
-                                        Rectangle {
-                                            anchors.centerIn: parent
-                                            width: parent.active ? 15 * overlay.s : 5 * overlay.s
-                                            height: 5 * overlay.s
-                                            radius: 2 * overlay.s
-                                            color: parent.active ? root.nord8 : root.nord4
-                                            opacity: parent.active ? 1 : (wsArea.containsMouse ? 0.75 : 0.35)
-                                        }
-
-                                        MouseArea {
-                                            id: wsArea
-                                            anchors.fill: parent
-                                            hoverEnabled: true
-                                            cursorShape: Qt.PointingHandCursor
-                                            onClicked: Hyprland.dispatch("workspace " + modelData)
-                                        }
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: pill.width >= 620 * overlay.s
-                                width: 1
-                                height: 22 * overlay.s
-                                color: root.nord3
-                            }
-
-                            Column {
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 80 * overlay.s
-                                spacing: 1 * overlay.s
-
-                                Text {
+	                                Text {
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     text: Qt.formatTime(clock.date, "HH:mm:ss")
                                     color: root.nord6
@@ -1749,91 +2122,120 @@ ShellRoot {
                                     text: Qt.formatDate(clock.date, "ddd d MMM")
                                     color: root.nord4
                                     font.family: root.uiFont
-                                    font.pixelSize: 10 * overlay.s
-                                }
-                            }
+	                                    font.pixelSize: 10 * overlay.s
+	                                }
+	                            }
 
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 1
-                                height: 22 * overlay.s
-                                color: root.nord3
-                            }
+	                            Row {
+	                                id: controlStrip
 
-                            TrayStrip {
-                                scaleFactor: overlay.s
-                                hostWindow: overlay
-                                menuTop: pill.y + pill.height + 6 * overlay.s
-                                maxStripWidth: 110 * overlay.s
-                                visible: itemCount > 0 && pill.width >= 680 * overlay.s
-                            }
+	                                Layout.preferredWidth: implicitWidth
+	                                Layout.alignment: Qt.AlignVCenter
+	                                spacing: 4 * overlay.s
 
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: SystemTray.items.values.length > 0 && pill.width >= 680 * overlay.s
-                                width: 1
-                                height: 22 * overlay.s
-                                color: root.nord3
-                            }
+	                                IconButton {
+	                                    icon: ""
+	                                    label: "Apps"
+	                                    scaleFactor: overlay.s
+	                                    onActivated: pill.closeAfter("fuzzel")
+	                                }
 
-                            IconButton {
-                                icon: ""
-                                label: "Apps"
-                                scaleFactor: overlay.s
-                                onActivated: pill.closeAfter("fuzzel")
-                            }
+	                                IconButton {
+	                                    icon: "󰝚"
+	                                    label: "Media and audio"
+	                                    active: pill.surface === "media" || (pill.hasPlayer && pill.player.isPlaying)
+	                                    scaleFactor: overlay.s
+	                                    onActivated: pill.toggleSurface("media")
+	                                }
 
-                            IconButton {
-                                icon: "󰝚"
-                                label: "Media and audio"
-                                active: pill.hasPlayer && pill.player.isPlaying
-                                scaleFactor: overlay.s
-                                onActivated: pill.toggleSurface("media")
-                            }
+	                                IconButton {
+	                                    icon: ""
+	                                    label: "Calendar"
+	                                    active: pill.surface === "calendar"
+	                                    scaleFactor: overlay.s
+	                                    onActivated: pill.toggleSurface("calendar")
+	                                }
 
-                            IconButton {
-                                icon: ""
-                                label: "Calendar"
-                                scaleFactor: overlay.s
-                                onActivated: pill.toggleSurface("calendar")
-                            }
+	                                IconButton {
+	                                    icon: "󰖩"
+	                                    label: "Connectivity"
+	                                    active: pill.surface === "links" || pill.vpn || pill.dnd
+	                                    scaleFactor: overlay.s
+	                                    onActivated: pill.toggleSurface("links")
+	                                }
 
-                            IconButton {
-                                icon: "󰖩"
-                                label: "Connectivity"
-                                active: pill.vpn || pill.dnd
-                                scaleFactor: overlay.s
-                                onActivated: pill.toggleSurface("links")
-                            }
+	                                IconButton {
+	                                    icon: "󰕮"
+	                                    label: "Sidebar"
+	                                    active: root.sidebarShown && root.sidebarMon === overlay.mon
+	                                    scaleFactor: overlay.s
+	                                    onActivated: root.toggleSidebar(overlay.mon)
+	                                }
 
-                            IconButton {
-                                icon: "󰕮"
-                                label: "Sidebar"
-                                active: root.sidebarShown && root.sidebarMon === overlay.mon
-                                scaleFactor: overlay.s
-                                onActivated: root.toggleSidebar(overlay.mon)
-                            }
+	                                IconButton {
+	                                    icon: "⏻"
+	                                    label: "Power"
+	                                    active: pill.surface === "power"
+	                                    scaleFactor: overlay.s
+	                                    onActivated: pill.toggleSurface("power")
+	                                }
+	                            }
 
-                            IconButton {
-                                icon: "⏻"
-                                label: "Power"
-                                scaleFactor: overlay.s
-                                onActivated: pill.toggleSurface("power")
-                            }
-                        }
-                    }
+	                            Item {
+	                                Layout.fillWidth: true
+	                                Layout.minimumWidth: 0
+	                            }
 
-                    Loader {
-                        anchors.fill: parent
-                        anchors.margins: 14 * overlay.s
-                        active: pill.surface.length > 0
-                        sourceComponent: pill.surface === "calendar" ? calendarSurface
-                            : pill.surface === "clipboard" ? clipboardSurface
-                            : pill.surface === "mixer" || pill.surface === "media" ? mediaSurface
-                            : pill.surface === "links" ? linksSurface
-                            : pill.surface === "power" ? powerSurface
-                            : null
-                    }
+	                            TrayStrip {
+	                                Layout.preferredWidth: implicitWidth
+	                                Layout.maximumWidth: pill.trayInlineW
+	                                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+	                                scaleFactor: overlay.s
+	                                hostWindow: overlay
+	                                menuTop: pill.y + pill.height + 6 * overlay.s
+	                                maxStripWidth: pill.trayInlineW
+	                                visible: itemCount > 0 && pill.width >= 600 * overlay.s
+	                            }
+	                        }
+	                    }
+
+	                    Rectangle {
+	                        id: surfacePanel
+
+	                        x: (pill.width - width) / 2
+	                        y: pill.height + 8 * overlay.s
+	                        width: pill.surfaceW
+	                        height: pill.surfaceH
+	                        visible: pill.surface.length > 0
+	                        radius: 10 * overlay.s
+	                        color: Qt.rgba(root.nord1.r, root.nord1.g, root.nord1.b, 0.98)
+	                        border.width: 1
+	                        border.color: root.nord8
+	                        clip: true
+
+	                        Rectangle {
+	                            anchors.top: parent.top
+	                            anchors.left: parent.left
+	                            anchors.right: parent.right
+	                            anchors.topMargin: 1
+	                            anchors.leftMargin: parent.radius * 0.65
+	                            anchors.rightMargin: parent.radius * 0.65
+	                            height: 1
+	                            color: Qt.rgba(root.nord6.r, root.nord6.g, root.nord6.b, 0.10)
+	                        }
+
+	                        Loader {
+	                            anchors.fill: parent
+	                            anchors.margins: 14 * overlay.s
+	                            active: pill.surface.length > 0
+	                            sourceComponent: pill.surface === "calendar" ? calendarSurface
+	                                : pill.surface === "clipboard" ? clipboardSurface
+	                                : pill.surface === "mixer" || pill.surface === "media" ? mediaSurface
+	                                : pill.surface === "links" ? linksSurface
+	                                : pill.surface === "power" ? powerSurface
+	                                : null
+	                        }
+	                    }
 
                     SystemClock {
                         id: clock
@@ -2574,7 +2976,7 @@ ShellRoot {
                                         active: pill.vpn
                                         scaleFactor: overlay.s
                                         onActivated: {
-                                            pill.sh("if systemctl is-active --quiet wg-quick-wg0.service; then pkexec systemctl stop wg-quick-wg0.service; else pkexec systemctl start wg-quick-wg0.service; fi");
+                                            root.toggleVpn();
                                             linksRefresh.restart();
                                         }
                                     }
@@ -2586,15 +2988,24 @@ ShellRoot {
                                         active: pill.dnd
                                         scaleFactor: overlay.s
                                         onActivated: {
-                                            pill.sh("makoctl mode | grep -q dnd && makoctl mode -r dnd || makoctl mode -a dnd");
+                                            root.toggleDnd();
                                             linksRefresh.restart();
                                         }
+                                    }
+
+                                    ActionButton {
+                                        Layout.fillWidth: true
+                                        label: root.keepAwake ? "Idle blocked" : "Idle allowed"
+                                        icon: "󰒳"
+                                        active: root.keepAwake
+                                        scaleFactor: overlay.s
+                                        onActivated: root.toggleIdleInhibitor()
                                     }
                                 }
 
                                 Timer {
                                     id: linksRefresh
-                                    interval: 700
+                                    interval: 1200
                                     onTriggered: pill.refreshStatuses()
                                 }
                             }
@@ -2655,6 +3066,19 @@ ShellRoot {
                             }
                         }
                     }
+                }
+
+                MediaSidecar {
+                    id: mediaPill
+
+                    readonly property real availableW: Math.max(0, (overlay.width - pill.width - 40 * overlay.s) / 2)
+
+                    scaleFactor: overlay.s
+                    width: Math.min(252 * overlay.s, availableW)
+                    visible: width >= 156 * overlay.s
+                    anchors.top: pill.top
+                    anchors.right: pill.left
+                    anchors.rightMargin: 8 * overlay.s
                 }
             }
         }
@@ -2882,7 +3306,7 @@ ShellRoot {
 
             Process {
                 id: sideDndProc
-                command: ["sh", "-c", "makoctl mode 2>/dev/null | grep -q dnd && printf dnd || printf default"]
+                command: ["sh", "-c", root.dndStatusCommand]
                 stdout: StdioCollector {
                     onStreamFinished: sidebarWin.dnd = this.text.trim() === "dnd"
                 }
@@ -2890,7 +3314,7 @@ ShellRoot {
 
             Process {
                 id: sideVpnProc
-                command: ["sh", "-c", "systemctl is-active wg-quick-wg0.service >/dev/null 2>&1 && printf on || printf off"]
+                command: ["sh", "-c", root.vpnStatusCommand]
                 stdout: StdioCollector {
                     onStreamFinished: sidebarWin.vpn = this.text.trim() === "on"
                 }
@@ -2999,11 +3423,11 @@ ShellRoot {
 
                             ActionButton {
                                 Layout.fillWidth: true
-                                label: root.keepAwake ? "Awake" : "Idle ok"
+                                label: root.keepAwake ? "Idle blocked" : "Idle allowed"
                                 icon: "󰒳"
                                 active: root.keepAwake
                                 scaleFactor: sidebarWin.s
-                                onActivated: root.keepAwake = !root.keepAwake
+                                onActivated: root.toggleIdleInhibitor()
                             }
 
                             ActionButton {
@@ -3013,7 +3437,7 @@ ShellRoot {
                                 active: sidebarWin.vpn
                                 scaleFactor: sidebarWin.s
                                 onActivated: {
-                                    root.run("if systemctl is-active --quiet wg-quick-wg0.service; then pkexec systemctl stop wg-quick-wg0.service; else pkexec systemctl start wg-quick-wg0.service; fi");
+                                    root.toggleVpn();
                                     sidebarRefresh.restart();
                                 }
                             }

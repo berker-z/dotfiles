@@ -177,7 +177,8 @@
       "on": "" // vpn on icon
     },
     "exec": "systemctl is-active wg-quick-wg0.service >/dev/null && echo '{\"alt\": \"on\", \"tooltip\": \"VPN is ON\"}' || echo '{\"alt\": \"off\", \"tooltip\": \"VPN is OFF\"}'",
-    "on-click": "bash -c 'if systemctl is-active --quiet wg-quick-wg0.service; then pkexec systemctl stop wg-quick-wg0.service; else pkexec systemctl start wg-quick-wg0.service; fi'"
+    "on-click": "bash -c 'if systemctl is-active --quiet wg-quick-wg0.service; then pkexec systemctl stop wg-quick-wg0.service; else pkexec systemctl start wg-quick-wg0.service; fi; pkill -RTMIN+10 waybar'",
+    "signal": 10
   },
 
   "battery": {
