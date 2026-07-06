@@ -9,6 +9,7 @@
   kdeColorScheme = "Nordic-Darker";
   kdeIconTheme = "breeze-dark";
   uiFont = "Iosevka Nerd Font";
+  gtkFont = "Liberation Sans";
   fixedFont = "Iosevka Nerd Font Mono";
   uiFontSize = 12;
   smallFontSize = 11;
@@ -64,7 +65,7 @@ in {
     };
 
     font = {
-      name = uiFont;
+      name = gtkFont;
       size = uiFontSize;
     };
 
@@ -79,7 +80,8 @@ in {
 
   dconf.settings."org/gnome/desktop/interface" = {
     color-scheme = "prefer-dark";
-    font-name = "${uiFont} ${toString uiFontSize}";
+    document-font-name = "${gtkFont} ${toString uiFontSize}";
+    font-name = "${gtkFont} ${toString uiFontSize}";
     monospace-font-name = "${fixedFont} ${toString uiFontSize}";
   };
 

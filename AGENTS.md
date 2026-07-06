@@ -10,6 +10,7 @@ You are a coding agent living in my computer. Whenever you need logs, tests, etc
 ## Project Structure & Module Organization
 
 - `flake.nix`, `configuration.nix`, and `home.nix` define the base NixOS + Home Manager configuration; host-specific overlays live in `hosts/<host>/`.
+- Check the current host before host-specific work (`hostname` is enough) so changes and validation target the machine you are actually on.
 - `modules/` holds reusable modules (Hyprland, waybar, themes). Add new services as separate files and list them in `modules/default.nix` to keep imports tidy.
 - `packages.nix` centralizes system and home package selections; prefer edits here over scattering package adds.
 - `scripts/` contains small helpers (e.g., `updateio.sh` for rebuilds); keep new scripts idempotent and echo status.
@@ -33,7 +34,7 @@ You are a coding agent living in my computer. Whenever you need logs, tests, etc
 
 ## Testing Guidelines
 
-- Minimum gate: `nix flake check` plus a build for each affected host (`nix build .#nixosConfigurations.<host>...`).
+- Match validation to the risk and scope of the change; prefer focused checks for small edits and broader builds for shared or risky changes.
 - For risky changes, run `sudo nixos-rebuild test --flake .#<host>` to boot-validate without persisting.
 - UI tweaks (Hyprland/waybar) should be smoke-tested in a VM or non-critical session when possible; capture screenshots for review.
 
