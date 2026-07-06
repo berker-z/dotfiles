@@ -1,7 +1,7 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "medium"
 web_search = "live"
 personality = "pragmatic"
 
@@ -59,3 +59,7 @@ hide_rate_limit_model_nudge = true
 
 [features]
 terminal_resize_reflow = true
+experimental_use_rmcp_client = true
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
