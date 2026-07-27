@@ -175,8 +175,7 @@
     systemd.setPath.enable = false;
   };
 
-  systemd.user.settings.Manager.DefaultEnvironment =
-    ''"PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"'';
+  systemd.user.settings.Manager.DefaultEnvironment = ''"PATH=/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:$PATH"'';
 
   programs.nautilus-open-any-terminal = {
     enable = true;
@@ -298,6 +297,9 @@
     };
     settings = {
       auto-optimise-store = true;
+      http-connections = 8;
+      max-substitution-jobs = 4;
+      stalled-download-timeout = 600;
     };
   };
 }

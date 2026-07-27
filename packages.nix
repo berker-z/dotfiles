@@ -82,16 +82,16 @@
     # API / Proto tooling
     protobuf
     grpcurl
+    supabase-cli
 
     # Editors & Tools
+    micro
     vscode
     nix-ld
     unityhub
     antigravity-fhs
     gemini-cli
     zed-editor
-    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
-    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
 
     # --- GUI Applications ---
     # Browsers
@@ -113,7 +113,6 @@
     qrencode
 
     # --- Hyprland & Wayland Ecosystem ---
-    hyprpanel
     hyprpolkitagent
     egl-wayland
     grim

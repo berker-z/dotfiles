@@ -1,6 +1,6 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "medium"
 web_search = "live"
 personality = "pragmatic"
@@ -20,6 +20,7 @@ pet = "seedy"
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
+"gpt-5.6-sol" = 4
 
 [projects."/home/berkerz/Projects/Multiplayer/ChapterGO"]
 trust_level = "trusted"
@@ -63,3 +64,9 @@ experimental_use_rmcp_client = true
 
 [mcp_servers.linear]
 url = "https://mcp.linear.app/mcp"
+
+[mcp_servers.linear.tools.save_issue]
+approval_mode = "approve"
+
+[mcp_servers.linear.tools.save_comment]
+approval_mode = "approve"

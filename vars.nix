@@ -9,6 +9,11 @@
     XDG_CURRENT_DESKTOP = "Hyprland";
     XDG_SESSION_DESKTOP = "Hyprland";
 
+    # editor
+    EDITOR = "micro";
+    VISUAL = "micro";
+    SUDO_EDITOR = "micro";
+
     # portals & gtk
     GTK_USE_PORTAL = "1";
 
