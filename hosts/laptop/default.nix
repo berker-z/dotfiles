@@ -17,6 +17,19 @@
 
   networking.hostName = "laptop";
 
+  # This machine is prone to PipeWire/WirePlumber getting wedged after
+  # Bluetooth headset resume/reconnects. Keep Bluetooth headphones as normal
+  # A2DP sinks unless a profile is chosen manually, and do not let Pulse's
+  # hotplug helpers steal the default sink when HDMI/Bluetooth endpoints appear.
+  services.pipewire = {
+    extraConfig."pipewire-pulse"."pulse.modules" = lib.mkForce [];
+    wireplumber.extraConfig."10-laptop-audio-policy" = {
+      "wireplumber.settings" = {
+        "bluetooth.autoswitch-to-headset-profile" = false;
+      };
+    };
+  };
+
   # Hybrid graphics: make AMD the primary display GPU, keep NVIDIA for offload.
   services.xserver.videoDrivers = ["amdgpu" "nvidia"];
 
