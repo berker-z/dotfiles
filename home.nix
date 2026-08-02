@@ -77,20 +77,17 @@
         lock_cmd = "hyprlock";
       };
 
-      listener =
-        [
-          {
-            timeout = 1800;
-            on-timeout = "hyprlock";
-          }
-        ]
-        ++ lib.optionals (host != "nixos") [
-          {
-            timeout = 3600;
-            on-timeout = "hyprctl dispatch dpms off";
-            on-resume = "hyprctl dispatch dpms on";
-          }
-        ];
+      listener = [
+        {
+          timeout = 1800;
+          on-timeout = "hyprlock";
+        }
+        {
+          timeout = 3600;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
+      ];
     };
   };
 
@@ -109,8 +106,6 @@
       ];
     };
   };
-
-  #xdg.configFile."Kvantum/Nordic".source = "${pkgs.nordic}/share/Kvantum/Nordic";
 
   home.file.".local/bin/ccbz" = {
     source = ./scripts/ccbz.sh;
@@ -157,7 +152,7 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "inode/directory" = ["org.gnome.Nautilus.desktop"];
+      "inode/directory" = ["io.github.berker_z.Marcel.desktop"];
       "image/png" = ["org.gnome.Loupe.desktop"];
       "image/jpeg" = ["org.gnome.Loupe.desktop"];
       "image/jpg" = ["org.gnome.Loupe.desktop"];

@@ -21,6 +21,10 @@
       url = "github:sadjow/codex-cli-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    marcel = {
+      url = "github:berker-z/marcel";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     yorha.url = "github:berker-z/yorha-flake";
 
     home-manager = {
@@ -48,6 +52,7 @@
     rust-overlay,
     yorha,
     codex-cli-nix,
+    marcel,
     ...
   }: let
     stablePkgs = import nixpkgs-stable {
@@ -57,6 +62,7 @@
     overlays = [
       rust-overlay.overlays.default
       codex-cli-nix.overlays.default
+      marcel.overlays.default
       (final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;
       })

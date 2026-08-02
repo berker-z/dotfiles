@@ -4,9 +4,15 @@
   pkgs,
   ...
 }: let
-  gtkThemeName = "Nordic-darker";
+  gtkThemeName = "WhiteSur-Dark-nord";
+  gtkThemePackage = pkgs.whitesur-gtk-theme.override {
+    colorVariants = ["dark"];
+    opacityVariants = ["normal"];
+    themeVariants = ["default"];
+    schemeVariants = ["nord"];
+  };
   gtkIconTheme = "Nordzy";
-  kdeColorScheme = "Nordic-Darker";
+  kdeColorScheme = "UtterlyNord";
   kdeIconTheme = "breeze-dark";
   uiFont = "Iosevka Nerd Font";
   gtkFont = "Liberation Sans";
@@ -18,7 +24,7 @@
   kdeTitleFontSpec = fontSpec uiFont uiFontSize 57;
   kdeSmallFontSpec = fontSpec uiFont smallFontSize 50;
   kdeFixedFontSpec = fontSpec fixedFont uiFontSize 50;
-  nordicKdeColors = builtins.readFile "${pkgs.nordic}/share/color-schemes/NordicDarker.colors";
+  nordKdeColors = builtins.readFile "${pkgs.utterly-nord-plasma}/share/color-schemes/UtterlyNord.colors";
   kdeGlobals =
     lib.replaceStrings
     [
@@ -49,13 +55,13 @@
         activeFont=${kdeTitleFontSpec}
       ''
     ]
-    nordicKdeColors;
+    nordKdeColors;
 in {
   gtk = {
     enable = true;
     theme = {
       name = gtkThemeName;
-      package = pkgs.nordic;
+      package = gtkThemePackage;
     };
     gtk4.theme = config.gtk.theme;
 
@@ -93,10 +99,6 @@ in {
     gtk.enable = true;
   };
 
-  # symlink Nordic assets for libadwaita
-  home.file.".config/assets".source = "${pkgs.nordic}/share/themes/${gtkThemeName}/assets";
-  home.file.".local/share/themes/${gtkThemeName}/assets".source = "${pkgs.nordic}/share/themes/${gtkThemeName}/assets";
-
   qt = {
     enable = true;
     platformTheme.name = "kde";
@@ -107,7 +109,7 @@ in {
   };
 
   xdg.configFile = {
-    # Qt apps now use KDE's platform theme and Breeze widgets. The Nordic KDE
+    # Qt apps use KDE's platform theme and Breeze widgets. The Nord KDE
     # color groups are embedded so KDE apps do not fall back to dark text while
     # resolving the external color-scheme file.
     "kdeglobals".text =
@@ -131,7 +133,6 @@ in {
   };
 
   xdg.dataFile = {
-    "color-schemes/${kdeColorScheme}.colors".source = "${pkgs.nordic}/share/color-schemes/NordicDarker.colors";
-    "color-schemes/NordicDarker.colors".source = "${pkgs.nordic}/share/color-schemes/NordicDarker.colors";
+    "color-schemes/${kdeColorScheme}.colors".source = "${pkgs.utterly-nord-plasma}/share/color-schemes/UtterlyNord.colors";
   };
 }

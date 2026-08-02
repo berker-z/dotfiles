@@ -89,7 +89,7 @@
     vscode
     nix-ld
     unityhub
-    antigravity-fhs
+    antigravity-ide-fhs
     gemini-cli
     zed-editor
 
@@ -104,6 +104,7 @@
     obsidian
     zenity
     mousepad # Restored
+    marcel
     nautilus
 
     # Graphics & Media
@@ -122,8 +123,11 @@
     satty
 
     # --- Theming (Qt/GTK) ---
-    (nordic.overrideAttrs {
-      dontCheckForBrokenSymlinks = true;
+    (whitesur-gtk-theme.override {
+      colorVariants = ["dark"];
+      opacityVariants = ["normal"];
+      themeVariants = ["default"];
+      schemeVariants = ["nord"];
     })
     qt5.qtwayland
     qt5.qtgraphicaleffects # Potentially redundant if not using SDDM effects
