@@ -92,6 +92,7 @@
     antigravity-ide-fhs
     gemini-cli
     zed-editor
+    claude-code
 
     # --- GUI Applications ---
     # Browsers
@@ -118,6 +119,8 @@
     egl-wayland
     grim
     slurp
+    wtype
+    wlrctl
     wl-clipboard
     cliphist # Replaces clipman
     satty
