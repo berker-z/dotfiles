@@ -93,6 +93,8 @@
     gemini-cli
     zed-editor
     claude-code
+    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.desktop
 
     # --- GUI Applications ---
     # Browsers

@@ -25,6 +25,10 @@
       url = "github:berker-z/marcel";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     yorha.url = "github:berker-z/yorha-flake";
 
     home-manager = {
@@ -65,6 +69,21 @@
       marcel.overlays.default
       (final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;
+      })
+      # FIXME: drop once nixos-unstable picks up nixpkgs PR #549253.
+      # nixpkgs bumped glaze 7.9.1 -> 8.0.0, but Hyprland 0.56.1 asks CMake for
+      # `glaze 7...<8`; the version check fails, CMake falls back to cloning
+      # glaze v7.2.0 with FetchContent, and there is no git/network in the
+      # sandbox. Same patch that upstream merged to master.
+      (_final: prev: {
+        hyprland = prev.hyprland.overrideAttrs (old: {
+          postPatch =
+            ''
+              substituteInPlace CMakeLists.txt start/CMakeLists.txt hyprpm/CMakeLists.txt \
+                --replace-fail "glaze 7...<8" "glaze"
+            ''
+            + old.postPatch;
+        });
       })
     ];
 
