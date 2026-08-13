@@ -1038,9 +1038,10 @@ log out, then: sudo systemctl isolate multi-user.target
       <section>
         <h2>The next proposed step</h2>
         <p>
-          Reboot once and prove that Tailscale, OpenSSH, and the headless agent toolchain return without a graphical
-          or local user login. Tailscale and key-only OpenSSH through MagicDNS are already verified. The workstation
-          Home Manager profile owns the <code>wired</code> SSH alias; it uses the dedicated
+          Reboot survival is proven: <code>wired</code> returned through Tailscale and key-only OpenSSH without a
+          graphical or local user login, retained the intended NixOS generation, and started in
+          <code>multi-user.target</code>. Codex, Claude, Hermes, Herdr, and tmux were all present after boot. The
+          workstation Home Manager profile owns the <code>wired</code> SSH alias; it uses the dedicated
           <code>~/.ssh/id_ed25519_wired</code> key and never depends on the changing LAN lease. Disable this node's
           key expiry in the Tailscale admin console before relying on it for fully unattended long-term access.
         </p>

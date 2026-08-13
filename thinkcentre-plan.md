@@ -149,7 +149,7 @@ Practical fallback:
 - [ ] Build with `nix build --no-link .#nixosConfigurations.<host>.config.system.build.toplevel` only when ready; the user will perform rebuilds/switches.
 - [ ] Switch and reboot one existing machine first to prove the refactor did not alter its desktop session.
 - [x] Install or switch the ThinkCentre locally for its first deployment.
-- [ ] Reboot the ThinkCentre and verify Tailscale, SSH, Mosh, Herdr, and agent sessions without a local graphical login.
+- [x] Reboot the ThinkCentre and verify Tailscale, SSH, the headless target, Herdr, and agent commands without a local graphical login. Mosh session testing remains separate.
 - [ ] Smoke-test the Wayland session, TV audio, suspend/idle behaviour, VLC/MPV, and file browsing.
 
 ## Decisions to make tomorrow
