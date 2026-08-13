@@ -92,9 +92,9 @@ The profile names describe capabilities, not machines. Host modules should only 
 ## Phase 4: remote access
 
 - [x] Enable Tailscale and confirm MagicDNS works through `systemd-resolved`.
-- [x] Sign the ThinkCentre into the tailnet once. Key expiry is currently 2027-02-09; disable it in the Tailscale admin console for truly unattended access.
+- [x] Sign the ThinkCentre into the tailnet once and disable key expiry for unattended access.
 - [x] Reuse key-only OpenSSH policy and add only the intended public keys.
-- [ ] Enable Mosh and confirm its UDP range is reachable through `tailscale0`.
+- [x] Enable Mosh and confirm an end-to-end session reaches `wired` through trusted `tailscale0`.
 - [ ] Review whether trusting all traffic on `tailscale0` is still desirable or whether Tailscale ACLs/grants should narrow access.
 - [ ] Confirm Herdr sees agents launched inside it and that its state survives closing the UI and rebooting.
 - [ ] Test from both the laptop and Moshi on the phone.
@@ -149,7 +149,7 @@ Practical fallback:
 - [ ] Build with `nix build --no-link .#nixosConfigurations.<host>.config.system.build.toplevel` only when ready; the user will perform rebuilds/switches.
 - [ ] Switch and reboot one existing machine first to prove the refactor did not alter its desktop session.
 - [x] Install or switch the ThinkCentre locally for its first deployment.
-- [x] Reboot the ThinkCentre and verify Tailscale, SSH, the headless target, Herdr, and agent commands without a local graphical login. Mosh session testing remains separate.
+- [x] Reboot the ThinkCentre and verify Tailscale, SSH, the headless target, Herdr, and agent commands without a local graphical login.
 - [ ] Smoke-test the Wayland session, TV audio, suspend/idle behaviour, VLC/MPV, and file browsing.
 
 ## Decisions to make tomorrow

@@ -47,11 +47,12 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
   clone the published repository into `~/dotfiles` after these changes are pushed.
 - Tailscale is enrolled as a fresh node with `berkerz` as its local operator. Its IPv4 address is
   `100.121.165.32`, its DNS name is `wired.tail3ce83b.ts.net`, and `ssh berkerz@wired` has been verified through
-  MagicDNS. Its current key expiry is 2027-02-09; disable expiry in the Tailscale admin console if this is to remain
-  unattended.
+  MagicDNS. Key expiry has been disabled in the Tailscale admin console for unattended access.
 - Reboot survival is verified. At 35 seconds uptime, `ssh wired` succeeded through Tailscale, the host retained
   generation `w1zr3l7v6z5p6m2dqcx3kryw9wivmi4n`, `multi-user.target` was the default, OpenSSH/Tailscale/
   NetworkManager/Avahi were active, and Codex, Claude, Hermes, Herdr, and tmux were available without local login.
+- Mosh is installed on both ends and a disposable end-to-end session through `tailscale0` reached
+  `wired` at `100.121.165.32` successfully. Phone/Moshi client testing remains separate.
 - Commit `54df514 add wired host and offline installer` is published on `origin/main`. The server checkout at
   `/home/berkerz/dotfiles` tracks `origin/main` and contains that implementation.
 

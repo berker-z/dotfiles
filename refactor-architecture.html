@@ -1042,8 +1042,9 @@ log out, then: sudo systemctl isolate multi-user.target
           graphical or local user login, retained the intended NixOS generation, and started in
           <code>multi-user.target</code>. Codex, Claude, Hermes, Herdr, and tmux were all present after boot. The
           workstation Home Manager profile owns the <code>wired</code> SSH alias; it uses the dedicated
-          <code>~/.ssh/id_ed25519_wired</code> key and never depends on the changing LAN lease. Disable this node's
-          key expiry in the Tailscale admin console before relying on it for fully unattended long-term access.
+          <code>~/.ssh/id_ed25519_wired</code> key and never depends on the changing LAN lease. Key expiry is disabled
+          for unattended long-term access. A disposable Mosh session was also verified end-to-end over Tailscale;
+          it reached <code>wired</code> at <code>100.121.165.32</code> and exited cleanly.
         </p>
         <p class="muted">
           The implementation landed on <code>main</code> at commit <code>54df514</code>. The server now tracks
