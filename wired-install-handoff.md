@@ -49,6 +49,8 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
   `100.121.165.32`, its DNS name is `wired.tail3ce83b.ts.net`, and `ssh berkerz@wired` has been verified through
   MagicDNS. Its current key expiry is 2027-02-09; disable expiry in the Tailscale admin console if this is to remain
   unattended. Reboot survival is the remaining remote-access check.
+- Commit `54df514 add wired host and offline installer` is published on `origin/main` and cloned to
+  `/home/berkerz/dotfiles` on `wired`; the server checkout resolves to that exact commit.
 
 ## USB facts and completed verification
 
