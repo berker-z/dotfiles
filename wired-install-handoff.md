@@ -57,6 +57,8 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
   `/home/berkerz/dotfiles` tracks `origin/main` and contains that implementation.
 - Deployed: `hermes-gateway.service` declares only the boot/restart lifecycle and consumes the writable,
   imperatively configured `/home/berkerz/.hermes` state. It does not render Hermes settings or credentials.
+- Pending deployment: `herdr-server.service` starts the persistent Herdr server at boot as `berkerz`; Herdr's
+  workspaces, panes, agent sessions, and configuration remain mutable under `~/.config/herdr`.
 - Deployed: `flake-reconcile.timer` runs at 06:00 Europe/Istanbul, fast-forwards a clean user-owned `main` checkout
   as `berkerz`, rebuilds revisions not yet stamped successful, and allows two hours for the switch. The timer is the
   consumer boundary: it rejects tracked, staged, and untracked drift, then root builds the validated checkout as an

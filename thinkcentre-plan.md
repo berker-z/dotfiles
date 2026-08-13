@@ -96,7 +96,7 @@ The profile names describe capabilities, not machines. Host modules should only 
 - [x] Reuse key-only OpenSSH policy and add only the intended public keys.
 - [x] Enable Mosh and confirm an end-to-end session reaches `wired` through trusted `tailscale0`.
 - [ ] Review whether trusting all traffic on `tailscale0` is still desirable or whether Tailscale ACLs/grants should narrow access.
-- [ ] Confirm Herdr sees agents launched inside it and that its state survives closing the UI and rebooting.
+- [ ] Verify the boot-managed `herdr-server.service`: remote detach/reattach, agent visibility, and state restoration across a reboot.
 - [x] Activate and verify the minimal `hermes-gateway.service`; keep Hermes configuration, authentication, sessions, and memory writable under `~/.hermes`.
 - [ ] Activate and observe one successful 06:00 `flake-reconcile.timer` run from Git fast-forward through NixOS switch.
 - [x] Keep `wired`'s checkout user-owned but operationally consume-only: drift-free `main`, fast-forward-only pulls, no local flake updates, a root rebuild from the validated `path:` snapshot, and read-only access from the Hermes service. Give Hermes separate credentials only for explicitly authorized project repositories.

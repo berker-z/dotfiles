@@ -5,6 +5,7 @@
     ../../profiles/system/agent-host.nix
     ../../packages/server.nix
     ../../modules/system/hermes-gateway.nix
+    ../../modules/system/herdr-server.nix
     ../../modules/system/flake-reconcile.nix
   ];
 

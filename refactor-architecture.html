@@ -1056,6 +1056,16 @@ log out, then: sudo systemctl isolate multi-user.target
               No Hermes settings or credentials are rendered by Nix.
             </p>
           </article>
+          <article class="card">
+            <span class="badge">NixOS owns</span>
+            <h3><code>herdr-server.service</code></h3>
+            <p>
+              Herdr's headless server starts at boot as <code>berkerz</code>, so remote clients can attach with
+              <code>herdr --remote wired</code> without a prior interactive login. Workspaces, panes, agent sessions,
+              and configuration remain writable runtime state under <code>~/.config/herdr</code>; Nix owns only the
+              process lifecycle.
+            </p>
+          </article>
         </div>
         <div class="callout" style="margin-top: 16px">
           <strong>Host maintenance is not an agent cronjob.</strong> <code>flake-reconcile.timer</code> runs at
