@@ -55,13 +55,13 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
   `wired` at `100.121.165.32` successfully. Phone/Moshi client testing remains separate.
 - Commit `54df514 add wired host and offline installer` is published on `origin/main`. The server checkout at
   `/home/berkerz/dotfiles` tracks `origin/main` and contains that implementation.
-- Pending deployment: `hermes-gateway.service` declares only the boot/restart lifecycle and consumes the writable,
+- Deployed: `hermes-gateway.service` declares only the boot/restart lifecycle and consumes the writable,
   imperatively configured `/home/berkerz/.hermes` state. It does not render Hermes settings or credentials.
-- Pending deployment: `flake-reconcile.timer` runs at 06:00 Europe/Istanbul, fast-forwards a clean `main` checkout,
-  rebuilds revisions not yet stamped successful, and allows two hours for the switch. The checkout must be owned by
-  root; the public remote is fetched anonymously, and the Hermes gateway sees the checkout read-only. The timer
-  intentionally never runs `nix flake update` locally, because an uncommitted production-only lockfile would create
-  the drift it is meant to prevent.
+- Deployed: `flake-reconcile.timer` runs at 06:00 Europe/Istanbul, fast-forwards a clean user-owned `main` checkout
+  as `berkerz`, rebuilds revisions not yet stamped successful, and allows two hours for the switch. The timer is the
+  consumer boundary; the Hermes gateway separately sees the checkout read-only. The timer intentionally never runs
+  `nix flake update` locally, because an uncommitted production-only lockfile would create the drift it is meant to
+  prevent.
 
 ## USB facts and completed verification
 

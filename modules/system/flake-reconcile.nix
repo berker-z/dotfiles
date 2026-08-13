@@ -14,6 +14,7 @@
       git
       nix
       nixos-rebuild
+      util-linux
     ];
     text = ''
       flake_dir=${lib.escapeShellArg flakeDirectory}
@@ -25,32 +26,30 @@
         exit 1
       fi
 
-      owner_uid="$(${pkgs.coreutils}/bin/stat --format=%u "$flake_dir")"
-      if [[ "$owner_uid" != 0 ]]; then
-        echo "refusing non-root-owned deployment checkout: $flake_dir" >&2
-        echo "make it consume-only with: sudo chown -R root:root $flake_dir" >&2
-        exit 1
-      fi
-
-      if ! ${pkgs.git}/bin/git -C "$flake_dir" diff --quiet --ignore-submodules --; then
+      if ! ${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
+        ${pkgs.git}/bin/git -C "$flake_dir" diff --quiet --ignore-submodules --; then
         echo "refusing to overwrite tracked changes in $flake_dir" >&2
         exit 1
       fi
-      if ! ${pkgs.git}/bin/git -C "$flake_dir" diff --cached --quiet --ignore-submodules --; then
+      if ! ${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
+        ${pkgs.git}/bin/git -C "$flake_dir" diff --cached --quiet --ignore-submodules --; then
         echo "refusing to overwrite staged changes in $flake_dir" >&2
         exit 1
       fi
 
-      branch="$(${pkgs.git}/bin/git -C "$flake_dir" branch --show-current)"
+      branch="$(${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
+        ${pkgs.git}/bin/git -C "$flake_dir" branch --show-current)"
       if [[ "$branch" != main ]]; then
         echo "refusing to deploy checkout branch '$branch'; expected 'main'" >&2
         exit 1
       fi
 
       echo "==> Fast-forwarding $flake_dir from origin/main"
-      ${pkgs.git}/bin/git -C "$flake_dir" pull --ff-only origin main
+      ${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
+        ${pkgs.git}/bin/git -C "$flake_dir" pull --ff-only origin main
 
-      revision="$(${pkgs.git}/bin/git -C "$flake_dir" rev-parse HEAD)"
+      revision="$(${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
+        ${pkgs.git}/bin/git -C "$flake_dir" rev-parse HEAD)"
       deployed_revision=""
       if [[ -r "$deploy_stamp" ]]; then
         deployed_revision="$(<"$deploy_stamp")"
