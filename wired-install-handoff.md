@@ -39,8 +39,8 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
 - `hosts/wired/{default,hardware-configuration,home}.nix` and `nixosConfigurations.wired` now exist locally.
 - The real host evaluates with Tailscale enabled, key-only SSH limited to `berkerz`, both dedicated desktop and
   Moshi public keys, and TCP 22 retained on the home LAN as a recovery path.
-- The real `wired` generation was built and switched successfully over LAN SSH:
-  `/nix/store/w1zr3l7v6z5p6m2dqcx3kryw9wivmi4n-nixos-system-wired-26.11.20260807.f13ff45`.
+- The current `wired` generation was built and switched successfully over LAN SSH:
+  `/nix/store/9j1bdwmnljg31q0jxy5kp8sdr6nzxwkg-nixos-system-wired-26.11.20260807.f13ff45`.
 - On the live host, OpenSSH, Tailscale, Avahi, and NetworkManager are active; bootstrap root SSH has been removed;
   Codex, Claude, Hermes, Herdr, and tmux all resolve from `berkerz`'s environment.
 - Switching to the real generation removed the bootstrap-only `/etc/wired/dotfiles` recovery snapshot as intended;
@@ -48,17 +48,20 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
 - Tailscale is enrolled as a fresh node with `berkerz` as its local operator. Its IPv4 address is
   `100.121.165.32`, its DNS name is `wired.tail3ce83b.ts.net`, and `ssh berkerz@wired` has been verified through
   MagicDNS. Key expiry has been disabled in the Tailscale admin console for unattended access.
-- Reboot survival is verified. At 35 seconds uptime, `ssh wired` succeeded through Tailscale, the host retained
-  generation `w1zr3l7v6z5p6m2dqcx3kryw9wivmi4n`, `multi-user.target` was the default, OpenSSH/Tailscale/
+- Reboot survival is verified. At 32 seconds uptime, `ssh wired` succeeded through Tailscale, the host retained
+  generation `9j1bdwmnljg31q0jxy5kp8sdr6nzxwkg`, `multi-user.target` was the default, OpenSSH/Tailscale/
   NetworkManager/Avahi were active, and Codex, Claude, Hermes, Herdr, and tmux were available without local login.
 - Mosh is installed on both ends and a disposable end-to-end session through `tailscale0` reached
   `wired` at `100.121.165.32` successfully. Phone/Moshi client testing remains separate.
-- Commit `54df514 add wired host and offline installer` is published on `origin/main`. The server checkout at
-  `/home/berkerz/dotfiles` tracks `origin/main` and contains that implementation.
+- The installer baseline (`54df514`) and boot-managed Herdr service (`ab8c628`) are published on `origin/main`.
+  The server checkout at `/home/berkerz/dotfiles` tracks `origin/main` and contains that implementation.
 - Deployed: `hermes-gateway.service` declares only the boot/restart lifecycle and consumes the writable,
   imperatively configured `/home/berkerz/.hermes` state. It does not render Hermes settings or credentials.
-- Pending deployment: `herdr-server.service` starts the persistent Herdr server at boot as `berkerz`; Herdr's
-  workspaces, panes, agent sessions, and configuration remain mutable under `~/.config/herdr`.
+- Deployed and reboot-tested: `herdr-server.service` starts the persistent Herdr server at boot as `berkerz`;
+  Herdr's workspaces, panes, agent sessions, and configuration remain mutable under `~/.config/herdr`. A clean
+  `herdr --remote wired` attach worked before and after reboot, restored workspace layout and working directories,
+  and detected both Codex and Hermes panes. Arbitrary foreground processes are not blindly restarted: the test
+  `sleep` pane returned as a shell after reboot.
 - Deployed: `flake-reconcile.timer` runs at 06:00 Europe/Istanbul, fast-forwards a clean user-owned `main` checkout
   as `berkerz`, rebuilds revisions not yet stamped successful, and allows two hours for the switch. The timer is the
   consumer boundary: it rejects tracked, staged, and untracked drift, then root builds the validated checkout as an
@@ -299,7 +302,8 @@ Ask before partitioning because this changes the disk layout and boot/recovery b
 4. Run `tailscale up` once and authenticate a fresh node; never copy another host's Tailscale state.
 5. Verify Tailscale/MagicDNS SSH and reboot survival.
 6. Verify Home Manager-provided Codex, Claude, Hermes, Herdr, tmux, and related commands after SSH login.
-7. Observe actual Herdr/tmux persistence before designing reboot-restored agent units.
+7. Herdr persistence is verified: its boot service restores workspace layout and accepts remote clients without a
+   prior login. Treat automatic resumption of a particular in-flight agent as a separate, agent-specific behavior.
 8. Add file sharing only after choosing explicit exported directories.
 9. Revisit GUI/media-center lifecycle later.
 
@@ -307,8 +311,8 @@ Ask before partitioning because this changes the disk layout and boot/recovery b
 
 - GUI lifecycle is parked. Do not implement `multi-user.target`/`graphical.target` switching yet.
 - Media-center compositor, login manager, autologin, and applications are undecided.
-- Reboot-restored interactive agent sessions are undecided. Home Manager installs/configures tools; that alone does not make interactive sessions daemons.
-- Start with disconnect survival through tmux/Herdr. Design explicit systemd user services only from observed requirements.
+- Herdr now provides disconnect survival and boot-restored workspace layout. It does not blindly restart arbitrary
+  foreground commands; any stronger automatic agent-resume policy should be chosen from observed requirements.
 - File sharing protocol is undecided. SFTP is available through SSH; Samba/NFS should wait for an actual client/use case.
 - Oracle host `otto` remains available. Tailscale is the preferred private transport. Oracle-specific WireGuard is not part of `wired`.
 

@@ -96,7 +96,7 @@ The profile names describe capabilities, not machines. Host modules should only 
 - [x] Reuse key-only OpenSSH policy and add only the intended public keys.
 - [x] Enable Mosh and confirm an end-to-end session reaches `wired` through trusted `tailscale0`.
 - [ ] Review whether trusting all traffic on `tailscale0` is still desirable or whether Tailscale ACLs/grants should narrow access.
-- [ ] Verify the boot-managed `herdr-server.service`: remote detach/reattach, agent visibility, and state restoration across a reboot.
+- [x] Verify the boot-managed `herdr-server.service`: a clean `herdr --remote wired` attach worked before and after a real reboot, workspaces and working directories restored, and Herdr detected independently launched Codex and Hermes panes. Arbitrary foreground processes are not blindly restarted; a pre-reboot `sleep` pane returned as a shell.
 - [x] Activate and verify the minimal `hermes-gateway.service`; keep Hermes configuration, authentication, sessions, and memory writable under `~/.hermes`.
 - [ ] Activate and observe one successful 06:00 `flake-reconcile.timer` run from Git fast-forward through NixOS switch.
 - [x] Keep `wired`'s checkout user-owned but operationally consume-only: drift-free `main`, fast-forward-only pulls, no local flake updates, a root rebuild from the validated `path:` snapshot, and read-only access from the Hermes service. Give Hermes separate credentials only for explicitly authorized project repositories.
@@ -201,7 +201,7 @@ The repo now defines a reusable `packages.x86_64-linux.wired-installer` ISO. It 
 
 - Boot `wired` into `multi-user.target`, not directly into a graphical session.
 - Keep Ethernet, Tailscale, OpenSSH, file sharing, and selected agent supervisors attached to the headless boot lifecycle.
-- Enable lingering for the personal user only when concrete systemd user services need to survive logout; installing Codex, Claude, tmux, or Herdr alone does not make their sessions reboot-persistent.
+- `herdr-server.service` is a boot-managed system service running as the personal user; it needs neither a graphical login nor user lingering. Herdr restores workspace layout and working directories, while arbitrary foreground processes are not automatically restarted.
 - Put portals, panels, notifications, and compositor helpers under `graphical-session.target`.
 - Add a dedicated `profiles/system/media-center.nix`; do not import the full workstation profile.
 - Start the TV login path with `sudo systemctl isolate graphical.target` and return to headless mode, after logging out, with `sudo systemctl isolate multi-user.target`.

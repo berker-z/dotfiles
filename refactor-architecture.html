@@ -224,9 +224,10 @@
         <p class="muted">
           <strong>Current phase:</strong> system and Home Manager profiles are extracted. The desktop has
           rebuilt, rebooted, and passed its smoke test. Module ownership cleanup, username parameterization,
-          and the two-list package split are complete. The graphical list is intentionally unchanged and now
-          awaits a separate cruft audit. Android development has a documented design below, but no emulator or
-          SDK configuration has been enabled yet.
+          and the two-list package split are complete. The headless <code>wired</code> host is installed and its
+          Tailscale, SSH, Mosh, Hermes gateway, and boot-managed Herdr lifecycle are reboot-tested. The graphical
+          list is intentionally unchanged and now awaits a separate cruft audit. Android development has a
+          documented design below, but no emulator or SDK configuration has been enabled yet.
         </p>
       </section>
 
@@ -734,6 +735,11 @@ packages/
               <td>The unchanged workstation selection moved to <code>packages/graphical.nix</code>; <code>packages/server.nix</code> has no import relationship to it and no current host selects it. Both GUI derivations exactly match their baselines and the flake check passed.</td>
               <td class="yes">Passed</td>
             </tr>
+            <tr>
+              <td>Wired Herdr persistence</td>
+              <td><code>herdr-server.service</code> started at boot as <code>berkerz</code>. Independent Kitty clients attached through <code>herdr --remote wired</code> before and after a real reboot; workspace layout and working directories restored, and live Codex and Hermes panes were detected. The test also established the boundary: arbitrary foreground processes return as shells rather than being blindly restarted.</td>
+              <td class="yes">Passed</td>
+            </tr>
           </tbody>
         </table>
       </section>
@@ -1061,9 +1067,10 @@ log out, then: sudo systemctl isolate multi-user.target
             <h3><code>herdr-server.service</code></h3>
             <p>
               Herdr's headless server starts at boot as <code>berkerz</code>, so remote clients can attach with
-              <code>herdr --remote wired</code> without a prior interactive login. Workspaces, panes, agent sessions,
-              and configuration remain writable runtime state under <code>~/.config/herdr</code>; Nix owns only the
-              process lifecycle.
+              <code>herdr --remote wired</code> without a prior interactive login. Workspaces, panes, and working
+              directories restore across server and machine restarts; arbitrary foreground processes are not
+              blindly restarted. Agent sessions and configuration remain writable runtime state under
+              <code>~/.config/herdr</code>; Nix owns only the process lifecycle.
             </p>
           </article>
         </div>
@@ -1092,7 +1099,7 @@ log out, then: sudo systemctl isolate multi-user.target
       </section>
 
       <section>
-        <h2>The next proposed step</h2>
+        <h2>Current operational baseline</h2>
         <p>
           Reboot survival is proven: <code>wired</code> returned through Tailscale and key-only OpenSSH without a
           graphical or local user login, retained the intended NixOS generation, and started in
@@ -1103,9 +1110,16 @@ log out, then: sudo systemctl isolate multi-user.target
           it reached <code>wired</code> at <code>100.121.165.32</code> and exited cleanly.
         </p>
         <p class="muted">
-          The implementation landed on <code>main</code> at commit <code>54df514</code>. The server now tracks
-          <code>origin/main</code> in <code>~/dotfiles</code>, so its Home Manager source links resolve and future builds
-          can run locally or through remote deployment.
+          Herdr persistence is also proven. The system service returned during boot with no graphical login;
+          remote Kitty clients attached before and after reboot, the same workspace IDs and working directories
+          restored, and Herdr recognized newly launched Codex and Hermes processes. This is intentionally honest
+          persistence: an arbitrary pre-reboot command such as <code>sleep</code> returns as a shell, while stronger
+          agent-specific resume behavior remains an explicit policy rather than a daemon side effect.
+        </p>
+        <p class="muted">
+          The installer baseline landed on <code>main</code> at <code>54df514</code>; the boot-managed Herdr service
+          landed at <code>ab8c628</code>. The server tracks <code>origin/main</code> in <code>~/dotfiles</code>, so its
+          Home Manager source links resolve and future builds can run locally or through remote deployment.
         </p>
         <p class="muted">
           The installer definition is a reusable recovery environment, separate from
