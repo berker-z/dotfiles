@@ -65,6 +65,7 @@ enabled = true
 hide_rate_limit_model_nudge = true
 
 [features]
+hooks = true
 terminal_resize_reflow = true
 experimental_use_rmcp_client = true
 
@@ -76,3 +77,8 @@ approval_mode = "approve"
 
 [mcp_servers.linear.tools.save_comment]
 approval_mode = "approve"
+
+[hooks.state]
+
+[hooks.state."/home/berkerz/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:dfd98b8ada25f49ec072558586fd32849b225b3f7f3f560276faf3581f2ec018"

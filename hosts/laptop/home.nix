@@ -1,37 +1,25 @@
-{config, pkgs, osConfig, ...}:
-
-
 {
+  lib,
+  pkgs,
+  ...
+}: {
+  imports = [
+    ../../profiles/home/common.nix
+    ../../profiles/home/workstation.nix
+    ../../profiles/home/agents.nix
+  ];
 
-home.packages = with pkgs; [
+  home.packages = with pkgs; [
+    brightnessctl
+  ];
 
-  brightnessctl
-];
+  wayland.windowManager.hyprland.extraConfig = ''
+    ${builtins.readFile ./hyp2.conf}
+  '';
 
+  xdg.configFile."waybar/config.jsonc".source = lib.mkForce ../../modules/waybar/config-laptop.jsonc;
 
+  home.sessionVariables.GSK_RENDERER = "ngl";
 
-#nvidia stuff for my laptop
-wayland.windowManager.hyprland = {
-
-    extraConfig = ''
-
-      ${builtins.readFile ./hyp2.conf}
-    '';
-   };
-
-home.sessionVariables = {
-  
-  GSK_RENDERER = "ngl";
-};
-
-programs.kitty = {
-
-settings = {
-font_size = 14;
-};
-};
-
-
-
-
+  programs.kitty.settings.font_size = 14;
 }

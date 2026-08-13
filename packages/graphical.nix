@@ -2,6 +2,7 @@
   config,
   pkgs,
   inputs,
+  primaryUser,
   ...
 }: {
   environment.systemPackages = with pkgs; [
@@ -89,7 +90,6 @@
     vscode
     nix-ld
     unityhub
-    antigravity-ide-fhs
     gemini-cli
     zed-editor
     claude-code
@@ -152,7 +152,7 @@
     age
   ];
 
-  home-manager.users.berkerz.home.packages = with pkgs; [
+  home-manager.users.${primaryUser}.home.packages = with pkgs; [
     # --- Core UI ---
     waybar
     kitty
@@ -193,5 +193,6 @@
     libreoffice
     gnome-clocks
     kdePackages.kolourpaint
+    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

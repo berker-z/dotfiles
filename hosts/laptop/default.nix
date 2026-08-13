@@ -2,10 +2,15 @@
   lib,
   config,
   pkgs,
+  primaryUser,
   ...
 }: {
   imports = [
     ./hardware-configuration.nix
+    ../../profiles/system/base.nix
+    ../../profiles/system/workstation.nix
+    ../../profiles/system/agent-host.nix
+    ../../modules/system/wireguard.nix
   ];
 
   boot.loader.grub = {
@@ -83,7 +88,7 @@
     after = ["multi-user.target" "asusd.service"];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/asus-power-profile.sh set Quiet";
+      ExecStart = "/run/current-system/sw/bin/bash /home/${primaryUser}/dotfiles/scripts/asus-power-profile.sh set Quiet";
     };
   };
 
@@ -97,7 +102,7 @@
     serviceConfig = {
       Type = "oneshot";
       ExecStartPre = "/run/current-system/sw/bin/sleep 10";
-      ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/asus-kbd-backlight.sh restore";
+      ExecStart = "/run/current-system/sw/bin/bash /home/${primaryUser}/dotfiles/scripts/asus-kbd-backlight.sh restore";
     };
   };
 
@@ -105,13 +110,13 @@
     description = "Set CPU max frequency (kHz) or restore default";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/run/current-system/sw/bin/bash /home/berkerz/dotfiles/scripts/set-cpu-max-freq.sh %i";
+      ExecStart = "/run/current-system/sw/bin/bash /home/${primaryUser}/dotfiles/scripts/set-cpu-max-freq.sh %i";
     };
   };
 
   security.sudo.extraRules = [
     {
-      users = ["berkerz"];
+      users = [primaryUser];
       commands = [
         {
           command = "/run/current-system/sw/bin/systemctl start cpu-max-freq@*.service";

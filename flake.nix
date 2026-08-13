@@ -13,10 +13,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland-qtutils.url = "github:hyprwm/hyprland-qtutils";
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     codex-cli-nix = {
       url = "github:sadjow/codex-cli-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,15 +25,14 @@
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    herdr = {
+      url = "github:herdrdev/herdr";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     yorha.url = "github:berker-z/yorha-flake";
 
     home-manager = {
       url = "github:nix-community/home-manager?ref=master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    nixvim = {
-      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -52,7 +47,6 @@
     nixos-hardware,
     zen-browser,
     helium-browser,
-    nixvim,
     rust-overlay,
     yorha,
     codex-cli-nix,
@@ -67,42 +61,22 @@
       rust-overlay.overlays.default
       codex-cli-nix.overlays.default
       marcel.overlays.default
-      (final: _prev: {
+      (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;
-      })
-      # FIXME: drop once nixos-unstable picks up nixpkgs PR #549253.
-      # nixpkgs bumped glaze 7.9.1 -> 8.0.0, but Hyprland 0.56.1 asks CMake for
-      # `glaze 7...<8`; the version check fails, CMake falls back to cloning
-      # glaze v7.2.0 with FetchContent, and there is no git/network in the
-      # sandbox. Same patch that upstream merged to master.
-      (_final: prev: {
-        hyprland = prev.hyprland.overrideAttrs (old: {
-          postPatch =
-            ''
-              substituteInPlace CMakeLists.txt start/CMakeLists.txt hyprpm/CMakeLists.txt \
-                --replace-fail "glaze 7...<8" "glaze"
-            ''
-            + old.postPatch;
-        });
       })
     ];
 
-    overlayedPkgs = import nixpkgs {
-      system = "x86_64-linux";
-      inherit overlays;
-    };
-
     mkSystem = {
       hostName,
+      primaryUser,
       extraModules ? [],
     }:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = {inherit inputs;};
+        specialArgs = {inherit inputs primaryUser;};
         modules =
           [
             yorha.nixosModules.yorha-grub-theme
-            ./configuration.nix
             ./hosts/${hostName}/default.nix
             {nixpkgs.overlays = overlays;}
             home-manager.nixosModules.home-manager
@@ -111,10 +85,10 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
               home-manager.overwriteBackup = true; #THANK GOD FOR THIS
-              home-manager.users.berkerz = import ./home.nix;
+              home-manager.extraSpecialArgs = {inherit primaryUser;};
+              home-manager.users.${primaryUser} = import ./hosts/${hostName}/home.nix;
               home-manager.sharedModules = [
                 helium-browser.homeModules.default
-                nixvim.homeModules.nixvim
               ];
             }
           ]
@@ -124,11 +98,13 @@
     nixosConfigurations = {
       nixos = mkSystem {
         hostName = "nixos";
+        primaryUser = "berkerz";
         extraModules = [];
       };
 
       laptop = mkSystem {
         hostName = "laptop";
+        primaryUser = "berkerz";
         extraModules = [
           nixos-hardware.nixosModules.asus-zephyrus-ga401
         ];

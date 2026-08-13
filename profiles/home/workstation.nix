@@ -1,0 +1,185 @@
+{
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    ../../modules/workstation
+  ];
+
+  services.mako = {
+    enable = true;
+    settings = {
+      default-timeout = 2500;
+      font = "monospace 11";
+      anchor = "bottom-right";
+      margin = 10;
+      border-radius = 10;
+      border-size = 1;
+      border-color = "#88c0d0";
+      background-color = "#2e3440";
+
+      "mode=dnd".invisible = 1;
+      "urgency=critical".default-timeout = 0;
+    };
+  };
+
+  programs.sioyek = {
+    enable = true;
+    config."background_color" = "0.18 0.20 0.25";
+  };
+
+  programs.helium = {
+    enable = true;
+    flags = ["--ozone-platform-hint=auto"];
+  };
+
+  wayland.windowManager.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    systemd.enableXdgAutostart = true;
+    systemd.enable = true;
+    systemd.variables = ["--all"];
+    configType = "hyprlang";
+    extraConfig = ''
+      ${builtins.readFile ../../modules/hypr/hyprland.conf}
+    '';
+  };
+
+  xdg.configFile = {
+    "hypr/hyprlock.conf".source = ../../modules/hypr/hyprlock.conf;
+    "waybar/style.css".source = ../../modules/waybar/style.css;
+    "waybar/config.jsonc".source = ../../modules/waybar/config.jsonc;
+  };
+
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        after_sleep_cmd = "hyprctl dispatch dpms on";
+        ignore_dbus_inhibit = false;
+        lock_cmd = "hyprlock";
+      };
+
+      listener = [
+        {
+          timeout = 1800;
+          on-timeout = "hyprlock";
+        }
+        {
+          timeout = 3600;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
+      ];
+    };
+  };
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      ipc = false;
+      splash = false;
+      splash_offset = 2;
+      wallpaper = [
+        {
+          monitor = "";
+          path = "${config.home.homeDirectory}/dotfiles/assets/fog.jpg";
+          fit_mode = "cover";
+        }
+      ];
+    };
+  };
+
+  home.file.".local/bin/ccbz" = {
+    source = ../../scripts/ccbz.sh;
+    executable = true;
+  };
+
+  xdg.desktopEntries.mirror = {
+    name = "Mirror";
+    comment = "Webcam preview with no UI";
+    exec = "guvcview --gui=none";
+    terminal = false;
+    icon = "guvcview";
+    categories = [
+      "Utility"
+      "Video"
+    ];
+  };
+
+  xdg.desktopEntries.ccbz = {
+    name = "CCBZ";
+    comment = "Open wiremix, bluetuith, and nmcli in Kitty windows";
+    exec = "${config.home.homeDirectory}/.local/bin/ccbz";
+    terminal = false;
+    icon = "utilities-terminal";
+    categories = [
+      "System"
+      "Settings"
+      "Utility"
+    ];
+  };
+
+  xdg.dataFile."applications/com.github.johnfactotum.Foliate.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=Foliate
+    Exec=env GDK_BACKEND=x11 foliate %U
+    Icon=com.github.johnfactotum.Foliate
+    Categories=Office;Viewer;
+    MimeType=application/epub+zip;
+  '';
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "inode/directory" = ["io.github.berker_z.Marcel.desktop"];
+      "image/png" = ["org.gnome.Loupe.desktop"];
+      "image/jpeg" = ["org.gnome.Loupe.desktop"];
+      "image/jpg" = ["org.gnome.Loupe.desktop"];
+      "image/gif" = ["org.gnome.Loupe.desktop"];
+      "image/bmp" = ["org.gnome.Loupe.desktop"];
+      "image/tiff" = ["org.gnome.Loupe.desktop"];
+      "image/webp" = ["org.gnome.Loupe.desktop"];
+      "application/pdf" = ["sioyek.desktop"];
+      "application/epub+zip" = ["com.github.johnfactotum.Foliate.desktop"];
+      "video/*" = ["vlc.desktop"];
+      "audio/*" = ["vlc.desktop"];
+      "x-scheme-handler/http" = "helium.desktop";
+      "x-scheme-handler/https" = "helium.desktop";
+      "text/html" = "helium.desktop";
+      "text/plain" = "org.xfce.mousepad.desktop";
+    };
+
+    associations.added = {
+      "x-scheme-handler/appflowy-flutter" = "appflowy.desktop";
+      "x-scheme-handler/appflowy" = "appflowy.desktop";
+      "x-scheme-handler/appflowy-desktop" = "appflowy.desktop";
+    };
+  };
+
+  programs.kitty = {
+    enable = true;
+    themeFile = "Nord";
+    settings.confirm_os_window_close = 0;
+    keybindings = {
+      "ctrl+t" = "new_tab";
+      "ctrl+n" = "new_window";
+      "alt+tab" = "next_window";
+      "ctrl+tab" = "next_tab";
+      "ctrl+w" = "close_window";
+      "ctrl+q" = "close_tab";
+    };
+  };
+
+  services.gammastep = {
+    enable = true;
+    provider = "manual";
+    temperature.day = 5500;
+    temperature.night = 3000;
+    tray = true;
+    latitude = 41.0;
+    longitude = 28.9;
+  };
+}

@@ -8,8 +8,11 @@
   ...
 }: {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../../profiles/system/base.nix
+    ../../profiles/system/workstation.nix
+    ../../profiles/system/agent-host.nix
+    ../../modules/system/wireguard.nix
   ];
   boot.loader.grub = {
     yorhaTheme = {

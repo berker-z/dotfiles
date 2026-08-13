@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dotfiles refactor architecture</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #242933;
+        --panel: #2e3440;
+        --panel-2: #3b4252;
+        --line: #4c566a;
+        --text: #eceff4;
+        --muted: #d8dee9;
+        --blue: #88c0d0;
+        --blue-2: #81a1c1;
+        --green: #a3be8c;
+        --yellow: #ebcb8b;
+        --red: #bf616a;
+        --purple: #b48ead;
+        --radius: 14px;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 10% 0%, rgba(136, 192, 208, 0.12), transparent 30rem),
+          var(--bg);
+        color: var(--text);
+        font: 16px/1.6 system-ui, sans-serif;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0 90px;
+      }
+
+      h1, h2, h3 { line-height: 1.2; }
+      h1 { margin: 0 0 12px; font-size: clamp(2rem, 6vw, 4rem); }
+      h2 { margin: 0 0 20px; font-size: 1.7rem; }
+      h3 { margin: 0 0 8px; font-size: 1.05rem; }
+      p { margin: 0 0 16px; }
+      code { color: var(--blue); }
+
+      .lead {
+        max-width: 820px;
+        color: var(--muted);
+        font-size: 1.16rem;
+      }
+
+      .callout, section {
+        margin-top: 28px;
+        padding: 26px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(46, 52, 64, 0.92);
+      }
+
+      .callout {
+        border-left: 5px solid var(--yellow);
+      }
+
+      .callout strong { color: var(--yellow); }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-2);
+      }
+
+      .card p, .muted { color: var(--muted); }
+
+      .badge {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: rgba(136, 192, 208, 0.14);
+        color: var(--blue);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .badge.future { background: rgba(180, 142, 173, 0.14); color: var(--purple); }
+      .badge.warning { background: rgba(235, 203, 139, 0.14); color: var(--yellow); }
+
+      .flow {
+        display: grid;
+        grid-template-columns: minmax(180px, 0.8fr) 40px minmax(240px, 1.4fr) 40px minmax(190px, 0.9fr);
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .node {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 120px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-2);
+      }
+
+      .node.host { border-color: var(--blue-2); }
+      .node.result { border-color: var(--green); }
+
+      .arrow {
+        display: grid;
+        place-items: center;
+        color: var(--blue);
+        font-size: 1.7rem;
+      }
+
+      ul, ol { margin: 8px 0 0; padding-left: 22px; }
+      li + li { margin-top: 7px; }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+      }
+
+      th, td {
+        padding: 13px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th { color: var(--blue); }
+      tr:last-child td { border-bottom: 0; }
+      .yes { color: var(--green); font-weight: 700; }
+      .no { color: var(--muted); }
+      .later { color: var(--yellow); font-weight: 700; }
+
+      pre {
+        overflow-x: auto;
+        margin: 0;
+        padding: 20px;
+        border-radius: 10px;
+        background: #1f242c;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .safe { border-left: 5px solid var(--green); }
+      .danger { border-left: 5px solid var(--red); }
+
+      .step {
+        display: grid;
+        grid-template-columns: 42px 1fr;
+        gap: 14px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .step:last-child { border-bottom: 0; }
+      .number {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--blue-2);
+        color: var(--bg);
+        font-weight: 800;
+      }
+
+      footer {
+        margin-top: 28px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        main { width: min(100% - 20px, 1120px); padding-top: 28px; }
+        section, .callout { padding: 19px; }
+        .flow { grid-template-columns: 1fr; }
+        .arrow { transform: rotate(90deg); min-height: 28px; }
+        table { font-size: 0.9rem; }
+        th, td { padding: 10px 7px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="badge">Updated 2026-08-13</span>
+        <h1>What this refactor is trying to do</h1>
+        <p class="lead">
+          The goal is not to make the repository clever. It is to stop every computer from inheriting
+          every setting. A host should say which capabilities it needs, while hardware-specific facts
+          remain in that host's own directory.
+        </p>
+      </header>
+
+      <div class="callout">
+        <strong>The core safety rule:</strong> first move existing settings without changing their values.
+        Only after both existing hosts still evaluate do we remove packages, change behavior, or add the
+        ThinkCentre. Structure changes and behavior changes should not be mixed casually.
+      </div>
+
+      <section class="safe">
+        <h2>Master document status</h2>
+        <p>
+          This file is the master record for the refactor. It describes the intended end state, decisions
+          already made, completed migration slices, validation evidence, known problems, and the next gate.
+          It must be updated whenever a slice changes the architecture or passes a validation milestone.
+        </p>
+        <p class="muted">
+          <strong>Current phase:</strong> system and Home Manager profiles are extracted. The desktop has
+          rebuilt, rebooted, and passed its smoke test. Module ownership cleanup, username parameterization,
+          and the two-list package split are complete. The graphical list is intentionally unchanged and now
+          awaits a separate cruft audit. Android development has a documented design below, but no emulator or
+          SDK configuration has been enabled yet.
+        </p>
+      </section>
+
+      <section>
+        <h2>The problem with the old shape</h2>
+        <div class="flow">
+          <div class="node host">
+            <h3>Every host</h3>
+            <code>flake.nix</code>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node">
+            <h3>One giant shared configuration</h3>
+            <code>configuration.nix</code>
+            <span class="muted">Desktop, Steam, Bluetooth, packages, agents, VPNs, fonts, cron…</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node result">
+            <h3>Same machine role</h3>
+            <span class="muted">Desktop, laptop, and future server all receive nearly everything.</span>
+          </div>
+        </div>
+        <p class="muted" style="margin-top: 18px">
+          This is manageable with two similar workstations. It becomes dangerous with a third machine
+          that should be an always-on agent host and lightweight media box.
+        </p>
+      </section>
+
+      <section>
+        <h2>The intended model</h2>
+        <div class="flow">
+          <div class="node host">
+            <h3>Host module</h3>
+            <code>hosts/&lt;name&gt;/default.nix</code>
+            <span class="muted">Chooses capabilities and owns hardware facts.</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node">
+            <h3>Capability profiles</h3>
+            <code>base + workstation + agents + media</code>
+            <span class="muted">Small reusable layers with explicit purposes.</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="node result">
+            <h3>One final NixOS system</h3>
+            <span class="muted">Nix merges the selected modules into the host configuration.</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>What each layer should own</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">System</span>
+            <h3>Base</h3>
+            <p>Universal operating-system policy: user account, Nix settings, locale, time, core networking, firewall, shell, and Git.</p>
+          </article>
+          <article class="card">
+            <span class="badge">System</span>
+            <h3>Workstation</h3>
+            <p>Graphical-machine concerns: Hyprland, login manager, PipeWire, Bluetooth, portals, fonts, Steam, graphics, and desktop packages.</p>
+          </article>
+          <article class="card">
+            <span class="badge">System</span>
+            <h3>Agent host</h3>
+            <p>Remote and persistent-agent concerns: Tailscale, SSH, Mosh, Herdr, Codex, Claude, Hermes, and the services needed to keep sessions alive.</p>
+          </article>
+          <article class="card">
+            <span class="badge future">Future</span>
+            <h3>Media center</h3>
+            <p>A minimal local TV session: compositor, browser, media player, file browsing, TV audio, idle behavior, and remote/controller input.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Host</span>
+            <h3>Machine directory</h3>
+            <p>Hostname, generated hardware configuration, GPU details, ASUS controls, DeepCool service, disk layout, and genuine per-machine overrides.</p>
+          </article>
+          <article class="card">
+            <span class="badge future">Home Manager</span>
+            <h3>User profiles</h3>
+            <p>The same capability split for user configuration: common terminal tools, workstation UI, agent configuration, and media-session preferences.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Which host receives what</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Host</th>
+              <th>Base</th>
+              <th>Workstation</th>
+              <th>Agent host</th>
+              <th>Media center</th>
+              <th>Host-only details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>nixos</code></td>
+              <td class="yes">Yes</td>
+              <td class="yes">Yes</td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+              <td>DeepCool hardware</td>
+            </tr>
+            <tr>
+              <td><code>laptop</code></td>
+              <td class="yes">Yes</td>
+              <td class="yes">Yes</td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+              <td>ASUS, NVIDIA offload, power and audio policy</td>
+            </tr>
+            <tr>
+              <td><code>thinkcentre</code></td>
+              <td class="yes">Yes</td>
+              <td class="no">No</td>
+              <td class="yes">Yes</td>
+              <td class="yes">Yes</td>
+              <td class="later">Hardware still to be inspected</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>What exists right now</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Implemented</span>
+            <h3>Initial system split</h3>
+            <p><code>base.nix</code>, <code>workstation.nix</code>, and <code>agent-host.nix</code> now exist. The desktop and laptop explicitly import them.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Implemented</span>
+            <h3>Home Manager split</h3>
+            <p><code>common.nix</code>, <code>workstation.nix</code>, and <code>agents.nix</code> now exist. Each current host explicitly imports all three and then applies its own overrides.</p>
+          </article>
+          <article class="card">
+            <span class="badge warning">Still incomplete</span>
+            <h3>Agent profile naming</h3>
+            <p>The system <code>agent-host.nix</code> still only imports Tailscale/SSH. User-level Codex and Claude configuration lives in <code>profiles/home/agents.nix</code>; agent packages are now selected explicitly by each independent package list.</p>
+          </article>
+          <article class="card">
+            <span class="badge warning">Compatibility</span>
+            <h3>Old aggregate retained</h3>
+            <p><code>configuration.nix</code> remains as a small aggregate. Current hosts no longer depend on it, but it gives us an easy reference and fallback while migration continues.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Implemented</span>
+            <h3>Two package lists</h3>
+            <p><code>packages/graphical.nix</code> preserves the existing desktop/laptop selection. <code>packages/server.nix</code> is an independent, conservative remote-admin and agent-tooling list.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Implemented</span>
+            <h3>Module ownership cleanup</h3>
+            <p>System service modules now live under <code>modules/system/</code>, agent integration under <code>modules/agents/</code>, and the Home Manager workstation aggregate under <code>modules/workstation/</code>.</p>
+          </article>
+          <article class="card">
+            <span class="badge future">Designed, not enabled</span>
+            <h3>Android development</h3>
+            <p>The old global emulator module stays removed. Its replacement will be a minimal graphical-host prerequisite plus a pinned, opt-in Android development shell.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Package strategy: two independent lists</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Desktop + laptop</span>
+            <h3><code>packages/graphical.nix</code></h3>
+            <p>Used by <code>nixos</code> and <code>laptop</code>. This remains the convenient place to add browsers, editors, games, desktop utilities, development tools, and graphical applications.</p>
+          </article>
+          <article class="card">
+            <span class="badge">Defined, not selected</span>
+            <h3><code>packages/server.nix</code></h3>
+            <p>Ready for the future mostly-server host but not imported by a current machine. It starts with remote administration, persistence/session tools, and agent tooling; TV/media packages wait for an explicit choice.</p>
+          </article>
+        </div>
+        <p class="muted" style="margin-top: 16px">
+          These lists do not inherit from one another. Intentional duplication of a few basics is acceptable:
+          it keeps the server boundary visible and prevents a convenient desktop addition from silently bloating
+          the ThinkCentre.
+        </p>
+      </section>
+
+      <section>
+        <h2>Android development without polluting the hosts</h2>
+        <div class="callout">
+          <strong>Boundary:</strong> Android is a development capability used on graphical hosts, not a reason
+          to place an SDK, emulator image, NDK, Java runtime, libvirt stack, and graphics overrides in every
+          login session.
+        </div>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Host responsibility</span>
+            <h3>Hardware access only</h3>
+            <p>
+              The desktop and laptop already load <code>kvm-amd</code> from their hardware modules. No new
+              shared system module appears necessary: keep ADB and the SDK in the development shell, and do
+              not enable libvirt solely for the Android emulator or load both AMD and Intel KVM modules.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge future">Development shell</span>
+            <h3><code>nix develop .#android</code></h3>
+            <p>
+              Compose a pinned SDK with one platform, build-tools version, emulator, one x86_64 Google APIs
+              system image, and a compatible JDK. Add one NDK only when a real project requires native builds.
+              SDK environment variables exist only inside this shell.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">Mutable user data</span>
+            <h3>AVDs remain outside the Nix store</h3>
+            <p>
+              Emulator definitions and writable device state belong in <code>~/.android/avd</code>. Projects
+              own their own ignored <code>local.properties</code>; entering the shell must not overwrite it.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge warning">Validation gate</span>
+            <h3>KVM must work first</h3>
+            <p>
+              On the current desktop, AMD-V is reported, <code>kvm_amd</code> is loaded, KVM is registered by
+              the kernel, and udev expects <code>/dev/kvm</code>. The coding sandbox does not expose that device,
+              so verify it from a normal host terminal before downloading a large emulator image; software
+              emulation would be an unhelpful fallback.
+            </p>
+          </article>
+        </div>
+        <p class="muted" style="margin-top: 16px">
+          The pinned NixOS release has removed <code>programs.adb</code> and no longer requires an
+          <code>adbusers</code> group: systemd 258 supplies device access rules. The shell's platform tools can
+          provide <code>adb</code>. Android Studio remains optional rather than a mandatory graphical package;
+          the SDK and emulator should work with any editor.
+        </p>
+        <h3>Why the deleted <code>emulator.nix</code> was fragile</h3>
+        <ul>
+          <li>It installed two Android platforms, two build-tools releases, Google Play images, an NDK, Java, Watchman, Qt, graphics libraries, and emulator tools globally.</li>
+          <li>It loaded both <code>kvm-intel</code> and <code>kvm-amd</code> and enabled libvirt even though the Android emulator talks to KVM directly.</li>
+          <li>It globally forced an AMD Vulkan driver path, which was inappropriate for the laptop and brittle across graphics-driver changes.</li>
+          <li>It set <code>ANDROID_EMULATOR_USE_SYSTEM_LIBS=1</code>, bypassing the emulator's packaged libraries and making host-library mismatches more likely.</li>
+          <li>It expanded <code>nix-ld</code> and every interactive shell for a tool that should be entered explicitly per development session.</li>
+        </ul>
+        <h3>Implementation and proof sequence</h3>
+        <ol>
+          <li>Verify that each GUI host exposes a usable <code>/dev/kvm</code>; fix firmware or host access separately if it does not.</li>
+          <li>Add an <code>android</code> dev shell without changing either host closure, initially using one stable SDK/API and no NDK unless required.</li>
+          <li>Evaluate and build the shell, then create one named AVD manually with <code>avdmanager</code>.</li>
+          <li>Boot the AVD, confirm hardware acceleration, run <code>adb devices</code>, and build a small project before considering Android Studio or extra images.</li>
+          <li>Only promote genuinely always-needed tools to <code>packages/graphical.nix</code>; never add them to the independent server list.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Graphical package audit: first evidence</h2>
+        <p>
+          This is a read-only classification pass after the structural split. Nothing in this table has been
+          removed yet; each removal is a separate behavioral change with its own derivation and command checks.
+        </p>
+        <table>
+          <thead><tr><th>Package entries</th><th>Evidence</th><th>Disposition</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>tailscale</code></td>
+              <td>The same Tailscale store path occurs twice in <code>environment.systemPackages</code>: once from the list and once from <code>services.tailscale</code>.</td>
+              <td class="yes">Objective duplicate; remove the explicit list entry first.</td>
+            </tr>
+            <tr>
+              <td>Hyprland and GTK portal packages</td>
+              <td>Each exact store path occurs twice because the package list repeats packages already selected by the portal configuration.</td>
+              <td class="yes">Objective duplicates; remove only the repeated explicit entries.</td>
+            </tr>
+            <tr>
+              <td><code>dig</code> + <code>dnsutils</code></td>
+              <td>The derivation paths differ, but both outputs contain the same four commands: <code>dig</code>, <code>nslookup</code>, <code>nsupdate</code>, and <code>delv</code>.</td>
+              <td class="yes">Command duplicate; keep one after confirming the preferred attribute.</td>
+            </tr>
+            <tr>
+              <td><code>git</code> + <code>programs.git.package = gitFull</code></td>
+              <td>Both variants are in the system profile. The configured Git module already installs <code>gitFull</code>.</td>
+              <td class="yes">Likely redundant; retain the module-owned full variant.</td>
+            </tr>
+            <tr>
+              <td><code>ffmpeg</code> + <code>ffmpeg-full</code></td>
+              <td>Both expose <code>ffmpeg</code>, <code>ffplay</code>, and <code>ffprobe</code>; the full variant supplies broader codec support.</td>
+              <td class="warning">Overlapping variants; verify consumers, then normally retain only full.</td>
+            </tr>
+            <tr>
+              <td>Home package <code>steam</code> + <code>programs.steam</code></td>
+              <td>The NixOS Steam module already installs its configured wrapper; Home Manager adds a second plain Steam wrapper.</td>
+              <td class="warning">Likely redundant, but test launch behavior after removing the Home entry.</td>
+            </tr>
+            <tr>
+              <td>Applications and development tools</td>
+              <td>Absence of obvious configuration references is not proof that an interactive program is unused.</td>
+              <td>Collect usage evidence or ask for a keep/remove decision; do not delete by intuition.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Current file flow</h2>
+        <pre>flake.nix
+└── hosts/&lt;host&gt;/default.nix
+    ├── hardware-configuration.nix
+    ├── profiles/system/base.nix
+    ├── profiles/system/workstation.nix
+    ├── profiles/system/agent-host.nix
+    ├── wireguard.nix                  # existing hosts only
+    └── genuine host-specific settings
+
+home-manager.users.berkerz
+└── hosts/&lt;host&gt;/home.nix
+    ├── profiles/home/common.nix
+    ├── profiles/home/workstation.nix
+    ├── profiles/home/agents.nix
+    └── genuine host-specific overrides
+
+home.nix                               # compatibility aggregate only</pre>
+        <p class="muted" style="margin-top: 16px">
+          Profiles express machine capabilities. Modules underneath them implement concrete features:
+          <code>modules/system/</code>, <code>modules/agents/</code>, and <code>modules/workstation/</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Module cleanup result</h2>
+        <p>
+          The ownership cleanup was completed as a behavior-preserving slice. Useful subdirectories remain
+          intact, while root-level service modules and scattered agent integration now have explicit homes.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Area</th><th>Current state</th><th>Proposed treatment</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>themes/</code>, <code>fuzzel/</code>, <code>quickshell/</code>, <code>wlogout/</code></td>
+              <td>Active workstation modules</td>
+              <td>Kept as directories and composed through <code>modules/workstation/default.nix</code>.</td>
+            </tr>
+            <tr>
+              <td><code>codex.nix</code>, <code>claude-code.nix</code>, <code>herdr/</code></td>
+              <td>Active agent integration</td>
+              <td>Grouped under <code>modules/agents/</code> without changing the evaluated system.</td>
+            </tr>
+            <tr>
+              <td><code>nord.css</code>, <code>satty.toml</code></td>
+              <td>Indirectly referenced active assets</td>
+              <td>Keep; they are not dead merely because Nix does not import them directly.</td>
+            </tr>
+            <tr>
+              <td><code>nordtheme.nix</code>, <code>themes/theming.nix.bak</code></td>
+              <td>No active references found</td>
+              <td>Removed. The unused root <code>emulator.nix</code> and <code>sddm.nix</code> were removed too.</td>
+            </tr>
+            <tr>
+              <td>Black and hibernate Wlogout icons</td>
+              <td>No current layout or stylesheet references found</td>
+              <td>Candidate asset cleanup; verify before deleting.</td>
+            </tr>
+            <tr>
+              <td>Untracked Hyprland/Quickshell Lua files</td>
+              <td>Experimental work owned by the user</td>
+              <td>Preserve untouched until their intended replacement path is explicitly chosen.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Decision log</h2>
+        <table>
+          <thead><tr><th>Date</th><th>Decision</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>2026-08-11</td><td>Use capability profiles</td><td>Avoid hostnames and machine roles leaking into shared modules.</td></tr>
+            <tr><td>2026-08-13</td><td>Keep structural and behavioral changes separate</td><td>Makes closure comparisons meaningful and rollback straightforward.</td></tr>
+            <tr><td>2026-08-13</td><td>Compose Home Manager profiles in each host home module</td><td>Hosts explicitly choose their user environment without hostname conditionals.</td></tr>
+            <tr><td>2026-08-13</td><td>Use two independent package lists</td><td>Desktop convenience must not silently bloat the mostly-server host.</td></tr>
+            <tr><td>2026-08-13</td><td>Keep compatibility aggregates temporarily</td><td>Do not erase old entry points before all hosts and workflows are proven.</td></tr>
+            <tr><td>2026-08-13</td><td>User owns test, switch, and reboot operations</td><td>Structural work can build safely without unexpectedly replacing the live system.</td></tr>
+            <tr><td>2026-08-13</td><td>Make the primary username a per-host value</td><td>Existing hosts remain <code>berkerz</code>; the ThinkCentre username remains an explicit pending decision.</td></tr>
+            <tr><td>2026-08-13</td><td>Organize modules by ownership</td><td>System services, agent integrations, and workstation UI should be discoverable without cluttering the repository root.</td></tr>
+            <tr><td>2026-08-13</td><td>Keep the Android SDK in an opt-in dev shell</td><td>The GUI hosts need hardware access, while SDK versions, images, Java, and optional NDKs are project tooling rather than permanent workstation state.</td></tr>
+            <tr><td>2026-08-13</td><td>Do not use libvirt for Android by default</td><td>The Android emulator can use KVM directly; a second virtualization management stack adds complexity without helping this use case.</td></tr>
+            <tr><td>2026-08-13</td><td>Name the ThinkCentre <code>wired</code></td><td>Use one memorable identity for its flake attribute, host directory, network name, MagicDNS name, and SSH alias.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Proposed finished file tree</h2>
+        <pre>profiles/
+├── system/
+│   ├── base.nix
+│   ├── workstation.nix
+│   ├── agent-host.nix
+│   └── media-center.nix
+└── home/
+    ├── common.nix
+    ├── workstation.nix
+    ├── agents.nix
+    └── media-center.nix
+
+hosts/
+├── nixos/
+├── laptop/
+└── thinkcentre/
+
+modules/
+├── system/                            # display manager, remote access, VPN, session environment
+├── agents/                            # Codex, Claude, Herdr hooks
+├── workstation/                      # Home Manager workstation aggregate
+├── themes/
+├── fuzzel/
+├── quickshell/
+└── wlogout/
+
+packages/
+├── graphical.nix                     # desktop + laptop
+└── server.nix                         # independent ThinkCentre list</pre>
+        <p class="muted" style="margin-top: 16px">
+          The two package modules are intentionally independent. Profiles decide which list a host receives;
+          neither package list imports the other.
+        </p>
+      </section>
+
+      <section class="safe">
+        <h2>How we avoid breaking the machines</h2>
+        <div class="step">
+          <div class="number">1</div>
+          <div><h3>Record a baseline</h3><p class="muted">Evaluate important options and package names for both existing hosts before moving the next layer.</p></div>
+        </div>
+        <div class="step">
+          <div class="number">2</div>
+          <div><h3>Move one capability at a time</h3><p class="muted">For example, move Home Manager agent configuration without simultaneously changing its settings or package versions.</p></div>
+        </div>
+        <div class="step">
+          <div class="number">3</div>
+          <div><h3>Evaluate both hosts</h3><p class="muted">Run focused <code>nix eval</code> checks, then <code>nix flake check --no-build</code>.</p></div>
+        </div>
+        <div class="step">
+          <div class="number">4</div>
+          <div><h3>Build without switching</h3><p class="muted">Use <code>nix build --no-link</code> only when the structure is stable. This creates no repo-root result symlink.</p></div>
+        </div>
+        <div class="step">
+          <div class="number">5</div>
+          <div><h3>Switch one existing machine first</h3><p class="muted">The user performs the switch. Test the desktop and remote access before touching the other machine.</p></div>
+        </div>
+        <div class="step">
+          <div class="number">6</div>
+          <div><h3>Add ThinkCentre last</h3><p class="muted">Only after the existing hosts remain equivalent do we add its hardware and select base + agents + media.</p></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Validation history</h2>
+        <table>
+          <thead><tr><th>Slice</th><th>Evidence</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Initial system profile split</td>
+              <td>Both hosts evaluated; flake check passed; desktop built; critical services and generated configuration matched the previous closure.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Antigravity and NixVim removal</td>
+              <td>Only intended top-level commands disappeared; closure reduced from 31.0 GiB to 29.9 GiB.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Desktop activation</td>
+              <td>User rebuilt successfully; the current system is the refactored generation. Zero failed system units were observed before reboot.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Home Manager profile split</td>
+              <td>Flake check passed; desktop and laptop built; desktop closure delta was empty; no managed home paths changed.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Post-reboot smoke test</td>
+              <td>User rebuilt, rebooted, and confirmed that the desktop system is working normally.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Module ownership cleanup</td>
+              <td>Both hosts evaluate to the exact same derivations as before the moves; formatting and diff checks passed.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Per-host primary username</td>
+              <td>Both hosts explicitly pass <code>primaryUser = "berkerz"</code>. Account, Home Manager, SSH, WireGuard, packages, and laptop service paths resolve unchanged; both system derivation paths exactly match their baselines and the flake check passed.</td>
+              <td class="yes">Passed</td>
+            </tr>
+            <tr>
+              <td>Independent package lists</td>
+              <td>The unchanged workstation selection moved to <code>packages/graphical.nix</code>; <code>packages/server.nix</code> has no import relationship to it and no current host selects it. Both GUI derivations exactly match their baselines and the flake check passed.</td>
+              <td class="yes">Passed</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="danger">
+        <h2>Things we should not do</h2>
+        <ul>
+          <li>Do not use hostname conditionals inside supposedly reusable profiles.</li>
+          <li>Do not give the ThinkCentre the workstation profile merely because a package is hard to reach.</li>
+          <li>Do not move settings and redesign their behavior in the same step.</li>
+          <li>Do not copy private keys, Tailscale state, or machine-local credentials.</li>
+          <li>Do not remove the compatibility path until all hosts evaluate and the current machines are smoke-tested.</li>
+          <li>Do not perform a rebuild or switch automatically during structural work.</li>
+          <li>Do not restore global Android SDK variables, host-specific Vulkan paths, both CPU vendors' KVM modules, or emulator library overrides.</li>
+        </ul>
+      </section>
+
+      <section class="danger">
+        <h2>Known issues intentionally not fixed yet</h2>
+        <ul>
+          <li>The root cron job still runs <code>~/Projects/swast/ye.sh</code> every minute and has produced failed-mail noise.</li>
+          <li>Both Waybar variants still reference a missing <code>~/.config/waybar/mediaplayer.py</code>.</li>
+          <li>The Mirror desktop entry still calls <code>guvcview</code>, which is not installed.</li>
+          <li>Several active UI files still hardcode <code>/home/berkerz/dotfiles</code> instead of store-managed assets.</li>
+          <li>The WireGuard module still recognizes only <code>nixos</code> and <code>laptop</code>; the ThinkCentre must not import it unchanged.</li>
+          <li>The graphical package list still contains known duplication and applications awaiting a keep/remove decision.</li>
+          <li>The coding sandbox does not expose <code>/dev/kvm</code>, although the desktop kernel and udev both register it correctly; emulator acceleration still needs one check from a normal host terminal.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Proposed remote-access architecture</h2>
+        <div class="callout">
+          <strong>Default path:</strong> use Tailscale as the private network and ordinary key-only OpenSSH as
+          the login protocol. The new always-on machine becomes the normal destination; the Oracle machine
+          remains a named legacy/off-site destination rather than defining the shared network architecture.
+        </div>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Transport</span>
+            <h3>Tailscale + MagicDNS</h3>
+            <p>
+              Every selected host joins independently and keeps its own Tailscale state. SSH aliases use stable
+              MagicDNS names instead of copied <code>100.x</code> addresses. Oracle can stay enrolled as long as
+              it remains useful.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">Login</span>
+            <h3>OpenSSH over the tailnet</h3>
+            <p>
+              Keep root and password login disabled, allow only the declared primary user, and authorize named
+              public keys for the laptop/desktop and Moshi. Regular OpenSSH also remains the bootstrap transport
+              for Mosh; do not enable a second Tailscale SSH identity system without a deliberate migration.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">Firewall</span>
+            <h3>Permit services, not the interface</h3>
+            <p>
+              Replace blanket trust of <code>tailscale0</code> with explicit SSH TCP and Mosh UDP rules on that
+              interface. Tailnet grants should independently restrict which personal devices may reach the new
+              server. Tailscale's own discovery/transport port may remain open as required.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">Client config</span>
+            <h3>Named destinations</h3>
+            <p>
+              Move outbound aliases out of the generic Home Manager base into a small remote-hosts profile.
+              Give the new machine its own alias and persistent known-host entry. Keep <code>otto</code> as the
+              Oracle alias while it exists, but stop using a fixed tailnet IP and a known-hosts file in
+              <code>/tmp</code>.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge warning">Legacy path</span>
+            <h3>Oracle WireGuard is opt-in</h3>
+            <p>
+              The current WireGuard peer is an Oracle full-tunnel route to <code>132.145.49.251</code>. It is
+              disabled at boot today. If still useful, rename it as a legacy Oracle tunnel and select it only on
+              intended client hosts; the new server should not import it. If Oracle is reachable through
+              Tailscale, WireGuard is unnecessary for SSH.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">Agent workflow</span>
+            <h3>One obvious always-on target</h3>
+            <p>
+              Laptop, desktop, and phone connect to the new host by name, then attach to persistent tmux/Herdr
+              sessions. Agent services must survive without a graphical login. Oracle remains a fallback or
+              off-site workload host, not a hidden dependency of those sessions.
+            </p>
+          </article>
+        </div>
+        <h3>Name shortlist</h3>
+        <table>
+          <thead><tr><th>Name</th><th>Why it fits</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>wired</code></td>
+              <td>A compact Serial Experiments Lain reference and a direct description of the host's role.</td>
+              <td class="yes">Chosen hostname and SSH alias.</td>
+            </tr>
+            <tr>
+              <td><code>pod042</code></td>
+              <td>A support unit that is always nearby, carries tools, and helps the operators.</td>
+              <td>Best if the box should feel infrastructural rather than home-like.</td>
+            </tr>
+            <tr>
+              <td><code>tachikoma</code></td>
+              <td>A networked, curious autonomous machine from Ghost in the Shell; extremely on-theme for an agent lab.</td>
+              <td>Excellent personality, slightly long to type.</td>
+            </tr>
+            <tr>
+              <td><code>pascal</code></td>
+              <td>A thoughtful machine running a village of other machines; short and consistent with the repository's YoRHa/NieR language.</td>
+              <td>Rejected: too close to the server-named-after-a-philosopher cliché.</td>
+            </tr>
+            <tr>
+              <td><code>mooncell</code></td>
+              <td>A literal computation and observation engine with strong server energy.</td>
+              <td>Grand and distinctive, less cozy than <code>pascal</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top: 16px">
+          Chosen topology: <code>ssh wired</code> reaches the home server through MagicDNS;
+          <code>ssh otto</code> continues to reach the Oracle host. Machine names are identities, while reusable
+          profiles continue to describe capabilities.
+        </p>
+      </section>
+
+      <section>
+        <h2>Open decision: ThinkCentre username</h2>
+        <p>
+          The server may use a different login name, but no name needs to be chosen during the refactor.
+          The flake now passes a <code>primaryUser</code> value into the selected system and Home Manager
+          profiles. Both existing hosts explicitly keep <code>berkerz</code>; the ThinkCentre can choose its
+          value when its host module is added.
+        </p>
+        <table>
+          <thead><tr><th>Choice</th><th>Advantages</th><th>Tradeoff</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>berkerz</code></td>
+              <td>Same paths, SSH expectations, shell habits, and ownership across personal machines.</td>
+              <td>Less obvious that the machine has a server role.</td>
+            </tr>
+            <tr>
+              <td>A distinct personal server user</td>
+              <td>Clear machine role and freedom to give it a minimal home environment.</td>
+              <td>More per-host paths and authentication details to manage.</td>
+            </tr>
+            <tr>
+              <td>Personal user plus service accounts</td>
+              <td>Human login remains familiar while long-running services receive narrowly scoped identities.</td>
+              <td>Slightly more account and permissions design.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top: 16px">
+          Tentative recommendation: keep one personal administrator account and introduce dedicated service
+          accounts only where a daemon genuinely benefits from isolation. Do not rename either existing host user.
+        </p>
+      </section>
+
+      <section>
+        <h2>The next proposed step</h2>
+        <p>
+          Remove the objective duplication recorded in the package-audit table: explicit Tailscale and portal
+          entries, one of <code>dig</code>/<code>dnsutils</code>, and plain <code>git</code>. Evaluate the resulting
+          command set and build both GUI hosts before considering the overlapping FFmpeg or Steam variants.
+        </p>
+        <p class="muted">
+          If this architecture still feels too abstract, the safer alternative is to stop at the current
+          three system profiles, restore <code>configuration.nix</code> as the sole import point, and postpone
+          the ThinkCentre until its hardware is available. Nothing requires us to finish the whole design in one pass.
+        </p>
+      </section>
+
+      <footer>Master architecture and migration record for the ThinkCentre refactor.</footer>
+    </main>
+  </body>
+</html>

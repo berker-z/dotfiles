@@ -1,14 +1,11 @@
-{config, pkgs, osConfig, ...}: {
+{pkgs, ...}: {
   imports = [
-    # ./modules
-    # ./hosts/${osConfig.networking.hostName}/home.nix
+    ../../profiles/home/common.nix
+    ../../profiles/home/workstation.nix
+    ../../profiles/home/agents.nix
   ];
 
   home.packages = with pkgs; [];
 
-  programs.kitty = {
-    settings = {
-      font_size = 14;
-    };
-  };
+  programs.kitty.settings.font_size = 14;
 }

@@ -3,6 +3,7 @@
   inputs,
   lib,
   config,
+  primaryUser,
   ...
 }: let
   address =
@@ -12,6 +13,7 @@
     then "10.100.100.2/24"
     else throw "unknown host for wireguard ip assignment: ${config.networking.hostName}";
 in {
+  networking.wireguard.enable = true;
   networking.firewall.allowedUDPPorts = [51820];
 
   networking.networkmanager.unmanaged = ["interface-name:wg0"];
@@ -19,7 +21,7 @@ in {
   networking.wg-quick.interfaces.wg0 = {
     listenPort = 51820;
     address = [address];
-    privateKeyFile = "/home/berkerz/.wg/client-private.key";
+    privateKeyFile = "/home/${primaryUser}/.wg/client-private.key";
 
     peers = [
       {

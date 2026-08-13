@@ -37,8 +37,34 @@
     executable = true;
   };
 
+  # Herdr's installer cannot overwrite settings.json because Home Manager
+  # correctly exposes it as an immutable store symlink. Manage both halves of
+  # the integration here instead.
+  home.file.".claude/hooks/herdr-agent-state.sh" = {
+    text =
+      builtins.replaceStrings
+      ["@python3@"]
+      ["${pkgs.python3}/bin/python3"]
+      (builtins.readFile ./herdr/claude-agent-state.sh);
+    executable = true;
+    force = true;
+  };
+
   # Claude Code settings
   home.file.".claude/settings.json".text = builtins.toJSON {
+    hooks.SessionStart = [
+      {
+        matcher = "*";
+        hooks = [
+          {
+            type = "command";
+            command = "bash '${config.home.homeDirectory}/.claude/hooks/herdr-agent-state.sh' session";
+            timeout = 10;
+          }
+        ];
+      }
+    ];
+
     statusLine = {
       type = "command";
       command = "${config.home.homeDirectory}/.claude/statusline.sh";
