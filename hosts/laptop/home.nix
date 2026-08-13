@@ -14,10 +14,13 @@
   ];
 
   wayland.windowManager.hyprland.extraConfig = ''
-    ${builtins.readFile ./hyp2.conf}
+    ${builtins.readFile ./hyp2.lua}
   '';
 
-  xdg.configFile."waybar/config.jsonc".source = lib.mkForce ../../modules/waybar/config-laptop.jsonc;
+  xdg.configFile = {
+    "waybar/style.css".source = ../../modules/waybar/style.css;
+    "waybar/config.jsonc".source = lib.mkForce ../../modules/waybar/config-laptop.jsonc;
+  };
 
   home.sessionVariables.GSK_RENDERER = "ngl";
 

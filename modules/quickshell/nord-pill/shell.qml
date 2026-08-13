@@ -22,23 +22,40 @@ ShellRoot {
     property bool keepAwake: false
     property string activeWindowLabel: "desktop"
     property int hyprSerial: 0
+    property string themeName: "nord"
 
-    readonly property color nord0: "#2e3440"
-    readonly property color nord1: "#3b4252"
-    readonly property color nord2: "#434c5e"
-    readonly property color nord3: "#4c566a"
-    readonly property color nord4: "#d8dee9"
-    readonly property color nord5: "#e5e9f0"
-    readonly property color nord6: "#eceff4"
-    readonly property color nord7: "#8fbcbb"
-    readonly property color nord8: "#88c0d0"
-    readonly property color nord9: "#81a1c1"
-    readonly property color nord10: "#5e81ac"
-    readonly property color nord11: "#bf616a"
-    readonly property color nord12: "#d08770"
-    readonly property color nord13: "#ebcb8b"
-    readonly property color nord14: "#a3be8c"
-    readonly property color nord15: "#b48ead"
+    readonly property var themeOptions: [
+        { id: "nord", label: "Nord" },
+        { id: "gruvbox-dark", label: "Gruvbox Dark" },
+        { id: "tokyo-night", label: "Tokyo Night" },
+        { id: "catppuccin-mocha", label: "Catppuccin Mocha" },
+        { id: "dracula", label: "Dracula" },
+        { id: "one-dark", label: "One Dark" },
+        { id: "solarized-dark", label: "Solarized Dark" },
+        { id: "everforest-dark", label: "Everforest Dark" },
+        { id: "rose-pine", label: "Rosé Pine" },
+        { id: "kanagawa-wave", label: "Kanagawa Wave" }
+    ]
+    readonly property var activeTheme: palette(themeName)
+
+    // These aliases keep the rest of the shell semantic while allowing every
+    // existing surface to repaint from one palette selection.
+    readonly property color nord0: activeTheme.shell
+    readonly property color nord1: activeTheme.surface
+    readonly property color nord2: activeTheme.hover
+    readonly property color nord3: activeTheme.border
+    readonly property color nord4: activeTheme.mutedForeground
+    readonly property color nord5: activeTheme.foreground
+    readonly property color nord6: activeTheme.foreground
+    readonly property color nord7: activeTheme.accentHover
+    readonly property color nord8: activeTheme.accent
+    readonly property color nord9: activeTheme.blue
+    readonly property color nord10: activeTheme.accentActive
+    readonly property color nord11: activeTheme.red
+    readonly property color nord12: activeTheme.orange
+    readonly property color nord13: activeTheme.yellow
+    readonly property color nord14: activeTheme.green
+    readonly property color nord15: activeTheme.purple
     readonly property string uiFont: "Iosevka Nerd Font"
     readonly property string iconFont: "Font Awesome 6 Free"
     readonly property string vpnService: "wg-quick-wg0.service"
@@ -46,6 +63,46 @@ ShellRoot {
     readonly property string dndToggleCommand: "if makoctl mode 2>/dev/null | grep -q dnd; then makoctl mode -r dnd; else makoctl mode -a dnd; fi; pkill -RTMIN+11 waybar 2>/dev/null || true"
     readonly property string vpnStatusCommand: "systemctl is-active " + vpnService + " >/dev/null 2>&1 && printf on || printf off"
     readonly property string vpnToggleCommand: "svc=" + vpnService + "; pkexec_cmd=$(command -v pkexec || printf /run/current-system/sw/bin/pkexec); if systemctl is-active --quiet $svc; then $pkexec_cmd systemctl stop $svc; else $pkexec_cmd systemctl start $svc; fi; pkill -RTMIN+10 waybar 2>/dev/null || true"
+
+    function palette(name) {
+        var palettes = {
+            "nord": { shell: "#2e3440", surface: "#3b4252", raised: "#434c5e", hover: "#434c5e", border: "#4c566a", foreground: "#d8dee9", mutedForeground: "#aab2c0", accent: "#88c0d0", accentHover: "#8fbcbb", accentActive: "#5e81ac", blue: "#81a1c1", red: "#bf616a", orange: "#d08770", yellow: "#ebcb8b", green: "#a3be8c", purple: "#b48ead" },
+            "gruvbox-dark": { shell: "#1d2021", surface: "#282828", raised: "#3c3836", hover: "#504945", border: "#665c54", foreground: "#ebdbb2", mutedForeground: "#a89984", accent: "#8ec07c", accentHover: "#b8bb26", accentActive: "#83a598", blue: "#83a598", red: "#fb4934", orange: "#fe8019", yellow: "#fabd2f", green: "#b8bb26", purple: "#d3869b" },
+            "tokyo-night": { shell: "#1a1b26", surface: "#24283b", raised: "#292e42", hover: "#3b4261", border: "#414868", foreground: "#c0caf5", mutedForeground: "#a9b1d6", accent: "#7dcfff", accentHover: "#9ece6a", accentActive: "#7aa2f7", blue: "#7aa2f7", red: "#f7768e", orange: "#ff9e64", yellow: "#e0af68", green: "#9ece6a", purple: "#bb9af7" },
+            "catppuccin-mocha": { shell: "#11111b", surface: "#1e1e2e", raised: "#313244", hover: "#45475a", border: "#585b70", foreground: "#cdd6f4", mutedForeground: "#a6adc8", accent: "#94e2d5", accentHover: "#a6e3a1", accentActive: "#89b4fa", blue: "#89b4fa", red: "#f38ba8", orange: "#fab387", yellow: "#f9e2af", green: "#a6e3a1", purple: "#cba6f7" },
+            "dracula": { shell: "#21222c", surface: "#282a36", raised: "#343746", hover: "#44475a", border: "#6272a4", foreground: "#f8f8f2", mutedForeground: "#bfbfbf", accent: "#8be9fd", accentHover: "#50fa7b", accentActive: "#bd93f9", blue: "#bd93f9", red: "#ff5555", orange: "#ffb86c", yellow: "#f1fa8c", green: "#50fa7b", purple: "#ff79c6" },
+            "one-dark": { shell: "#21252b", surface: "#282c34", raised: "#2c323c", hover: "#3e4451", border: "#4b5263", foreground: "#abb2bf", mutedForeground: "#7f848e", accent: "#56b6c2", accentHover: "#98c379", accentActive: "#61afef", blue: "#61afef", red: "#e06c75", orange: "#d19a66", yellow: "#e5c07b", green: "#98c379", purple: "#c678dd" },
+            "solarized-dark": { shell: "#002b36", surface: "#073642", raised: "#164954", hover: "#285762", border: "#586e75", foreground: "#93a1a1", mutedForeground: "#839496", accent: "#2aa198", accentHover: "#859900", accentActive: "#268bd2", blue: "#268bd2", red: "#dc322f", orange: "#cb4b16", yellow: "#b58900", green: "#859900", purple: "#d33682" },
+            "everforest-dark": { shell: "#1e2326", surface: "#272e33", raised: "#2e383c", hover: "#374145", border: "#4f5b58", foreground: "#d3c6aa", mutedForeground: "#859289", accent: "#83c092", accentHover: "#a7c080", accentActive: "#7fbbb3", blue: "#7fbbb3", red: "#e67e80", orange: "#e69875", yellow: "#dbbc7f", green: "#a7c080", purple: "#d699b6" },
+            "rose-pine": { shell: "#191724", surface: "#1f1d2e", raised: "#26233a", hover: "#403d52", border: "#524f67", foreground: "#e0def4", mutedForeground: "#908caa", accent: "#9ccfd8", accentHover: "#c4a7e7", accentActive: "#31748f", blue: "#31748f", red: "#eb6f92", orange: "#ea9a97", yellow: "#f6c177", green: "#9ccfd8", purple: "#c4a7e7" },
+            "kanagawa-wave": { shell: "#16161d", surface: "#1f1f28", raised: "#2a2a37", hover: "#363646", border: "#54546d", foreground: "#dcd7ba", mutedForeground: "#727169", accent: "#6a9589", accentHover: "#98bb6c", accentActive: "#7e9cd8", blue: "#7e9cd8", red: "#e46876", orange: "#ffa066", yellow: "#e6c384", green: "#98bb6c", purple: "#957fb8" }
+        };
+        return palettes[name] || palettes.nord;
+    }
+
+    function validTheme(name) {
+        for (var i = 0; i < themeOptions.length; i++)
+            if (themeOptions[i].id === name)
+                return true;
+        return false;
+    }
+
+    function setTheme(name) {
+        if (!validTheme(name))
+            return;
+        themeName = name;
+        themeSave.save(name);
+    }
+
+    function visibleTrayItems() {
+        var source = SystemTray.items.values || [];
+        return source.filter(function(item) {
+            if (!item)
+                return false;
+            var identity = [item.id || "", item.title || "", item.tooltipTitle || ""].join(" ").toLowerCase();
+            return identity.indexOf("spotify") === -1;
+        });
+    }
 
     function refresh() {
         Hyprland.refreshMonitors();
@@ -263,6 +320,28 @@ ShellRoot {
         }
     }
 
+    Process {
+        id: themeLoad
+        command: ["sh", "-c", "state=${XDG_STATE_HOME:-$HOME/.local/state}/nord-pill/theme; test -r \"$state\" && cat \"$state\" || printf nord"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var savedTheme = this.text.trim();
+                if (root.validTheme(savedTheme))
+                    root.themeName = savedTheme;
+            }
+        }
+    }
+
+    Process {
+        id: themeSave
+
+        function save(name) {
+            command = ["sh", "-c", "state=${XDG_STATE_HOME:-$HOME/.local/state}/nord-pill; mkdir -p \"$state\"; printf '%s\\n' \"$1\" > \"$state/theme\"", "sh", name];
+            running = true;
+        }
+    }
+
     IpcHandler {
         target: "pill"
 
@@ -373,6 +452,45 @@ ShellRoot {
         }
     }
 
+    component ShellButton: Rectangle {
+        id: button
+
+        property string icon: ""
+        property string label: ""
+        property bool active: false
+        property real scaleFactor: 1
+
+        signal activated()
+
+        width: 24 * scaleFactor
+        height: 24 * scaleFactor
+        radius: 6 * scaleFactor
+        color: active ? root.activeTheme.raised : (area.containsMouse ? root.activeTheme.hover : "transparent")
+        border.width: active ? 1 : 0
+        border.color: root.activeTheme.accent
+
+        Behavior on color {
+            ColorAnimation { duration: 100 }
+        }
+
+        Text {
+            anchors.centerIn: parent
+            text: button.icon
+            color: button.active ? root.activeTheme.accent : root.activeTheme.foreground
+            font.family: root.uiFont
+            font.pixelSize: 12 * button.scaleFactor
+        }
+
+        MouseArea {
+            id: area
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: button.activated()
+        }
+
+    }
+
     component WorkspaceStrip: Row {
         id: strip
 
@@ -415,7 +533,7 @@ ShellRoot {
                     anchors.fill: parent
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: Hyprland.dispatch("workspace " + modelData)
+                    onClicked: Hyprland.dispatch("hl.dsp.focus({ workspace = " + modelData + " })")
                 }
             }
         }
@@ -477,8 +595,8 @@ ShellRoot {
             : "Spotify"
         readonly property bool playing: hasSpotify && spotify.isPlaying
 
-        height: 34 * scaleFactor
-        radius: 8 * scaleFactor
+        height: 28 * scaleFactor
+        radius: 7 * scaleFactor
         color: Qt.rgba(root.nord1.r, root.nord1.g, root.nord1.b, 0.96)
         border.width: 1
         border.color: root.nord10
@@ -576,9 +694,9 @@ ShellRoot {
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: 10 * media.scaleFactor
-            anchors.rightMargin: 10 * media.scaleFactor
-            spacing: 8 * media.scaleFactor
+            anchors.leftMargin: 8 * media.scaleFactor
+            anchors.rightMargin: 8 * media.scaleFactor
+            spacing: 7 * media.scaleFactor
 
             Text {
                 id: mediaLabel
@@ -590,7 +708,7 @@ ShellRoot {
                 color: media.hasSpotify ? root.nord6 : root.nord4
                 elide: Text.ElideRight
                 font.family: root.uiFont
-                font.pixelSize: 14 * media.scaleFactor
+                font.pixelSize: 12 * media.scaleFactor
                 font.weight: media.playing ? Font.DemiBold : Font.Normal
 
                 MouseArea {
@@ -615,8 +733,8 @@ ShellRoot {
             Rectangle {
                 id: volumeSlider
 
-                Layout.preferredWidth: 84 * media.scaleFactor
-                Layout.preferredHeight: 8 * media.scaleFactor
+                Layout.preferredWidth: 76 * media.scaleFactor
+                Layout.preferredHeight: 6 * media.scaleFactor
                 Layout.alignment: Qt.AlignVCenter
                 radius: 5 * media.scaleFactor
                 color: root.nord0
@@ -628,7 +746,7 @@ ShellRoot {
                     anchors.bottom: parent.bottom
                     width: Math.max(10 * media.scaleFactor, parent.width * media.volumePct / 100)
                     radius: parent.radius
-                    color: media.muted ? root.nord3 : "#90b1b1"
+                    color: media.muted ? root.activeTheme.border : root.activeTheme.accent
 
                     Behavior on width {
                         NumberAnimation { duration: 90 }
@@ -802,10 +920,10 @@ ShellRoot {
         property real maxStripWidth: 180 * scaleFactor
         property bool expandedRows: false
 
-        readonly property var items: SystemTray.items.values
+        readonly property var items: root.visibleTrayItems()
         readonly property int itemCount: items.length
-        readonly property real itemSize: (expandedRows ? 32 : 28) * scaleFactor
-        readonly property real itemGap: 5 * scaleFactor
+        readonly property real itemSize: (expandedRows ? 32 : 24) * scaleFactor
+        readonly property real itemGap: (expandedRows ? 5 : 3) * scaleFactor
 
         visible: itemCount > 0
         width: visible ? (expandedRows ? maxStripWidth : Math.min(maxStripWidth, trayRow.implicitWidth)) : 0
@@ -849,8 +967,8 @@ ShellRoot {
                     id: trayIcon
 
                     anchors.centerIn: parent
-                    width: 17 * tray.scaleFactor
-                    height: 17 * tray.scaleFactor
+                    width: (tray.expandedRows ? 17 : 15) * tray.scaleFactor
+                    height: (tray.expandedRows ? 17 : 15) * tray.scaleFactor
                     source: slot.modelData && slot.modelData.icon ? slot.modelData.icon : ""
                     sourceSize.width: 36
                     sourceSize.height: 36
@@ -906,7 +1024,7 @@ ShellRoot {
             spacing: tray.itemGap
 
             Repeater {
-                model: SystemTray.items
+                model: tray.items
                 delegate: traySlotDelegate
             }
         }
@@ -919,7 +1037,7 @@ ShellRoot {
             spacing: tray.itemGap
 
             Repeater {
-                model: SystemTray.items
+                model: tray.items
                 delegate: traySlotDelegate
             }
         }
@@ -934,7 +1052,7 @@ ShellRoot {
             visible: open
             color: "transparent"
             exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.keyboardFocus: open ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
             WlrLayershell.namespace: "nord-pill-tray"
 
@@ -1764,6 +1882,39 @@ ShellRoot {
         }
     }
 
+    // Reserve one Waybar-style strip without forcing the popover host itself
+    // to claim the whole screen as an exclusive zone.
+    Variants {
+        model: Quickshell.screens
+
+        PanelWindow {
+            id: reservation
+
+            required property var modelData
+            readonly property real s: modelData ? Math.max(0.78, Math.min(1.0, modelData.height / 1080)) : 1
+
+            screen: modelData
+            color: "transparent"
+            implicitHeight: 34 * s
+            exclusionMode: ExclusionMode.Normal
+            exclusiveZone: Math.ceil(34 * s)
+            WlrLayershell.layer: WlrLayer.Top
+            WlrLayershell.namespace: "nord-pill-reserve"
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+
+            anchors {
+                top: true
+                left: true
+                right: true
+            }
+
+            mask: Region {
+                width: 0
+                height: 0
+            }
+        }
+    }
+
     Variants {
         model: Quickshell.screens
 
@@ -1780,7 +1931,7 @@ ShellRoot {
             screen: modelData
             color: "transparent"
             exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "nord-pill"
             WlrLayershell.keyboardFocus: surfaceOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
@@ -1797,11 +1948,24 @@ ShellRoot {
                 id: interactiveRegion
 
                 Region {
-                    id: pillRegion
                     x: pill.x
                     y: pill.y
-                    width: pill.width
-                    height: pill.height
+                    width: pill.leftW
+                    height: pill.pillH
+                }
+
+                Region {
+                    x: pill.x + (pill.width - pill.clockW) / 2
+                    y: pill.y
+                    width: pill.clockW
+                    height: pill.pillH
+                }
+
+                Region {
+                    x: pill.x + pill.width - pill.systemW
+                    y: pill.y
+                    width: pill.systemW
+                    height: pill.pillH
                 }
 
                 Region {
@@ -1854,11 +2018,9 @@ ShellRoot {
                     id: pill
 
                     anchors.top: parent.top
-                    anchors.topMargin: 36 * overlay.s
+                    anchors.topMargin: 3 * overlay.s
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    property bool hovered: hover.hovered
-                    readonly property bool expanded: hovered || overlay.forceOpen || overlay.surfaceOpen
                     readonly property string surface: overlay.surfaceOpen ? root.openSurface : ""
                     readonly property var player: {
                         var list = Mpris.players.values;
@@ -1897,18 +2059,13 @@ ShellRoot {
 	                    property bool dnd: false
 	                    property bool vpn: false
 
-	                    readonly property real maxW: Math.max(260 * overlay.s, overlay.width - 32 * overlay.s)
-	                    readonly property real frameRadius: pill.surface.length > 0 ? 10 * overlay.s : 8 * overlay.s
-	                    readonly property real compactLabelW: Math.min(116 * overlay.s, Math.max(34 * overlay.s, Math.min(root.activeWindowLabel.length, 15) * 7.7 * overlay.s))
-	                    readonly property real compactClockW: 78 * overlay.s
-	                    readonly property real compactWorkspaceW: root.workspaceStripWidth(workspaceNumbers, activeWorkspace, overlay.s, true)
-	                    readonly property real expandedWorkspaceW: root.workspaceStripWidth(workspaceNumbers, activeWorkspace, overlay.s, false)
-	                    readonly property real trayInlineW: SystemTray.items.values.length > 0 ? Math.min(138 * overlay.s, SystemTray.items.values.length * 33 * overlay.s) : 0
-	                    readonly property real controlStripW: 248 * overlay.s
-	                    readonly property real restW: Math.min(maxW, Math.max(188 * overlay.s, compactLabelW + compactWorkspaceW + compactClockW + 24 * overlay.s))
-	                    readonly property real restH: 34 * overlay.s
-	                    readonly property real hoverW: Math.min(maxW, Math.max(restW, compactLabelW + expandedWorkspaceW + compactClockW + controlStripW + trayInlineW + 56 * overlay.s))
-	                    readonly property real hoverH: 46 * overlay.s
+	                    readonly property real maxW: width
+	                    readonly property real pillH: 28 * overlay.s
+	                    readonly property real leftLabelW: Math.min(104 * overlay.s, Math.max(52 * overlay.s, root.activeWindowLabel.length * 7.2 * overlay.s))
+	                    readonly property real leftW: leftLabelW + root.workspaceStripWidth(workspaceNumbers, activeWorkspace, overlay.s, true) + 26 * overlay.s
+	                    readonly property real clockW: 154 * overlay.s
+	                    readonly property real trayW: Math.min(150 * overlay.s, root.visibleTrayItems().length * 27 * overlay.s)
+	                    readonly property real systemW: (166 * overlay.s) + trayW
 	                    readonly property real calendarW: Math.min(390 * overlay.s, maxW)
 	                    readonly property real calendarH: 300 * overlay.s
 	                    readonly property real clipboardW: Math.min(520 * overlay.s, maxW)
@@ -1919,29 +2076,25 @@ ShellRoot {
 	                    readonly property real linksH: Math.min(500 * overlay.s, overlay.height - 120 * overlay.s)
 	                    readonly property real powerW: Math.min(390 * overlay.s, maxW)
 	                    readonly property real powerH: 165 * overlay.s
+	                    readonly property real themeW: Math.min(470 * overlay.s, maxW)
+	                    readonly property real themeH: 338 * overlay.s
 	                    readonly property real surfaceW: surface === "calendar" ? calendarW
 	                        : surface === "clipboard" ? clipboardW
 	                        : surface === "mixer" || surface === "media" ? mediaW
 	                        : surface === "links" ? linksW
 	                        : surface === "power" ? powerW
+	                        : surface === "theme" ? themeW
 	                        : 0
 	                    readonly property real surfaceH: surface === "calendar" ? calendarH
 	                        : surface === "clipboard" ? clipboardH
 	                        : surface === "mixer" || surface === "media" ? mediaH
 	                        : surface === "links" ? linksH
 	                        : surface === "power" ? powerH
+	                        : surface === "theme" ? themeH
 	                        : 0
 
-	                    width: expanded ? hoverW : restW
-	                    height: expanded ? hoverH : restH
-
-                    Behavior on width {
-                        NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
-                    }
-
-                    Behavior on height {
-                        NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
-                    }
+	                    width: overlay.width - 32 * overlay.s
+	                    height: pillH
 
                     function sh(command) {
                         Quickshell.execDetached(["sh", "-c", command]);
@@ -1987,223 +2140,153 @@ ShellRoot {
                         }
                     }
 
-                    HoverHandler {
-                        id: hover
-                    }
-
                     Rectangle {
-                        anchors.fill: parent
-                        radius: pill.frameRadius
+                        id: leftIsland
+
+                        anchors.left: parent.left
+                        width: pill.leftW
+                        height: pill.pillH
+                        radius: 7 * overlay.s
+                        color: root.activeTheme.surface
                         border.width: 1
-                        border.color: pill.surface.length > 0 ? root.nord8 : root.nord10
-                        gradient: Gradient {
-                            GradientStop { position: 0.0; color: root.nord1 }
-                            GradientStop { position: 1.0; color: root.nord0 }
-                        }
+                        border.color: root.activeTheme.border
 
-                        Rectangle {
-                            anchors.top: parent.top
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.topMargin: 1
-                            anchors.leftMargin: parent.radius * 0.65
-                            anchors.rightMargin: parent.radius * 0.65
-                            height: 1
-                            color: Qt.rgba(root.nord6.r, root.nord6.g, root.nord6.b, 0.10)
-                        }
-                    }
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 8 * overlay.s
+                            anchors.rightMargin: 7 * overlay.s
+                            spacing: 7 * overlay.s
 
-                    MouseArea {
-                        anchors.fill: parent
-                        enabled: false
-                        acceptedButtons: Qt.LeftButton
-                    }
+                            WorkspaceStrip {
+                                Layout.preferredWidth: implicitWidth
+                                Layout.alignment: Qt.AlignVCenter
+                                workspaces: pill.workspaceNumbers
+                                activeWorkspace: pill.activeWorkspace
+                                compact: true
+                                scaleFactor: overlay.s
+                            }
 
-	                    Item {
-	                        anchors.fill: parent
-	                        anchors.margins: 5 * overlay.s
-	                        visible: pill.surface.length === 0
-	                        opacity: pill.expanded ? 0 : 1
-
-                        Behavior on opacity {
-                            NumberAnimation { duration: 100 }
-                        }
-
-	                        Row {
-	                            anchors.centerIn: parent
-	                            spacing: 6 * overlay.s
-
-	                            Text {
-	                                anchors.verticalCenter: parent.verticalCenter
-                                width: pill.compactLabelW
+                            Text {
+	                                Layout.preferredWidth: pill.leftLabelW
+                                Layout.alignment: Qt.AlignVCenter
                                 text: root.activeWindowLabel
-                                color: root.nord8
+                                color: root.activeTheme.accent
                                 elide: Text.ElideRight
                                 font.family: root.uiFont
-                                font.pixelSize: 14 * overlay.s
-	                                font.weight: Font.DemiBold
-	                            }
-
-	                            WorkspaceStrip {
-	                                anchors.verticalCenter: parent.verticalCenter
-	                                workspaces: pill.workspaceNumbers
-	                                activeWorkspace: pill.activeWorkspace
-	                                compact: true
-	                                scaleFactor: overlay.s
-	                            }
-
-	                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: pill.compactClockW
-                                horizontalAlignment: Text.AlignRight
-                                text: Qt.formatTime(clock.date, "HH:mm:ss")
-                                color: root.nord6
-                                font.family: root.uiFont
-                                font.pixelSize: 16 * overlay.s
-                                font.weight: Font.Bold
-                                font.features: { "tnum": 1 }
+                                font.pixelSize: 12 * overlay.s
+                                font.weight: Font.DemiBold
                             }
                         }
                     }
 
-	                    Item {
-	                        anchors.fill: parent
-	                        anchors.margins: 6 * overlay.s
-	                        visible: pill.expanded
-	                        opacity: pill.expanded ? 1 : 0
-	                        clip: true
+                    Rectangle {
+                        id: clockIsland
 
-                        Behavior on opacity {
-                            NumberAnimation { duration: 120 }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: pill.clockW
+                        height: pill.pillH
+                        radius: 7 * overlay.s
+                        color: root.activeTheme.surface
+                        border.width: 1
+                        border.color: pill.surface === "calendar" ? root.activeTheme.accent : root.activeTheme.border
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: pill.toggleSurface("calendar")
                         }
 
-	                        RowLayout {
-	                            id: hoverRow
-	                            anchors.fill: parent
-	                            spacing: 6 * overlay.s
+                        Text {
+                            anchors.centerIn: parent
+                            text: Qt.formatTime(clock.date, "HH:mm") + "  ·  " + Qt.formatDate(clock.date, "ddd d")
+                            color: root.activeTheme.foreground
+                            font.family: root.uiFont
+                            font.pixelSize: 12 * overlay.s
+                            font.weight: Font.Bold
+                            font.features: { "tnum": 1 }
+                        }
+                    }
 
-	                            Text {
-	                                Layout.preferredWidth: visible ? pill.compactLabelW : 0
-	                                Layout.alignment: Qt.AlignVCenter
-	                                visible: pill.width >= 430 * overlay.s
-	                                text: root.activeWindowLabel
-	                                color: root.nord8
-	                                elide: Text.ElideRight
-	                                font.family: root.uiFont
-	                                font.pixelSize: 14 * overlay.s
-	                                font.weight: Font.DemiBold
-	                            }
+                    Rectangle {
+                        id: systemIsland
 
-	                            WorkspaceStrip {
-	                                Layout.preferredWidth: implicitWidth
-	                                Layout.alignment: Qt.AlignVCenter
-	                                workspaces: pill.workspaceNumbers
-	                                activeWorkspace: pill.activeWorkspace
-	                                scaleFactor: overlay.s
-	                            }
+                        anchors.right: parent.right
+                        width: pill.systemW
+                        height: pill.pillH
+                        radius: 7 * overlay.s
+                        color: root.activeTheme.surface
+                        border.width: 1
+                        border.color: root.activeTheme.border
 
-	                            Column {
-	                                Layout.preferredWidth: pill.compactClockW
-	                                Layout.alignment: Qt.AlignVCenter
-	                                spacing: 1 * overlay.s
+                        Row {
+                            anchors.centerIn: parent
+                            spacing: 2 * overlay.s
 
-	                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: Qt.formatTime(clock.date, "HH:mm:ss")
-                                    color: root.nord6
-                                    font.family: root.uiFont
-                                    font.pixelSize: 16 * overlay.s
-                                    font.weight: Font.Bold
-                                    font.features: { "tnum": 1 }
-                                }
+                            ShellButton {
+                                icon: ""
+                                label: "Apps"
+                                scaleFactor: overlay.s
+                                onActivated: pill.closeAfter("fuzzel")
+                            }
 
-                                Text {
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: Qt.formatDate(clock.date, "ddd d MMM")
-                                    color: root.nord4
-                                    font.family: root.uiFont
-	                                    font.pixelSize: 10 * overlay.s
-	                                }
-	                            }
+                            ShellButton {
+                                icon: "󰖩"
+                                label: "Connectivity"
+                                active: pill.surface === "links" || pill.vpn || pill.dnd
+                                scaleFactor: overlay.s
+                                onActivated: pill.toggleSurface("links")
+                            }
 
-	                            Row {
-	                                id: controlStrip
+                            ShellButton {
+                                icon: "󰅌"
+                                label: "Clipboard"
+                                active: pill.surface === "clipboard"
+                                scaleFactor: overlay.s
+                                onActivated: pill.toggleSurface("clipboard")
+                            }
 
-	                                Layout.preferredWidth: implicitWidth
-	                                Layout.alignment: Qt.AlignVCenter
-	                                spacing: 4 * overlay.s
+                            ShellButton {
+                                icon: "󰕮"
+                                label: "Sidebar"
+                                active: root.sidebarShown && root.sidebarMon === overlay.mon
+                                scaleFactor: overlay.s
+                                onActivated: root.toggleSidebar(overlay.mon)
+                            }
 
-	                                IconButton {
-	                                    icon: ""
-	                                    label: "Apps"
-	                                    scaleFactor: overlay.s
-	                                    onActivated: pill.closeAfter("fuzzel")
-	                                }
+                            TrayStrip {
+                                anchors.verticalCenter: parent.verticalCenter
+                                scaleFactor: overlay.s
+                                hostWindow: overlay
+                                menuTop: pill.y + pill.height + 4 * overlay.s
+                                maxStripWidth: pill.trayW
+                            }
 
-	                                IconButton {
-	                                    icon: "󰝚"
-	                                    label: "Media and audio"
-	                                    active: pill.surface === "media" || (pill.hasPlayer && pill.player.isPlaying)
-	                                    scaleFactor: overlay.s
-	                                    onActivated: pill.toggleSurface("media")
-	                                }
+                            ShellButton {
+                                icon: "⚙"
+                                label: "Theme"
+                                active: pill.surface === "theme"
+                                scaleFactor: overlay.s
+                                onActivated: pill.toggleSurface("theme")
+                            }
 
-	                                IconButton {
-	                                    icon: ""
-	                                    label: "Calendar"
-	                                    active: pill.surface === "calendar"
-	                                    scaleFactor: overlay.s
-	                                    onActivated: pill.toggleSurface("calendar")
-	                                }
-
-	                                IconButton {
-	                                    icon: "󰖩"
-	                                    label: "Connectivity"
-	                                    active: pill.surface === "links" || pill.vpn || pill.dnd
-	                                    scaleFactor: overlay.s
-	                                    onActivated: pill.toggleSurface("links")
-	                                }
-
-	                                IconButton {
-	                                    icon: "󰕮"
-	                                    label: "Sidebar"
-	                                    active: root.sidebarShown && root.sidebarMon === overlay.mon
-	                                    scaleFactor: overlay.s
-	                                    onActivated: root.toggleSidebar(overlay.mon)
-	                                }
-
-	                                IconButton {
-	                                    icon: "⏻"
-	                                    label: "Power"
-	                                    active: pill.surface === "power"
-	                                    scaleFactor: overlay.s
-	                                    onActivated: pill.toggleSurface("power")
-	                                }
-	                            }
-
-	                            Item {
-	                                Layout.fillWidth: true
-	                                Layout.minimumWidth: 0
-	                            }
-
-	                            TrayStrip {
-	                                Layout.preferredWidth: implicitWidth
-	                                Layout.maximumWidth: pill.trayInlineW
-	                                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-	                                scaleFactor: overlay.s
-	                                hostWindow: overlay
-	                                menuTop: pill.y + pill.height + 6 * overlay.s
-	                                maxStripWidth: pill.trayInlineW
-	                                visible: itemCount > 0 && pill.width >= 600 * overlay.s
-	                            }
-	                        }
-	                    }
+                            ShellButton {
+                                icon: "⏻"
+                                label: "Power"
+                                active: pill.surface === "power"
+                                scaleFactor: overlay.s
+                                onActivated: pill.toggleSurface("power")
+                            }
+                        }
+                    }
 
 	                    Rectangle {
 	                        id: surfacePanel
 
-	                        x: (pill.width - width) / 2
-	                        y: pill.height + 8 * overlay.s
+	                        x: pill.surface === "calendar"
+	                            ? (pill.width - width) / 2
+	                            : Math.max(0, systemIsland.x + systemIsland.width - width)
+	                        y: pill.height + 6 * overlay.s
 	                        width: pill.surfaceW
 	                        height: pill.surfaceH
 	                        visible: pill.surface.length > 0
@@ -2233,6 +2316,7 @@ ShellRoot {
 	                                : pill.surface === "mixer" || pill.surface === "media" ? mediaSurface
 	                                : pill.surface === "links" ? linksSurface
 	                                : pill.surface === "power" ? powerSurface
+	                                : pill.surface === "theme" ? themeSurface
 	                                : null
 	                        }
 	                    }
@@ -3013,6 +3097,106 @@ ShellRoot {
                     }
 
                     Component {
+                        id: themeSurface
+
+                        ColumnLayout {
+                            spacing: 10 * overlay.s
+
+                            SectionTitle {
+                                Layout.fillWidth: true
+                                overline: "Appearance"
+                                heading: "Color theme"
+                                scaleFactor: overlay.s
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                color: root.activeTheme.border
+                            }
+
+                            GridLayout {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                columns: 2
+                                rowSpacing: 7 * overlay.s
+                                columnSpacing: 7 * overlay.s
+
+                                Repeater {
+                                    model: root.themeOptions
+
+                                    Rectangle {
+                                        id: themeChoice
+
+                                        required property var modelData
+                                        readonly property var choiceTheme: root.palette(modelData.id)
+                                        readonly property bool selected: root.themeName === modelData.id
+
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        radius: 7 * overlay.s
+                                        color: selected ? root.activeTheme.raised : (themeArea.containsMouse ? root.activeTheme.hover : root.activeTheme.shell)
+                                        border.width: 1
+                                        border.color: selected ? root.activeTheme.accent : root.activeTheme.border
+
+                                        MouseArea {
+                                            id: themeArea
+                                            anchors.fill: parent
+                                            hoverEnabled: true
+                                            cursorShape: Qt.PointingHandCursor
+                                            onClicked: root.setTheme(themeChoice.modelData.id)
+                                        }
+
+                                        RowLayout {
+                                            anchors.fill: parent
+                                            anchors.leftMargin: 10 * overlay.s
+                                            anchors.rightMargin: 10 * overlay.s
+                                            spacing: 9 * overlay.s
+
+                                            Row {
+                                                Layout.alignment: Qt.AlignVCenter
+                                                spacing: 2 * overlay.s
+
+                                                Repeater {
+                                                    model: [themeChoice.choiceTheme.accent, themeChoice.choiceTheme.blue, themeChoice.choiceTheme.green, themeChoice.choiceTheme.purple]
+
+                                                    Rectangle {
+                                                        required property var modelData
+                                                        width: 7 * overlay.s
+                                                        height: 18 * overlay.s
+                                                        radius: 2 * overlay.s
+                                                        color: modelData
+                                                    }
+                                                }
+                                            }
+
+                                            Text {
+                                                Layout.fillWidth: true
+                                                Layout.alignment: Qt.AlignVCenter
+                                                text: themeChoice.modelData.label
+                                                color: root.activeTheme.foreground
+                                                elide: Text.ElideRight
+                                                font.family: root.uiFont
+                                                font.pixelSize: 12 * overlay.s
+                                                font.weight: themeChoice.selected ? Font.Bold : Font.DemiBold
+                                            }
+
+                                            Text {
+                                                visible: themeChoice.selected
+                                                text: "✓"
+                                                color: root.activeTheme.accent
+                                                font.family: root.uiFont
+                                                font.pixelSize: 13 * overlay.s
+                                                font.weight: Font.Bold
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Component {
                         id: powerSurface
 
                         ColumnLayout {
@@ -3071,14 +3255,11 @@ ShellRoot {
                 MediaSidecar {
                     id: mediaPill
 
-                    readonly property real availableW: Math.max(0, (overlay.width - pill.width - 40 * overlay.s) / 2)
-
                     scaleFactor: overlay.s
-                    width: Math.min(252 * overlay.s, availableW)
-                    visible: width >= 156 * overlay.s
+                    width: 252 * overlay.s
+                    visible: (pill.width - pill.systemW) - ((pill.width + pill.clockW) / 2) > width + 20 * overlay.s
                     anchors.top: pill.top
-                    anchors.right: pill.left
-                    anchors.rightMargin: 8 * overlay.s
+                    x: pill.x + pill.width - pill.systemW - width - 8 * overlay.s
                 }
             }
         }
@@ -3285,7 +3466,7 @@ ShellRoot {
             visible: active
             color: "transparent"
             exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.layer: WlrLayer.Top
             WlrLayershell.namespace: "nord-sidebar"
             WlrLayershell.keyboardFocus: active ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
@@ -3358,7 +3539,7 @@ ShellRoot {
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
-                anchors.topMargin: 42 * sidebarWin.s
+                anchors.topMargin: 34 * sidebarWin.s
                 anchors.rightMargin: 12 * sidebarWin.s
                 anchors.bottomMargin: 12 * sidebarWin.s
                 width: sidebarWin.panelWidth

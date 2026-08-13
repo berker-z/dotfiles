@@ -188,15 +188,7 @@ in {
     xdg.configFile."quickshell/${configName}".source = ./nord-pill;
 
     wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
-      $nordPill = nord-pill
-
-      bind = $mainMod ALT, P, exec, $nordPill toggle
-      bind = $mainMod ALT SHIFT, P, exec, $nordPill restart
-      bind = $mainMod ALT, C, exec, $nordPill calendar
-      bind = $mainMod ALT, M, exec, $nordPill mixer
-      bind = $mainMod ALT, V, exec, $nordPill clipboard
-      bind = $mainMod ALT, S, exec, $nordPill sidebar
-      bind = $mainMod ALT, O, exec, $nordPill power
+      ${builtins.readFile ./hyprland.lua}
     '';
   };
 }

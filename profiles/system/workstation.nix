@@ -1,4 +1,9 @@
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ../../packages/graphical.nix
     ../../modules/system/display-manager.nix
@@ -39,9 +44,11 @@
     ];
   };
 
-  programs.waybar.package = pkgs.waybar.overrideAttrs (oldAttrs: {
-    mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-  });
+  programs.waybar.package =
+    lib.mkIf (config.networking.hostName == "laptop")
+    (pkgs.waybar.overrideAttrs (oldAttrs: {
+      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
+    }));
 
   programs.hyprland = {
     enable = true;

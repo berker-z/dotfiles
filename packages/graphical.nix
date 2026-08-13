@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   primaryUser,
@@ -152,47 +153,50 @@
     age
   ];
 
-  home-manager.users.${primaryUser}.home.packages = with pkgs; [
-    # --- Core UI ---
-    waybar
-    kitty
-    wlogout
+  home-manager.users.${primaryUser}.home.packages = with pkgs;
+    [
+      # --- Core UI ---
+      kitty
+      wlogout
 
-    # --- Hypr Ecosystem ---
-    hyprlock
-    hypridle
-    hyprpaper
-    hyprshot
-    hyprpicker
+      # --- Hypr Ecosystem ---
+      hyprlock
+      hypridle
+      hyprpaper
+      hyprshot
+      hyprpicker
 
-    hyprland-qt-support
+      hyprland-qt-support
 
-    # --- Everyday Tools ---
-    slack
-    playerctl
-    spotify
-    bluez
-    blueman
-    foliate
-    vivaldi
-    vivaldi-ffmpeg-codecs
-    brave
-    vlc
-    deluge
-    steam
-    appflowy
-    telegram-desktop
-    loupe
-    kdePackages.dolphin
-    kdePackages.kde-cli-tools
-    kdePackages.kded
-    kdePackages.kio
-    kdePackages.kio-extras
-    kdePackages.kservice
-    kdePackages.ffmpegthumbs
-    libreoffice
-    gnome-clocks
-    kdePackages.kolourpaint
-    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
+      # --- Everyday Tools ---
+      slack
+      playerctl
+      spotify
+      bluez
+      blueman
+      foliate
+      vivaldi
+      vivaldi-ffmpeg-codecs
+      brave
+      vlc
+      deluge
+      steam
+      appflowy
+      telegram-desktop
+      loupe
+      kdePackages.dolphin
+      kdePackages.kde-cli-tools
+      kdePackages.kded
+      kdePackages.kio
+      kdePackages.kio-extras
+      kdePackages.kservice
+      kdePackages.ffmpegthumbs
+      libreoffice
+      gnome-clocks
+      kdePackages.kolourpaint
+      inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ]
+    ++ lib.optionals (config.networking.hostName == "laptop") [
+      pkgs.waybar
+    ];
 }

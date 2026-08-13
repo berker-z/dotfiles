@@ -50,16 +50,14 @@
     systemd.enableXdgAutostart = true;
     systemd.enable = true;
     systemd.variables = ["--all"];
-    configType = "hyprlang";
+    configType = "lua";
     extraConfig = ''
-      ${builtins.readFile ../../modules/hypr/hyprland.conf}
+      ${builtins.readFile ../../modules/hypr/hyprland.lua}
     '';
   };
 
   xdg.configFile = {
     "hypr/hyprlock.conf".source = ../../modules/hypr/hyprlock.conf;
-    "waybar/style.css".source = ../../modules/waybar/style.css;
-    "waybar/config.jsonc".source = ../../modules/waybar/config.jsonc;
   };
 
   services.hypridle = {
