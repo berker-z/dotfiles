@@ -26,14 +26,11 @@
         exit 1
       fi
 
-      if ! ${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
-        ${pkgs.git}/bin/git -C "$flake_dir" diff --quiet --ignore-submodules --; then
-        echo "refusing to overwrite tracked changes in $flake_dir" >&2
-        exit 1
-      fi
-      if ! ${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
-        ${pkgs.git}/bin/git -C "$flake_dir" diff --cached --quiet --ignore-submodules --; then
-        echo "refusing to overwrite staged changes in $flake_dir" >&2
+      status="$(${pkgs.util-linux}/bin/runuser --user ${lib.escapeShellArg primaryUser} -- \
+        ${pkgs.git}/bin/git -C "$flake_dir" status --porcelain --untracked-files=normal)"
+      if [[ -n "$status" ]]; then
+        echo "refusing local checkout drift in $flake_dir:" >&2
+        printf '%s\n' "$status" >&2
         exit 1
       fi
 
@@ -61,7 +58,10 @@
       fi
 
       echo "==> Switching $host to Git revision $revision"
-      ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake "$flake_dir#$host"
+      # Git trust is evaluated per OS user. Root should not treat the user's
+      # checkout as its own repository; rebuild the already-validated clean
+      # filesystem snapshot instead.
+      ${pkgs.nixos-rebuild}/bin/nixos-rebuild switch --flake "path:$flake_dir#$host"
       printf '%s\n' "$revision" > "$deploy_stamp"
       echo "==> Successfully deployed $revision"
     '';

@@ -59,9 +59,10 @@ This is the operational source of truth for provisioning the Lenovo ThinkCentre 
   imperatively configured `/home/berkerz/.hermes` state. It does not render Hermes settings or credentials.
 - Deployed: `flake-reconcile.timer` runs at 06:00 Europe/Istanbul, fast-forwards a clean user-owned `main` checkout
   as `berkerz`, rebuilds revisions not yet stamped successful, and allows two hours for the switch. The timer is the
-  consumer boundary; the Hermes gateway separately sees the checkout read-only. The timer intentionally never runs
-  `nix flake update` locally, because an uncommitted production-only lockfile would create the drift it is meant to
-  prevent.
+  consumer boundary: it rejects tracked, staged, and untracked drift, then root builds the validated checkout as an
+  explicit `path:` flake without taking ownership of the user's Git repository. The Hermes gateway separately sees
+  the checkout read-only. The timer intentionally never runs `nix flake update` locally, because an uncommitted
+  production-only lockfile would create the drift it is meant to prevent.
 
 ## USB facts and completed verification
 

@@ -1063,7 +1063,9 @@ log out, then: sudo systemctl isolate multi-user.target
           <code>origin/main</code> as <code>berkerz</code>, and switches only Git revisions that have not deployed
           successfully. It allows two hours for slow builds and records its success under
           <code>/var/lib/flake-reconcile</code>. It deliberately does not run <code>nix flake update</code>: dependency
-          advancement must be committed upstream so the server never owns an unpublished lockfile.
+          advancement must be committed upstream so the server never owns an unpublished lockfile. After Git
+          validation rejects tracked, staged, or untracked drift, root rebuilds that clean checkout through an
+          explicit <code>path:</code> flake rather than claiming ownership of the user's Git repository.
         </div>
         <p class="muted">
           <code>~/dotfiles</code> is operationally consume-only on <code>wired</code>: the timer only accepts a clean
