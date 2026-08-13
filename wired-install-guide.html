@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>wired — one-shot offline installation</title>
+    <style>
+      :root { color-scheme: dark; --bg:#11151c; --card:#1a202b; --ink:#eef2f7; --muted:#aeb9c8; --blue:#88c0d0; --red:#ff7b86; --green:#a3d9a5; --line:#344052; }
+      * { box-sizing: border-box; }
+      body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.6 system-ui,sans-serif; }
+      main { width:min(920px,calc(100% - 32px)); margin:48px auto 96px; }
+      h1 { font-size:clamp(2.1rem,6vw,4rem); line-height:1; margin:.2em 0; }
+      h2 { margin:0 0 12px; color:var(--blue); }
+      .lede,.muted { color:var(--muted); }
+      .badge { display:inline-block; padding:4px 10px; border:1px solid var(--blue); border-radius:999px; color:var(--blue); }
+      section { margin:24px 0; padding:24px; background:var(--card); border:1px solid var(--line); border-radius:14px; }
+      section.danger { border-color:var(--red); }
+      section.done { border-color:var(--green); }
+      code,pre { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+      code { color:#d8dee9; }
+      pre { overflow:auto; padding:16px; background:#0c1016; border-radius:9px; white-space:pre-wrap; }
+      li { margin:.65em 0; }
+      strong { color:white; }
+      .stop { color:var(--red); font-weight:750; }
+      .ok { color:var(--green); }
+      @media print { :root { color-scheme:light; } body { background:white;color:black;font-size:13px; } main{width:100%;margin:0;} section{break-inside:avoid;background:white;} pre{background:#eee;} }
+    </style>
+  </head>
+  <body>
+    <main>
+      <span class="badge">Offline • monitor + keyboard • one internal disk</span>
+      <h1>Install <code>wired</code></h1>
+      <p class="lede">This USB installs a prebuilt, minimal NixOS system without Ethernet. Nothing touches the internal disk until you run one command, select the disk, inspect its identity, and type an exact erase phrase.</p>
+
+      <section>
+        <h2>What the finished machine will do</h2>
+        <ul>
+          <li>Boot unattended as <code>wired</code> after the USB is removed.</li>
+          <li>Obtain Ethernet automatically through DHCP.</li>
+          <li>Advertise <code>wired.local</code> on the home LAN.</li>
+          <li>Start SSH automatically and accept the dedicated desktop key.</li>
+          <li>Keep an offline snapshot of this dotfiles repo at <code>/etc/wired/dotfiles</code>.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>1. Boot the USB</h2>
+        <ol>
+          <li>Connect the monitor and keyboard. Leave Ethernet disconnected.</li>
+          <li>Insert the Toshiba USB and turn the ThinkCentre on.</li>
+          <li>If it does not boot the USB, restart and press <strong>F12 repeatedly</strong>, then choose the entry beginning with <strong>UEFI</strong> for the Toshiba USB. Press <strong>Enter</strong>.</li>
+          <li>At the NixOS menu, leave the first/default entry selected and press <strong>Enter</strong>. Waiting also selects it automatically.</li>
+          <li>Wait until the text console shows a prompt similar to <code>nixos login:</code>. Log in as <code>nixos</code>; the live installer normally needs no password. This custom image loads the Turkish Q keyboard layout automatically.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>2. Confirm UEFI, then start</h2>
+        <p>Type this and press Enter:</p>
+        <pre>test -d /sys/firmware/efi &amp;&amp; echo UEFI</pre>
+        <p>You must see <strong class="ok">UEFI</strong>. If you see nothing, stop and reboot through the F12 menu using the UEFI USB entry.</p>
+        <p>Then type:</p>
+        <pre>sudo wired-install</pre>
+      </section>
+
+      <section class="danger">
+        <h2>3. Select the internal disk</h2>
+        <p>The installer prints a disk table. Identify the <strong>internal, non-removable</strong> disk:</p>
+        <ul>
+          <li><code>RM</code> must be <code>0</code>.</li>
+          <li>The Toshiba installer USB has <code>RM 1</code> and must never be selected.</li>
+          <li>The internal disk will commonly be <code>/dev/nvme0n1</code> or <code>/dev/sda</code>. Use the displayed model, serial, transport, and size—not the example name.</li>
+        </ul>
+        <p>Type the complete path requested by the prompt and press Enter.</p>
+        <p>The installer prints a <strong>FINAL TARGET</strong> block, including the proposed layout: a 1 GiB FAT32 EFI partition and the remaining space as one unencrypted ext4 root partition. There is no dedicated swap or separate home partition. Read it twice. If the disk or layout is not what you want, press <strong>Ctrl+C</strong>.</p>
+        <p class="stop">The next confirmation permanently erases every existing partition and file on that selected disk.</p>
+        <p>If the target is correct, type the exact phrase printed on screen—for example:</p>
+        <pre>ERASE /dev/nvme0n1</pre>
+      </section>
+
+      <section>
+        <h2>4. Let the offline install finish</h2>
+        <p>The script performs seven labeled stages: partition, format, mount, hardware capture, and installation. It does not need Ethernet.</p>
+        <p>At the final stage it asks you to set a local recovery password for <code>berkerz</code>. Type the password, press Enter, then type it again. <strong>No characters appear while typing; that is normal.</strong></p>
+        <p>Do not power off until you see <strong>INSTALLATION COMPLETE</strong>. If any command reports <code>ERROR</code> or exits early, leave the machine on and photograph the full screen; do not rerun with a different disk.</p>
+      </section>
+
+      <section>
+        <h2>5. Shut down and move it</h2>
+        <p>At the prompt type:</p>
+        <pre>poweroff</pre>
+        <ol>
+          <li>Wait until the ThinkCentre is completely off.</li>
+          <li>Remove the Toshiba USB.</li>
+          <li>Move the machine beside the router.</li>
+          <li>Connect Ethernet and power, then press the power button once.</li>
+          <li>Give it roughly two minutes for its first headless boot.</li>
+        </ol>
+      </section>
+
+      <section class="done">
+        <h2>6. Connect from this desktop</h2>
+        <p>In a terminal on this computer:</p>
+        <pre>ssh -i ~/.ssh/id_ed25519_wired berkerz@wired.local</pre>
+        <p>On the first connection, confirm the new SSH host key by typing <code>yes</code>. The dedicated key should log you in without asking for the account password.</p>
+        <p>If <code>wired.local</code> does not resolve, find the new <code>wired</code> lease in the router interface and substitute its <code>192.168.1.x</code> address:</p>
+        <pre>ssh -i ~/.ssh/id_ed25519_wired berkerz@192.168.1.X</pre>
+      </section>
+
+      <section>
+        <h2>7. First remote checks</h2>
+        <pre>hostname
+ip -4 -brief address
+systemctl is-active sshd avahi-daemon
+ls -la /etc/wired/dotfiles
+ls -la /root/wired-generated-config</pre>
+        <p>The expected hostname is <code>wired</code>; both services should print <code>active</code>. The generated hardware configuration is preserved for integrating the real host into the main flake. From this point onward, we continue together over SSH and replace the bootstrap with the full GitHub-backed configuration.</p>
+      </section>
+    </main>
+  </body>
+</html>

@@ -66,6 +66,24 @@
       })
     ];
 
+    wiredPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILN38WfMRFyT3mTQDddh+8i88V6/v0LcIplM9mnRbrQF nixos-to-wired";
+
+    repoSnapshot = builtins.path {
+      path = self.outPath;
+      name = "wired-dotfiles-snapshot";
+      filter = path: type: let
+        name = builtins.baseNameOf path;
+      in
+        type
+        != "symlink"
+        && name != ".git"
+        && name != ".direnv"
+        && name != "result"
+        && name != "secrets.nix"
+        && !(nixpkgs.lib.hasSuffix ".key" name)
+        && !(nixpkgs.lib.hasSuffix ".pem" name);
+    };
+
     mkSystem = {
       hostName,
       primaryUser,
@@ -94,6 +112,18 @@
           ]
           ++ extraModules;
       };
+
+    wiredBootstrap = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = {inherit repoSnapshot wiredPublicKey;};
+      modules = [./installer/wired-bootstrap.nix];
+    };
+
+    wiredInstaller = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = {inherit repoSnapshot wiredBootstrap wiredPublicKey;};
+      modules = [./installer/wired-installer.nix];
+    };
   in {
     nixosConfigurations = {
       nixos = mkSystem {
@@ -109,6 +139,17 @@
           nixos-hardware.nixosModules.asus-zephyrus-ga401
         ];
       };
+
+      wired = mkSystem {
+        hostName = "wired";
+        primaryUser = "berkerz";
+        extraModules = [];
+      };
+    };
+
+    packages.x86_64-linux = {
+      wired-bootstrap = wiredBootstrap.config.system.build.toplevel;
+      wired-installer = wiredInstaller.config.system.build.isoImage;
     };
 
     devShells = nixpkgs.lib.genAttrs ["x86_64-linux"] (system: let

@@ -868,12 +868,10 @@ packages/
       </section>
 
       <section>
-        <h2>Open decision: ThinkCentre username</h2>
+        <h2>Resolved decision: ThinkCentre username</h2>
         <p>
-          The server may use a different login name, but no name needs to be chosen during the refactor.
-          The flake now passes a <code>primaryUser</code> value into the selected system and Home Manager
-          profiles. Both existing hosts explicitly keep <code>berkerz</code>; the ThinkCentre can choose its
-          value when its host module is added.
+          The first real <code>wired</code> generation keeps <code>berkerz</code> as its primary administrator.
+          The flake still passes <code>primaryUser</code> explicitly, so a future host is not forced to reuse it.
         </p>
         <table>
           <thead><tr><th>Choice</th><th>Advantages</th><th>Tradeoff</th></tr></thead>
@@ -896,22 +894,163 @@ packages/
           </tbody>
         </table>
         <p class="muted" style="margin-top: 16px">
-          Tentative recommendation: keep one personal administrator account and introduce dedicated service
-          accounts only where a daemon genuinely benefits from isolation. Do not rename either existing host user.
+          Decision: keep one familiar personal administrator account and introduce dedicated service accounts only
+          where a daemon genuinely benefits from isolation. All three current hosts use <code>berkerz</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Provisioning <code>wired</code>: installation-day runbook</h2>
+        <div class="callout">
+          <strong>Fast path:</strong> the repo now builds a dedicated headless ISO as
+          <code>packages.x86_64-linux.wired-installer</code>. It boots as <code>wired-installer</code>, obtains
+          Ethernet through DHCP, advertises <code>wired-installer.local</code>, starts SSH automatically, and
+          accepts only the dedicated desktop key. More importantly, it contains the complete prebuilt closure for
+          a minimal installed <code>wired</code> system, so the ThinkCentre can be partitioned and installed beside
+          the monitor with no Ethernet. It contains no private key and never modifies a disk automatically.
+        </div>
+        <ol>
+          <li>Build the custom ISO, positively identify the Toshiba USB by model, serial, transport, and size, then verify the raw write with a read-back checksum.</li>
+          <li>Boot the USB beside the monitor with Ethernet disconnected and follow <code>wired-install-guide.html</code>. The guarded <code>wired-install</code> helper requires the complete internal disk path, rejects removable disks, displays model/serial/size, and requires an exact <code>ERASE /dev/…</code> confirmation.</li>
+          <li>The offline bootstrap uses GPT, a 1 GiB FAT32 EFI System Partition labeled <code>WIRED_BOOT</code>, and an ext4 root partition labeled <code>WIRED_ROOT</code>. It saves generated hardware facts, installs the bundled closure, and asks locally for a recovery password.</li>
+          <li>Power off, remove the USB, move the machine to Ethernet, and boot. Connect using <code>ssh -i ~/.ssh/id_ed25519_wired berkerz@wired.local</code>; fall back to the router DHCP lease if mDNS is unavailable.</li>
+          <li>Before touching disks, collect boot mode, disk model/serial, CPU/GPU, NIC name, TPM availability, and existing filesystem information.</li>
+          <li>Choose storage deliberately. Plain ext4 is quickest and reboots unattended; LUKS protects agent credentials at rest but needs a boot-unlock plan, such as an initial passphrase followed by evaluated TPM2 enrollment.</li>
+          <li>Partition only after the exact target disk is agreed, mount root and the EFI System Partition under <code>/mnt</code>, then run <code>nixos-generate-config --root /mnt</code>.</li>
+          <li>Bring only the generated <code>hardware-configuration.nix</code> into <code>hosts/wired/</code>. Add a host module, Home Manager composition, <code>nixosConfigurations.wired</code>, and the independent server package list on the desktop repo.</li>
+          <li>Before install, authorize the dedicated desktop public key and the intended phone/laptop keys in the installed host configuration. Never copy the private key into the repo or installer.</li>
+          <li>Evaluate and build <code>wired</code>, push it, clone the pinned repo in the installer, and install with <code>nixos-install --flake ...#wired</code>.</li>
+          <li>Set a local recovery password for the primary user before reboot. Remove the USB, boot locally, then run <code>tailscale up</code> once and authenticate the node.</li>
+          <li>Verify LAN SSH, Tailscale/MagicDNS SSH, reboot survival, and Mosh before adding the TV session, media applications, or persistent agent workloads.</li>
+        </ol>
+        <p class="muted">
+          Corrected artifact: 1,513,308,160 bytes, SHA-256
+          <code>ff800a1db5f56c030fb4875c05867b59408871c6e54d3f42097de62eedc044a7</code>.
+          The Toshiba USB read-back matched this hash byte-for-byte. <code>nix flake check --no-build</code>
+          passed with the two existing hosts and both new installer outputs.
+        </p>
+        <p class="muted">
+          The first installed generation should be headless: base + agent host + server packages. Media-center
+          and graphical-session work is a second generation after remote recovery is proven. Do not copy the
+          Oracle Tailscale state, WireGuard private key, or agent credentials onto <code>wired</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Actual <code>wired</code> hardware and bootstrap state</h2>
+        <table>
+          <tbody>
+            <tr><th>Hardware</th><td>Lenovo ThinkCentre M710q, serial <code>S4HK4384</code></td></tr>
+            <tr><th>Compute</th><td>Intel Core i5-6600, 4 cores; Intel HD Graphics 530</td></tr>
+            <tr><th>Network</th><td>Intel I219-V Ethernet <code>enp0s31f6</code>, MAC <code>6c:4b:90:80:f5:b4</code>; no Wi-Fi device detected</td></tr>
+            <tr><th>Storage</th><td>111.8 GiB Longline SATA SSD; 1 GiB <code>WIRED_BOOT</code> + 110.8 GiB ext4 <code>WIRED_ROOT</code></td></tr>
+            <tr><th>Firmware</th><td>UEFI; TPM 2.0 available at <code>/dev/tpmrm0</code></td></tr>
+            <tr><th>LAN</th><td>Observed DHCP lease <code>192.168.1.126</code>; key-only SSH verified</td></tr>
+          </tbody>
+        </table>
+        <p class="muted">
+          The offline bootstrap completed successfully, then the real flake generation
+          <code>w1zr3l7v6z5p6m2dqcx3kryw9wivmi4n-nixos-system-wired-26.11.20260807.f13ff45</code> was built and
+          switched remotely over LAN. OpenSSH, Tailscale, Avahi, and NetworkManager are active; root SSH from the
+          installer has been removed. The desktop currently fails to resolve <code>wired.local</code>, so the DHCP
+          address remains the immediate recovery path. Tailscale was enrolled as a fresh node at
+          <code>100.121.165.32</code>; MagicDNS resolves <code>wired</code> to
+          <code>wired.tail3ce83b.ts.net</code>, and key-only OpenSSH over that route is verified.
+        </p>
+      </section>
+
+      <section>
+        <h2><code>wired</code> has two lifecycles, not two systems</h2>
+        <div class="callout">
+          <strong>Rule:</strong> remote access, file sharing, and explicitly chosen agent supervisors belong to
+          the headless boot lifecycle. The compositor, display manager, portals, panel, and media applications
+          belong to a graphical lifecycle that starts only on demand.
+        </div>
+        <pre>power on
+   │
+   ▼
+multi-user.target                     always running
+├── Ethernet + systemd-resolved
+├── Tailscale
+├── OpenSSH + Mosh firewall rules
+├── file-sharing services
+└── lingering user manager
+    └── supervised Herdr/agent sessions chosen for automatic recovery
+
+sudo systemctl isolate graphical.target
+   │
+   ▼
+graphical.target                      optional local TV session
+├── display manager
+└── Hyprland or Labwc session
+    ├── PipeWire + portals
+    ├── panel/launcher
+    └── browser, MPV/VLC, Marcel
+
+log out, then: sudo systemctl isolate multi-user.target
+   └── graphical units stop; headless services and agent sessions continue</pre>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Boot default</span>
+            <h3><code>multi-user.target</code></h3>
+            <p>
+              The media profile may install graphical capability while forcing the default boot target to
+              headless mode. Installing GUI packages consumes disk space but does not mean the compositor or
+              display manager is running.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">System services</span>
+            <h3>Machine-owned availability</h3>
+            <p>
+              Tailscale, OpenSSH, and Samba/NFS-style shares run as system services under
+              <code>multi-user.target</code>. They never depend on a person logging in locally or on
+              <code>graphical-session.target</code>.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">User services</span>
+            <h3>Persistent agent ownership</h3>
+            <p>
+              A lingering systemd user manager can supervise selected Herdr or tmux-based sessions after boot
+              and across SSH disconnects. Interactive agents are not automatically persistent merely because
+              their packages and hooks are installed; each desired recovery behavior needs an explicit unit.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">GUI services</span>
+            <h3>Session-owned state</h3>
+            <p>
+              Wayland compositor helpers, portals, panels, notifications, and wallpaper processes attach to
+              <code>graphical-session.target</code>. Logging out stops them without touching the user manager's
+              always-on agent units.
+            </p>
+          </article>
+        </div>
+        <p class="muted" style="margin-top: 16px">
+          The implementation should add <code>profiles/system/media-center.nix</code>; it must not import the
+          full workstation profile. Initially start and stop the graphical target manually. Friendly
+          <code>media-up</code>/<code>media-down</code> commands or a remote control can be added only after the
+          target transition is proven safe.
         </p>
       </section>
 
       <section>
         <h2>The next proposed step</h2>
         <p>
-          Remove the objective duplication recorded in the package-audit table: explicit Tailscale and portal
-          entries, one of <code>dig</code>/<code>dnsutils</code>, and plain <code>git</code>. Evaluate the resulting
-          command set and build both GUI hosts before considering the overlapping FFmpeg or Steam variants.
+          Reboot once and prove that Tailscale, OpenSSH, and the headless agent toolchain return without a graphical
+          or local user login. Tailscale and key-only OpenSSH through MagicDNS are already verified. The workstation
+          Home Manager profile owns the <code>wired</code> SSH alias; it uses the dedicated
+          <code>~/.ssh/id_ed25519_wired</code> key and never depends on the changing LAN lease. Disable this node's
+          key expiry in the Tailscale admin console before relying on it for fully unattended long-term access.
         </p>
         <p class="muted">
-          If this architecture still feels too abstract, the safer alternative is to stop at the current
-          three system profiles, restore <code>configuration.nix</code> as the sole import point, and postpone
-          the ThinkCentre until its hardware is available. Nothing requires us to finish the whole design in one pass.
+          The installer definition is a reusable recovery environment, separate from
+          <code>nixosConfigurations.wired</code>. The first installed closure is intentionally a boring bootstrap,
+          not the final profile composition. Its only embedded credential is the dedicated public key; passwords,
+          private keys, Tailscale state, WireGuard material, and agent credentials remain absent. The installer and
+          bootstrap carry a filtered recovery snapshot at <code>/etc/wired/dotfiles</code>; the real flake generation
+          removes that snapshot, because future configuration should come from the Git repository.
         </p>
       </section>
 

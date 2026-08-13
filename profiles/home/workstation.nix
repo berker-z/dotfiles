@@ -1,11 +1,21 @@
 {
   config,
   pkgs,
+  primaryUser,
   ...
 }: {
   imports = [
     ../../modules/workstation
   ];
+
+  programs.ssh.settings.wired = {
+    HostName = "wired";
+    User = primaryUser;
+    IdentityFile = "${config.home.homeDirectory}/.ssh/id_ed25519_wired";
+    IdentitiesOnly = true;
+    ServerAliveInterval = 30;
+    ServerAliveCountMax = 3;
+  };
 
   services.mako = {
     enable = true;

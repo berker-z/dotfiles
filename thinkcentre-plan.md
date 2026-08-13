@@ -66,34 +66,34 @@ The profile names describe capabilities, not machines. Host modules should only 
 ## Phase 1: inventory and baseline
 
 - [x] Choose the hostname: `wired`.
-- [ ] Record `git status` and keep all unrelated existing changes intact.
-- [ ] Inventory what currently lives in `configuration.nix`, `home.nix`, `packages.nix`, `modules/default.nix`, and each host directory.
-- [ ] Classify every shared setting as base, workstation, agent-host, media-center, or host-specific.
-- [ ] Record focused `nix eval` results for `nixos` and `laptop` so the refactor can be compared without building.
-- [ ] Inspect the ThinkCentre hardware and generate its `hardware-configuration.nix` on that machine.
+- [x] Record `git status` and keep all unrelated existing changes intact.
+- [x] Inventory the shared configuration and each host directory.
+- [x] Classify shared settings as base, workstation, agent-host, media-center, or host-specific.
+- [x] Record focused `nix eval` results for `nixos` and `laptop` so the refactor can be compared without building.
+- [x] Inspect the ThinkCentre hardware and generate its `hardware-configuration.nix` on that machine.
 
 ## Phase 2: extract profiles without changing behaviour
 
-- [ ] Extract a small system base: Nix settings, users, locale/time, core networking, and genuinely universal services.
-- [ ] Extract workstation system settings: display manager, Hyprland, graphics, audio, Bluetooth, printing, gaming, and desktop-only services.
-- [ ] Extract the Home Manager common layer: shell, Git, terminal tools, and other non-graphical defaults.
-- [ ] Extract workstation Home Manager settings: Hyprland, Quickshell, themes, launchers, notifications, MIME defaults, and desktop applications.
-- [ ] Extract agent tooling: Herdr, Codex, Claude, Hermes, their hooks, and the environment they require.
-- [ ] Recompose `nixos` and `laptop` from the profiles and confirm their evaluated options remain equivalent.
+- [x] Extract a small system base: Nix settings, users, locale/time, core networking, and genuinely universal services.
+- [x] Extract workstation system settings: display manager, Hyprland, graphics, audio, Bluetooth, printing, gaming, and desktop-only services.
+- [x] Extract the Home Manager common layer: shell, Git, terminal tools, and other non-graphical defaults.
+- [x] Extract workstation Home Manager settings: Hyprland, Quickshell, themes, launchers, notifications, MIME defaults, and desktop applications.
+- [x] Extract agent tooling: Herdr, Codex, Claude, Hermes, their hooks, and the environment they require.
+- [x] Recompose `nixos` and `laptop` from the profiles and confirm their evaluated options remain equivalent.
 
 ## Phase 3: add the ThinkCentre host
 
-- [ ] Add the third `nixosConfigurations` entry through the existing `mkSystem` helper.
-- [ ] Import the ThinkCentre hardware configuration and only its real hardware overrides.
-- [ ] Compose base + agent-host + media-center profiles.
-- [ ] Decide whether agent tooling belongs on all three machines or only on the machines where sessions will actually run.
-- [ ] Give each machine a distinct Tailscale identity; do not copy `/var/lib/tailscale/tailscaled.state`.
+- [x] Add the third `nixosConfigurations` entry through the existing `mkSystem` helper.
+- [x] Import the ThinkCentre hardware configuration and only its real hardware overrides.
+- [x] Compose base + agent-host now; keep media-center explicitly deferred.
+- [x] Put agent tooling on all three current machines; revisit only from observed usage.
+- [x] Give `wired` a fresh Tailscale identity; do not copy `/var/lib/tailscale/tailscaled.state`.
 
 ## Phase 4: remote access
 
-- [ ] Enable Tailscale and confirm MagicDNS works through `systemd-resolved`.
-- [ ] Sign the ThinkCentre into the tailnet once and disable key expiry for that node in the Tailscale admin console if appropriate.
-- [ ] Reuse key-only OpenSSH policy and add only the intended public keys.
+- [x] Enable Tailscale and confirm MagicDNS works through `systemd-resolved`.
+- [x] Sign the ThinkCentre into the tailnet once. Key expiry is currently 2027-02-09; disable it in the Tailscale admin console for truly unattended access.
+- [x] Reuse key-only OpenSSH policy and add only the intended public keys.
 - [ ] Enable Mosh and confirm its UDP range is reachable through `tailscale0`.
 - [ ] Review whether trusting all traffic on `tailscale0` is still desirable or whether Tailscale ACLs/grants should narrow access.
 - [ ] Confirm Herdr sees agents launched inside it and that its state survives closing the UI and rebooting.
@@ -143,12 +143,12 @@ Practical fallback:
 
 ## Validation and rollout
 
-- [ ] Format changed Nix files.
-- [ ] Run focused `nix eval` checks for all three host configurations.
-- [ ] Run `nix flake check` once module wiring is stable.
+- [x] Format changed Nix files.
+- [x] Run focused `nix eval` checks for all three host configurations.
+- [x] Run `nix flake check` once module wiring is stable.
 - [ ] Build with `nix build --no-link .#nixosConfigurations.<host>.config.system.build.toplevel` only when ready; the user will perform rebuilds/switches.
 - [ ] Switch and reboot one existing machine first to prove the refactor did not alter its desktop session.
-- [ ] Install or switch the ThinkCentre locally for its first deployment.
+- [x] Install or switch the ThinkCentre locally for its first deployment.
 - [ ] Reboot the ThinkCentre and verify Tailscale, SSH, Mosh, Herdr, and agent sessions without a local graphical login.
 - [ ] Smoke-test the Wayland session, TV audio, suspend/idle behaviour, VLC/MPV, and file browsing.
 
@@ -173,3 +173,31 @@ Practical fallback:
 4. Extract base and workstation profiles while keeping `nixos` and `laptop` equivalent.
 5. Add the ThinkCentre host and evaluate all three configurations.
 6. Only then add the remote-agent and media-center pieces.
+
+## Installation-day fast path
+
+The repo now defines a reusable `packages.x86_64-linux.wired-installer` ISO. It boots as
+`wired-installer`, requests Ethernet configuration through DHCP, advertises
+`wired-installer.local`, starts SSH automatically, and accepts only the dedicated
+`~/.ssh/id_ed25519_wired` key for root. It never modifies a disk automatically.
+
+1. Build and write the custom ISO to the positively identified Toshiba USB, with a source and read-back checksum.
+2. Boot the USB in UEFI mode with Ethernet attached.
+3. Connect from the desktop with `ssh -i ~/.ssh/id_ed25519_wired root@wired-installer.local`; use the router DHCP leases or LAN neighbor discovery if mDNS is unavailable.
+4. Continue over SSH from the desktop; inventory the hardware and exact target disk before making destructive changes.
+5. Decide plain ext4 versus LUKS before partitioning. For LUKS, decide how an unattended server will unlock after a power loss.
+6. Mount the target under `/mnt` and generate its hardware configuration there.
+7. Copy only that generated hardware module into `hosts/wired/`, then add and validate the `wired` flake configuration in the main repo.
+8. Add the dedicated desktop SSH public key plus intended phone/laptop keys to the installed host configuration.
+9. Install the validated flake, set a local recovery password, reboot, and enroll the node into Tailscale locally.
+10. Prove SSH, MagicDNS, Mosh, and reboot recovery before adding media or graphical capabilities.
+
+## Service and GUI lifecycle
+
+- Boot `wired` into `multi-user.target`, not directly into a graphical session.
+- Keep Ethernet, Tailscale, OpenSSH, file sharing, and selected agent supervisors attached to the headless boot lifecycle.
+- Enable lingering for the personal user only when concrete systemd user services need to survive logout; installing Codex, Claude, tmux, or Herdr alone does not make their sessions reboot-persistent.
+- Put portals, panels, notifications, and compositor helpers under `graphical-session.target`.
+- Add a dedicated `profiles/system/media-center.nix`; do not import the full workstation profile.
+- Start the TV login path with `sudo systemctl isolate graphical.target` and return to headless mode, after logging out, with `sudo systemctl isolate multi-user.target`.
+- Prove manual target switching before adding aliases, remote-control actions, or autologin.
