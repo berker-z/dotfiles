@@ -99,6 +99,7 @@ The profile names describe capabilities, not machines. Host modules should only 
 - [ ] Confirm Herdr sees agents launched inside it and that its state survives closing the UI and rebooting.
 - [ ] Activate and verify the minimal `hermes-gateway.service`; keep Hermes configuration, authentication, sessions, and memory writable under `~/.hermes`.
 - [ ] Activate and observe one successful 06:00 `flake-reconcile.timer` run from Git fast-forward through NixOS switch.
+- [ ] Make `wired`'s dotfiles checkout root-owned and consume-only; give Hermes separate credentials only for explicitly authorized project repositories.
 - [ ] Test from both the laptop and Moshi on the phone.
 - [ ] Decide whether the existing WireGuard setup has any role on this host; do not mix it into the Tailscale path by default.
 

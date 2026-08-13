@@ -30,6 +30,7 @@ in {
       ExecStart = "${lib.getExe hermesPackage} gateway run";
       Restart = "on-failure";
       RestartSec = "10s";
+      ReadOnlyPaths = ["${homeDirectory}/dotfiles"];
       # This limits only gateway shutdown, not the separate flake rebuild job.
       TimeoutStopSec = "60s";
       UMask = "0077";

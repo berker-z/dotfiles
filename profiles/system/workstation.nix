@@ -11,6 +11,14 @@
 
   security.pam.services.greetd.enableGnomeKeyring = true;
   programs.dconf.enable = true;
+  programs.fish.shellAliases = {
+    mergio = "bash ~/dotfiles/scripts/mergio.sh";
+    pushio = "bash ~/dotfiles/scripts/pushio.sh";
+    updateio = "bash ~/dotfiles/scripts/updateio.sh";
+    cod = "bash ~/dotfiles/scripts/codio.sh";
+    rsh = "nix develop ~/dotfiles#rusticed --command fish";
+    garbagio = "bash ~/dotfiles/scripts/garbagio.sh";
+  };
   services.gnome = {
     evolution-data-server.enable = false;
     gnome-keyring.enable = true;

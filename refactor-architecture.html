@@ -1059,12 +1059,18 @@ log out, then: sudo systemctl isolate multi-user.target
         </div>
         <div class="callout" style="margin-top: 16px">
           <strong>Host maintenance is not an agent cronjob.</strong> <code>flake-reconcile.timer</code> runs at
-          06:00 Europe/Istanbul, refuses tracked checkout changes, fast-forwards <code>origin/main</code>, and switches
-          only Git revisions that have not deployed successfully. It allows two hours for slow builds and records
-          its success under <code>/var/lib/flake-reconcile</code>. It deliberately does not run
+          06:00 Europe/Istanbul, requires a root-owned clean checkout, fast-forwards <code>origin/main</code>
+          anonymously, and switches only Git revisions that have not deployed successfully. It allows two hours for
+          slow builds and records its success under <code>/var/lib/flake-reconcile</code>. It deliberately does not run
           <code>nix flake update</code>: dependency advancement must be committed upstream so the server never owns an
           unpublished lockfile.
         </div>
+        <p class="muted">
+          <code>~/dotfiles</code> is consume-only on <code>wired</code>: root owns the checkout, ordinary user
+          processes can read it, and the Hermes gateway additionally mounts it read-only inside its service
+          namespace. Hermes may use a separate GitHub identity for explicitly authorized project repositories; the
+          public dotfiles remote needs no credential and grants no push capability.
+        </p>
         <p class="muted">
           This makes write access to <code>origin/main</code> a root-equivalent deployment boundary for
           <code>wired</code>: committed Nix code can become the next system generation automatically. Branch
