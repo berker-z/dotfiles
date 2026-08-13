@@ -1045,9 +1045,9 @@ log out, then: sudo systemctl isolate multi-user.target
           key expiry in the Tailscale admin console before relying on it for fully unattended long-term access.
         </p>
         <p class="muted">
-          The implementation is published on <code>main</code> at commit <code>54df514</code>. The same revision is
-          cloned to <code>~/dotfiles</code> on <code>wired</code>, so its Home Manager source links resolve and future
-          builds can run locally or through remote deployment.
+          The implementation landed on <code>main</code> at commit <code>54df514</code>. The server now tracks
+          <code>origin/main</code> in <code>~/dotfiles</code>, so its Home Manager source links resolve and future builds
+          can run locally or through remote deployment.
         </p>
         <p class="muted">
           The installer definition is a reusable recovery environment, separate from
