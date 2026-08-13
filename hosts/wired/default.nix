@@ -4,6 +4,8 @@
     ../../profiles/system/base.nix
     ../../profiles/system/agent-host.nix
     ../../packages/server.nix
+    ../../modules/system/hermes-gateway.nix
+    ../../modules/system/flake-reconcile.nix
   ];
 
   networking = {

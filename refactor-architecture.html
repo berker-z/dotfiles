@@ -1036,6 +1036,43 @@ log out, then: sudo systemctl isolate multi-user.target
       </section>
 
       <section>
+        <h2>Mutable Hermes, declarative lifecycle</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge">Hermes owns</span>
+            <h3><code>~/.hermes</code></h3>
+            <p>
+              The setup wizard remains the source of truth for provider authentication, model and tool choices,
+              skills, sessions, memories, platform configuration, and Hermes cron state. Rebuilds do not replace
+              <code>config.yaml</code>, auth databases, or other writable runtime state.
+            </p>
+          </article>
+          <article class="card">
+            <span class="badge">NixOS owns</span>
+            <h3><code>hermes-gateway.service</code></h3>
+            <p>
+              A minimal system service runs the pinned Hermes package as <code>berkerz</code> with the real home and
+              system tool path. It starts at boot, consumes the imperative state, and restarts only after failure.
+              No Hermes settings or credentials are rendered by Nix.
+            </p>
+          </article>
+        </div>
+        <div class="callout" style="margin-top: 16px">
+          <strong>Host maintenance is not an agent cronjob.</strong> <code>flake-reconcile.timer</code> runs at
+          06:00 Europe/Istanbul, refuses tracked checkout changes, fast-forwards <code>origin/main</code>, and switches
+          only Git revisions that have not deployed successfully. It allows two hours for slow builds and records
+          its success under <code>/var/lib/flake-reconcile</code>. It deliberately does not run
+          <code>nix flake update</code>: dependency advancement must be committed upstream so the server never owns an
+          unpublished lockfile.
+        </div>
+        <p class="muted">
+          This makes write access to <code>origin/main</code> a root-equivalent deployment boundary for
+          <code>wired</code>: committed Nix code can become the next system generation automatically. Branch
+          protection and account security therefore matter more than adding an agent-level approval prompt.
+        </p>
+      </section>
+
+      <section>
         <h2>The next proposed step</h2>
         <p>
           Reboot survival is proven: <code>wired</code> returned through Tailscale and key-only OpenSSH without a

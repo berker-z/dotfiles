@@ -97,6 +97,8 @@ The profile names describe capabilities, not machines. Host modules should only 
 - [x] Enable Mosh and confirm an end-to-end session reaches `wired` through trusted `tailscale0`.
 - [ ] Review whether trusting all traffic on `tailscale0` is still desirable or whether Tailscale ACLs/grants should narrow access.
 - [ ] Confirm Herdr sees agents launched inside it and that its state survives closing the UI and rebooting.
+- [ ] Activate and verify the minimal `hermes-gateway.service`; keep Hermes configuration, authentication, sessions, and memory writable under `~/.hermes`.
+- [ ] Activate and observe one successful 06:00 `flake-reconcile.timer` run from Git fast-forward through NixOS switch.
 - [ ] Test from both the laptop and Moshi on the phone.
 - [ ] Decide whether the existing WireGuard setup has any role on this host; do not mix it into the Tailscale path by default.
 
@@ -140,6 +142,8 @@ Practical fallback:
 - [ ] Introduce age/sops or another agreed secret mechanism before adding service tokens to the host configuration.
 - [ ] Authenticate Codex, Claude, Hermes, and GitHub separately on the ThinkCentre where required.
 - [ ] Document which Herdr state is machine-local and what must be backed up to recover sessions.
+- [x] Keep Hermes-owned state imperative under `~/.hermes`; Nix declares only the package and gateway lifecycle.
+- [ ] Choose a reviewed upstream flake-update workflow; do not mutate `flake.lock` only on the production server.
 
 ## Validation and rollout
 
