@@ -23,8 +23,7 @@
     age
 
     claude-code
-    gemini-cli
-    inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default
+    hermes-agent-full
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

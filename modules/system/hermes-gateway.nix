@@ -1,13 +1,12 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   primaryUser,
   ...
 }: let
   homeDirectory = "/home/${primaryUser}";
-  hermesPackage = inputs.hermes-agent.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  hermesPackage = pkgs.hermes-agent-full;
 in {
   systemd.services.hermes-gateway = {
     description = "Hermes messaging gateway";

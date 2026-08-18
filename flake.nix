@@ -20,6 +20,7 @@
     marcel = {
       url = "github:berker-z/marcel";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
@@ -28,6 +29,7 @@
     herdr = {
       url = "github:herdrdev/herdr";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
     yorha.url = "github:berker-z/yorha-flake";
 
@@ -36,7 +38,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs @ {
@@ -60,6 +65,67 @@
     overlays = [
       rust-overlay.overlays.default
       codex-cli-nix.overlays.default
+      (final: prev: {
+        codex = prev.codex.override {
+          stdenv =
+            final.stdenv
+            // {
+              inherit (final.stdenv.hostPlatform) isDarwin isLinux;
+            };
+        };
+
+        hermes-agent-full =
+          inputs.hermes-agent.packages.${final.stdenv.hostPlatform.system}.minimal.override
+          {
+            stdenv =
+              final.stdenv
+              // {
+                inherit (final.stdenv.hostPlatform) isDarwin isLinux;
+              };
+            extraDependencyGroups =
+              [
+                "anthropic"
+                "azure-identity"
+                "bedrock"
+                "daytona"
+                "dingtalk"
+                "edge-tts"
+                "exa"
+                "fal"
+                "feishu"
+                "firecrawl"
+                "hindsight"
+                "honcho"
+                "messaging"
+                "modal"
+                "parallel-web"
+                "tts-premium"
+                "vercel"
+                "voice"
+              ]
+              ++ final.lib.optionals final.stdenv.hostPlatform.isLinux ["matrix"];
+          };
+        hermes-agent-desktop = let
+          upstreamNpmLib = final.hermes-agent-full.hermesNpmLib;
+          hermesNpmLib =
+            upstreamNpmLib
+            // {
+              buildNpmPackage = attrs:
+                upstreamNpmLib.buildNpmPackage (
+                  attrs
+                  // {
+                    # The desktop typecheck imports a root-level test fixture,
+                    # which upstream's filtered source currently omits.
+                    dirs = attrs.dirs ++ final.lib.optional (builtins.elem "apps/desktop" attrs.dirs) "tests/fixtures";
+                  }
+                );
+            };
+        in
+          final.callPackage "${inputs.hermes-agent}/nix/desktop.nix" {
+            inherit hermesNpmLib;
+            hermesAgent = final.hermes-agent-full;
+          };
+      })
       marcel.overlays.default
       (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;

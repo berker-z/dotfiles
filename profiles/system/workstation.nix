@@ -15,6 +15,7 @@
   boot.kernelModules = ["i2c-dev"];
 
   security.pam.services.greetd.enableGnomeKeyring = true;
+  security.pam.services.hyprlock = {};
   programs.dconf.enable = true;
   programs.fish.shellAliases = {
     mergio = "bash ~/dotfiles/scripts/mergio.sh";

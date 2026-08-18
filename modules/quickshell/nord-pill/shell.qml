@@ -478,7 +478,7 @@ ShellRoot {
             text: button.icon
             color: button.active ? root.activeTheme.accent : root.activeTheme.foreground
             font.family: root.uiFont
-            font.pixelSize: 12 * button.scaleFactor
+            font.pixelSize: 13 * button.scaleFactor
         }
 
         MouseArea {
@@ -708,7 +708,7 @@ ShellRoot {
                 color: media.hasSpotify ? root.nord6 : root.nord4
                 elide: Text.ElideRight
                 font.family: root.uiFont
-                font.pixelSize: 12 * media.scaleFactor
+                font.pixelSize: 13 * media.scaleFactor
                 font.weight: media.playing ? Font.DemiBold : Font.Normal
 
                 MouseArea {
@@ -2061,9 +2061,9 @@ ShellRoot {
 
 	                    readonly property real maxW: width
 	                    readonly property real pillH: 28 * overlay.s
-	                    readonly property real leftLabelW: Math.min(104 * overlay.s, Math.max(52 * overlay.s, root.activeWindowLabel.length * 7.2 * overlay.s))
+	                    readonly property real leftLabelW: Math.min(112 * overlay.s, Math.max(54 * overlay.s, root.activeWindowLabel.length * 7.6 * overlay.s))
 	                    readonly property real leftW: leftLabelW + root.workspaceStripWidth(workspaceNumbers, activeWorkspace, overlay.s, true) + 26 * overlay.s
-	                    readonly property real clockW: 154 * overlay.s
+	                    readonly property real clockW: 174 * overlay.s
 	                    readonly property real trayW: Math.min(150 * overlay.s, root.visibleTrayItems().length * 27 * overlay.s)
 	                    readonly property real systemW: (166 * overlay.s) + trayW
 	                    readonly property real calendarW: Math.min(390 * overlay.s, maxW)
@@ -2093,7 +2093,7 @@ ShellRoot {
 	                        : surface === "theme" ? themeH
 	                        : 0
 
-	                    width: overlay.width - 32 * overlay.s
+	                    width: overlay.width - 8 * overlay.s
 	                    height: pillH
 
                     function sh(command) {
@@ -2173,7 +2173,7 @@ ShellRoot {
                                 color: root.activeTheme.accent
                                 elide: Text.ElideRight
                                 font.family: root.uiFont
-                                font.pixelSize: 12 * overlay.s
+                                font.pixelSize: 13 * overlay.s
                                 font.weight: Font.DemiBold
                             }
                         }
@@ -2199,10 +2199,10 @@ ShellRoot {
 
                         Text {
                             anchors.centerIn: parent
-                            text: Qt.formatTime(clock.date, "HH:mm") + "  ·  " + Qt.formatDate(clock.date, "ddd d")
+                            text: Qt.formatTime(clock.date, "HH:mm:ss") + "  ·  " + Qt.formatDate(clock.date, "ddd d")
                             color: root.activeTheme.foreground
                             font.family: root.uiFont
-                            font.pixelSize: 12 * overlay.s
+                            font.pixelSize: 13 * overlay.s
                             font.weight: Font.Bold
                             font.features: { "tnum": 1 }
                         }
@@ -3257,9 +3257,9 @@ ShellRoot {
 
                     scaleFactor: overlay.s
                     width: 252 * overlay.s
-                    visible: (pill.width - pill.systemW) - ((pill.width + pill.clockW) / 2) > width + 20 * overlay.s
+                    visible: pill.leftW + width + 14 * overlay.s < (pill.width - pill.clockW) / 2
                     anchors.top: pill.top
-                    x: pill.x + pill.width - pill.systemW - width - 8 * overlay.s
+                    x: pill.x + pill.leftW + 6 * overlay.s
                 }
             }
         }
