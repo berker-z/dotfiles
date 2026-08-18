@@ -12,6 +12,11 @@
 
 ## Reference
 
+- 2026-08-18: The `~/job-watch/` app (LinkedIn job collector) is served by a
+  **systemd user service** `job-watch.service` (declared in `profiles/home/workstation.nix`)
+  on `http://127.0.0.1:8791`, loopback-only, enabled + auto-restart. Do NOT start it as a
+  stray background process — it's managed by systemd (the linked `linkedin-job-watch`
+  Hermes skill fills `~/job-watch/jobs.json`, which the service renders as HTML).
 - 2026-08-06: `hermes-agent` is back in `flake.nix` and the independent
   `packages/{graphical,server}.nix` lists without an explicit revision in its input URL. The old
   2026-06-17 pin (`a35b370284ec62b2851c26c23aed526a2c4d50a7`) is no longer needed:
