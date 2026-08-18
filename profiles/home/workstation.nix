@@ -15,6 +15,26 @@
     (pkgs.callPackage ../../packages/agent-browser.nix { })
   ];
 
+  # Job Watch — serve the jobs.json list as an HTML page on 127.0.0.1:8791.
+  # A systemd user service (not a stray background process) so it survives
+  # reboots and restarts on crash. Loopback-only.
+  systemd.user.services.job-watch = {
+    Unit = {
+      Description = "Job Watch HTML server (serves ~/job-watch/jobs.json)";
+      After = [ "network.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.python3}/bin/python3 ${config.home.homeDirectory}/job-watch/server.py 8791";
+      Restart = "on-failure";
+      RestartSec = 5;
+      WorkingDirectory = "${config.home.homeDirectory}/job-watch";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
   programs.ssh.settings.wired = {
     HostName = "wired";
     User = primaryUser;
