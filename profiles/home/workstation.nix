@@ -8,6 +8,13 @@
     ../../modules/workstation
   ];
 
+  home.packages = [
+    # agent-browser@0.34.0 (fixed) — Hermes's pinned ^0.26.0 and nixpkgs's
+    # 0.27.0 both break CDP attach to a live browser (Page.enable timeout).
+    # Hermes discovery checks PATH first, so this wins over its npx fallback.
+    (pkgs.callPackage ../../packages/agent-browser.nix { })
+  ];
+
   programs.ssh.settings.wired = {
     HostName = "wired";
     User = primaryUser;
@@ -41,7 +48,13 @@
 
   programs.helium = {
     enable = true;
-    flags = ["--ozone-platform-hint=auto"];
+    flags = [
+      "--ozone-platform-hint=auto"
+      # Remote debugging so Hermes can attach to Helium's real profile (cookies/sessions) via CDP.
+      # Loopback-only binding: not reachable from the network.
+      "--remote-debugging-port=9222"
+      "--remote-debugging-address=127.0.0.1"
+    ];
   };
 
   wayland.windowManager.hyprland = {
