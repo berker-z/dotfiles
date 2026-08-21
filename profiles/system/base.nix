@@ -104,6 +104,8 @@
     settings = {
       auto-optimise-store = true;
       http-connections = 8;
+      keep-derivations = false;
+      keep-outputs = false;
       max-substitution-jobs = 4;
       stalled-download-timeout = 600;
     };

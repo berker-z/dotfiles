@@ -12,7 +12,9 @@
     ../../profiles/system/base.nix
     ../../profiles/system/workstation.nix
     ../../profiles/system/agent-host.nix
+    ../../modules/system/hermes-gateway.nix
     ../../modules/system/wireguard.nix
+    ../../modules/system/android.nix
   ];
   boot.loader.grub = {
     yorhaTheme = {

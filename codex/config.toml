@@ -55,6 +55,15 @@ trust_level = "trusted"
 [projects."/home/berkerz/Projects/Multiplayer"]
 trust_level = "trusted"
 
+[projects."/home"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/berker-z"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/ravel"]
+trust_level = "trusted"
+
 [plugins."canva@openai-curated"]
 enabled = true
 

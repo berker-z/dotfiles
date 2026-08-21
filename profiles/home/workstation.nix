@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   primaryUser,
   ...
@@ -34,6 +35,14 @@
       WantedBy = [ "default.target" ];
     };
   };
+
+  # Hermes rejects symlinked cron scripts whose resolved target is outside
+  # ~/.hermes/scripts. Copy this declarative source as a regular executable.
+  home.activation.ensureHeliumCdpScript = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    target="$HOME/.hermes/scripts/ensure-helium-cdp"
+    rm -f "$target"
+    install -Dm755 ${../../scripts/ensure-helium-cdp.sh} "$target"
+  '';
 
   programs.ssh.settings.wired = {
     HostName = "wired";
