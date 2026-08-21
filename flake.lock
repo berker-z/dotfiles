@@ -171,6 +171,26 @@
         "type": "github"
       }
     },
+    "hyprhands": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787333681,
+        "narHash": "sha256-FicjAHHM76s6Zbbr/R+BcbearOq3gxouRa/tpqH8Eic=",
+        "owner": "berker-z",
+        "repo": "hyprhands",
+        "rev": "c1ef0f9983beb9f0b59a6f9d626557dbd770b5a2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "berker-z",
+        "repo": "hyprhands",
+        "type": "github"
+      }
+    },
     "hyprland-qt-support": {
       "inputs": {
         "hyprlang": [
@@ -419,6 +439,27 @@
         "type": "github"
       }
     },
+    "obsidian-extensions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "treefmt-nix": "treefmt-nix"
+      },
+      "locked": {
+        "lastModified": 1787289424,
+        "narHash": "sha256-RGHHWih8i587xMZcUxCikJrRnBYhWuoVN1NvxccYZz0=",
+        "owner": "karaolidis",
+        "repo": "nix-obsidian-extensions",
+        "rev": "7ece6dc5319c432e93af3b29585c70081b4da0a9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "karaolidis",
+        "repo": "nix-obsidian-extensions",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -476,11 +517,13 @@
         "herdr": "herdr",
         "hermes-agent": "hermes-agent",
         "home-manager": "home-manager_2",
+        "hyprhands": "hyprhands",
         "hyprland-qtutils": "hyprland-qtutils",
         "marcel": "marcel",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-stable": "nixpkgs-stable",
+        "obsidian-extensions": "obsidian-extensions",
         "rust-overlay": "rust-overlay",
         "yorha": "yorha",
         "zen-browser": "zen-browser"
@@ -536,6 +579,27 @@
         "type": "github"
       }
     },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "obsidian-extensions",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785360170,
+        "narHash": "sha256-XE1lKgQ3eIO3E7zWryqcRsax+mYXod/5RHBn4YaR9YE=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "d1187f8bc71fb8aab02395869ec3f5c1920f75c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
     "uv2nix": {
       "inputs": {
         "nixpkgs": [
@@ -548,11 +612,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785277507,
-        "narHash": "sha256-9Tq3UDX2hD/aveW/HvkBlAmEwJTOlY5HQXJM+L5BGmE=",
+        "lastModified": 1786615403,
+        "narHash": "sha256-U++y7nM/6xiEcWI7q4fQoPZjPvRaTwkSqzBOVoEBjUE=",
         "owner": "pyproject-nix",
         "repo": "uv2nix",
-        "rev": "5a836d395cbf5fc22670eb98dd4aa4fc4d406977",
+        "rev": "4b59abb2ae1896d2a0e1abfc47fbc9bf985ea730",
         "type": "github"
       },
       "original": {

@@ -64,6 +64,9 @@ trust_level = "trusted"
 [projects."/home/berkerz/Projects/ravel"]
 trust_level = "trusted"
 
+[projects."/home/berkerz/Projects/hyprhands"]
+trust_level = "trusted"
+
 [plugins."canva@openai-curated"]
 enabled = true
 
@@ -86,6 +89,10 @@ approval_mode = "approve"
 
 [mcp_servers.linear.tools.save_comment]
 approval_mode = "approve"
+
+[mcp_servers.hyprhands]
+command = "hyprhands"
+args = ["mcp"]
 
 [hooks.state]
 

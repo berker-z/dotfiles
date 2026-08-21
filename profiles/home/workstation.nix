@@ -75,6 +75,15 @@
     config."background_color" = "0.18 0.20 0.25";
   };
 
+  programs.obsidian = {
+    enable = true;
+    package = null; # Installed system-wide in packages/graphical.nix.
+    vaults.local.target = "Documents/Local";
+    defaultSettings.communityPlugins = with pkgs.obsidianPlugins; [
+      powereditor
+    ];
+  };
+
   programs.helium = {
     enable = true;
     flags = [

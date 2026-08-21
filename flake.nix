@@ -22,6 +22,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "rust-overlay";
     };
+    hyprhands = {
+      url = "github:berker-z/hyprhands";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,6 +39,11 @@
 
     home-manager = {
       url = "github:nix-community/home-manager?ref=master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    obsidian-extensions = {
+      url = "github:karaolidis/nix-obsidian-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -65,6 +74,7 @@
     overlays = [
       rust-overlay.overlays.default
       codex-cli-nix.overlays.default
+      inputs.obsidian-extensions.overlays.default
       (final: prev: {
         codex = prev.codex.override {
           stdenv =
@@ -127,6 +137,9 @@
           };
       })
       marcel.overlays.default
+      (final: _prev: {
+        hyprhands = inputs.hyprhands.packages.${final.stdenv.hostPlatform.system}.default;
+      })
       (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;
       })

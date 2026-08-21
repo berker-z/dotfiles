@@ -15,6 +15,7 @@
 in {
   home.packages = [
     codexForHerdr
+    pkgs.hyprhands
     pkgs.mcp-proxy
   ];
 
