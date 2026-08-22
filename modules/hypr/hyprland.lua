@@ -9,7 +9,7 @@ hl.monitor({
 
 local mainMod = "SUPER"
 local terminal = "kitty"
-local fileManager = "marcel"
+local fileManager = "marcel-rs"
 local menu = "fuzzel"
 local browser = "helium"
 

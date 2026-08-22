@@ -107,7 +107,7 @@
     obsidian
     zenity
     mousepad # Restored
-    marcel
+    marcel-rs
     nautilus
 
     # Graphics & Media
