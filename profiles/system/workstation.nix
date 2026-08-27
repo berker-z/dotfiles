@@ -24,6 +24,7 @@
     cod = "bash ~/dotfiles/scripts/codio.sh";
     rsh = "nix develop ~/dotfiles#rusticed --command fish";
     garbagio = "bash ~/dotfiles/scripts/garbagio.sh";
+    cleanio = "bash ~/dotfiles/scripts/clean-rust-projects.sh";
   };
   services.gnome = {
     evolution-data-server.enable = false;

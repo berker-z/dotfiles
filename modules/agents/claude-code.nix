@@ -182,6 +182,16 @@
         # Bash is unrestricted; the sandbox decides what it can actually touch.
         "Bash"
 
+        # Running OUTSIDE the sandbox, without a prompt. This used to sit in
+        # `ask` and was by far the biggest source of interruptions: anything
+        # touching /dev/kvm (the Android emulator, adb), any long-running
+        # server that has to share the host network namespace, and any write
+        # to a denyWrite path all need it, so a single task could stack up a
+        # dozen prompts. The trade is real — an unsandboxed command can reach
+        # the whole filesystem — but `sudo`, `rm` and `mv` still prompt below,
+        # which is where the damage would actually come from.
+        "Bash(dangerouslyDisableSandbox:true)"
+
         # Internet: no approval for any of this.
         "WebFetch"
         "WebSearch"
@@ -189,20 +199,32 @@
       ];
 
       ask = [
-        # Leaving the sandbox is the one Bash case worth a prompt — without
-        # this, a failed sandboxed command can silently retry unsandboxed and
-        # the blanket Bash allow above would auto-approve it.
-        "Bash(dangerouslyDisableSandbox:true)"
+        # Destructive and hard to undo. These two are the whole point of the
+        # allowlist above being as wide as it is.
+        "Bash(rm:*)"
+        "Bash(mv:*)"
 
-        # Privilege escalation and system rebuilds run outside the sandbox.
+        # Kept because it is the loophole in the two rules above, not out of
+        # general caution: `sudo rm -rf /` does not match `Bash(rm:*)`, since
+        # the rule matches the command prefix and that command starts with
+        # `sudo`. Without this, the rm/mv prompts are trivially bypassed.
+        # It also covers nixos-rebuild, which cannot run without it.
         "Bash(sudo:*)"
-        "Bash(nixos-rebuild:*)"
 
         # Outward-facing and hard to walk back.
         "Bash(git push:*)"
       ];
 
-      deny = [];
+      deny = [
+        # Imperative Nix package management, rejected outright rather than
+        # prompted. Everything on this machine is declared in this repo; a
+        # package installed this way is invisible to it, survives no rebuild,
+        # and quietly diverges the system from what the flake says it is.
+        # The right move is always to edit a .nix file here instead.
+        "Bash(nix profile:*)"
+        "Bash(nix-env:*)"
+        "Bash(nix-channel:*)"
+      ];
 
       defaultMode = "default";
     };

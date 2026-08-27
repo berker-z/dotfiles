@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Dotfiles host and module architecture</title>
+  <desc id="desc">The flake creates three hosts. Hosts compose system and Home Manager profiles, which import focused modules and package sets.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#81a1c1"/>
+    </marker>
+    <marker id="arrow-home" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b48ead"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+    <style>
+      .title { font: 700 34px sans-serif; fill: #eceff4; }
+      .subtitle { font: 17px sans-serif; fill: #aeb8c8; }
+      .layer { font: 700 15px sans-serif; fill: #88c0d0; letter-spacing: 2px; }
+      .head { font: 700 22px sans-serif; fill: #eceff4; }
+      .body { font: 16px sans-serif; fill: #d8dee9; }
+      .small { font: 14px sans-serif; fill: #c4ccd8; }
+      .box { stroke-width: 2; rx: 14; filter: url(#shadow); }
+      .system-line { fill: none; stroke: #81a1c1; stroke-width: 3; marker-end: url(#arrow); }
+      .home-line { fill: none; stroke: #b48ead; stroke-width: 3; stroke-dasharray: 8 7; marker-end: url(#arrow-home); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1120" fill="#242933"/>
+  <text x="800" y="52" text-anchor="middle" class="title">How the dotfiles architecture comes together</text>
+  <text x="800" y="82" text-anchor="middle" class="subtitle">flake → hosts → capability profiles → focused modules/packages → one merged system</text>
+
+  <text x="55" y="128" class="layer">1 · ENTRY POINT</text>
+  <rect class="box" x="475" y="106" width="650" height="112" fill="#3b4252" stroke="#88c0d0"/>
+  <text x="800" y="148" text-anchor="middle" class="head">flake.nix · mkSystem</text>
+  <text x="800" y="178" text-anchor="middle" class="body">inputs + overlays + selected host + Home Manager</text>
+  <text x="800" y="201" text-anchor="middle" class="small">also injects laptop hardware support and external shared modules</text>
+
+  <path class="system-line" d="M800 218 V260 H280 V286"/>
+  <path class="system-line" d="M800 218 V286"/>
+  <path class="system-line" d="M800 218 V260 H1320 V286"/>
+
+  <text x="55" y="276" class="layer">2 · HOST RECIPES</text>
+  <rect class="box" x="80" y="286" width="400" height="146" fill="#354052" stroke="#5e81ac"/>
+  <text x="280" y="326" text-anchor="middle" class="head">nixos</text>
+  <text x="280" y="357" text-anchor="middle" class="body">main graphical desktop</text>
+  <text x="280" y="385" text-anchor="middle" class="small">hardware config · Hermes · WireGuard</text>
+  <text x="280" y="408" text-anchor="middle" class="small">Android tooling · DeepCool config</text>
+
+  <rect class="box" x="600" y="286" width="400" height="146" fill="#354052" stroke="#5e81ac"/>
+  <text x="800" y="326" text-anchor="middle" class="head">laptop</text>
+  <text x="800" y="357" text-anchor="middle" class="body">graphical ASUS laptop</text>
+  <text x="800" y="385" text-anchor="middle" class="small">hardware config · ASUS GA401 module</text>
+  <text x="800" y="408" text-anchor="middle" class="small">hybrid graphics · audio/power overrides</text>
+
+  <rect class="box" x="1120" y="286" width="400" height="146" fill="#354052" stroke="#5e81ac"/>
+  <text x="1320" y="326" text-anchor="middle" class="head">wired</text>
+  <text x="1320" y="357" text-anchor="middle" class="body">headless agent/server host</text>
+  <text x="1320" y="385" text-anchor="middle" class="small">hardware config · server packages</text>
+  <text x="1320" y="408" text-anchor="middle" class="small">Hermes · Herdr · flake reconciliation</text>
+
+  <path class="system-line" d="M210 432 V492"/>
+  <path class="home-line" d="M350 432 V492"/>
+  <path class="system-line" d="M730 432 V492"/>
+  <path class="home-line" d="M870 432 V492"/>
+  <path class="system-line" d="M1250 432 V492"/>
+  <path class="home-line" d="M1390 432 V492"/>
+
+  <text x="55" y="482" class="layer">3 · CAPABILITY PROFILES</text>
+  <rect class="box" x="55" y="492" width="135" height="178" fill="#33445a" stroke="#81a1c1"/>
+  <text x="122" y="525" text-anchor="middle" class="head">System</text>
+  <text x="122" y="559" text-anchor="middle" class="small">base</text>
+  <text x="122" y="584" text-anchor="middle" class="small">workstation</text>
+  <text x="122" y="609" text-anchor="middle" class="small">agent-host</text>
+
+  <rect class="box" x="205" y="492" width="220" height="178" fill="#4b3b55" stroke="#b48ead"/>
+  <text x="315" y="525" text-anchor="middle" class="head">Home Manager</text>
+  <text x="315" y="559" text-anchor="middle" class="small">common</text>
+  <text x="315" y="584" text-anchor="middle" class="small">workstation</text>
+  <text x="315" y="609" text-anchor="middle" class="small">agents</text>
+
+  <rect class="box" x="575" y="492" width="135" height="178" fill="#33445a" stroke="#81a1c1"/>
+  <text x="642" y="525" text-anchor="middle" class="head">System</text>
+  <text x="642" y="559" text-anchor="middle" class="small">base</text>
+  <text x="642" y="584" text-anchor="middle" class="small">workstation</text>
+  <text x="642" y="609" text-anchor="middle" class="small">agent-host</text>
+
+  <rect class="box" x="725" y="492" width="220" height="178" fill="#4b3b55" stroke="#b48ead"/>
+  <text x="835" y="525" text-anchor="middle" class="head">Home Manager</text>
+  <text x="835" y="559" text-anchor="middle" class="small">common</text>
+  <text x="835" y="584" text-anchor="middle" class="small">workstation</text>
+  <text x="835" y="609" text-anchor="middle" class="small">agents</text>
+
+  <rect class="box" x="1095" y="492" width="135" height="178" fill="#33445a" stroke="#81a1c1"/>
+  <text x="1162" y="525" text-anchor="middle" class="head">System</text>
+  <text x="1162" y="559" text-anchor="middle" class="small">base</text>
+  <text x="1162" y="584" text-anchor="middle" class="small">agent-host</text>
+  <text x="1162" y="609" text-anchor="middle" class="small">server packages</text>
+
+  <rect class="box" x="1245" y="492" width="220" height="178" fill="#4b3b55" stroke="#b48ead"/>
+  <text x="1355" y="525" text-anchor="middle" class="head">Home Manager</text>
+  <text x="1355" y="559" text-anchor="middle" class="small">common</text>
+  <text x="1355" y="584" text-anchor="middle" class="small">agents</text>
+  <text x="1355" y="620" text-anchor="middle" class="small">no desktop profile</text>
+
+  <path class="system-line" d="M122 670 V735 H320 V768"/>
+  <path class="system-line" d="M642 670 V735 H320 V768"/>
+  <path class="system-line" d="M1162 670 V735 H1280 V768"/>
+  <path class="home-line" d="M315 670 V718 H800 V768"/>
+  <path class="home-line" d="M835 670 V768"/>
+  <path class="home-line" d="M1355 670 V718 H800 V768"/>
+
+  <text x="55" y="758" class="layer">4 · IMPLEMENTATION</text>
+  <rect class="box" x="80" y="768" width="480" height="184" fill="#2f3949" stroke="#81a1c1"/>
+  <text x="320" y="807" text-anchor="middle" class="head">NixOS modules + package sets</text>
+  <text x="320" y="843" text-anchor="middle" class="body">display manager · session environment</text>
+  <text x="320" y="871" text-anchor="middle" class="body">SSH/Tailscale · WireGuard · Android</text>
+  <text x="320" y="899" text-anchor="middle" class="body">Hermes · Herdr · flake reconcile</text>
+  <text x="320" y="927" text-anchor="middle" class="body">graphical.nix / server.nix</text>
+
+  <rect class="box" x="600" y="768" width="400" height="184" fill="#44384f" stroke="#b48ead"/>
+  <text x="800" y="807" text-anchor="middle" class="head">Home Manager modules</text>
+  <text x="800" y="843" text-anchor="middle" class="body">Hyprland workstation config</text>
+  <text x="800" y="871" text-anchor="middle" class="body">themes · Quickshell · fuzzel · wlogout</text>
+  <text x="800" y="899" text-anchor="middle" class="body">Codex · Claude Code</text>
+  <text x="800" y="927" text-anchor="middle" class="body">user apps, dotfiles and services</text>
+
+  <rect class="box" x="1040" y="768" width="480" height="184" fill="#2f3949" stroke="#81a1c1"/>
+  <text x="1280" y="807" text-anchor="middle" class="head">Host-specific implementation</text>
+  <text x="1280" y="843" text-anchor="middle" class="body">hardware-configuration.nix</text>
+  <text x="1280" y="871" text-anchor="middle" class="body">machine-only services and overrides</text>
+  <text x="1280" y="899" text-anchor="middle" class="body">laptop GPU/audio · desktop hardware</text>
+  <text x="1280" y="927" text-anchor="middle" class="body">wired server/recovery details</text>
+
+  <path class="system-line" d="M320 952 V1000 H800 V1021"/>
+  <path class="home-line" d="M800 952 V1021"/>
+  <path class="system-line" d="M1280 952 V1000 H800 V1021"/>
+
+  <rect class="box" x="405" y="1021" width="790" height="72" fill="#3b4252" stroke="#a3be8c"/>
+  <text x="800" y="1053" text-anchor="middle" class="head">One merged, immutable NixOS generation</text>
+  <text x="800" y="1078" text-anchor="middle" class="small">imports declare pieces; the Nix module system evaluates and merges the complete graph</text>
+
+  <line x1="1280" y1="110" x2="1340" y2="110" stroke="#81a1c1" stroke-width="3"/>
+  <text x="1352" y="116" class="small">system/NixOS</text>
+  <line x1="1280" y1="143" x2="1340" y2="143" stroke="#b48ead" stroke-width="3" stroke-dasharray="8 7"/>
+  <text x="1352" y="149" class="small">Home Manager</text>
+</svg>

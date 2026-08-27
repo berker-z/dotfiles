@@ -117,6 +117,29 @@
           };
         hermes-agent-desktop = let
           upstreamNpmLib = final.hermes-agent-full.hermesNpmLib;
+          electronHeadersUrl = "https://artifacts.electronjs.org/headers/dist/v${final.electron.version}/node-v${final.electron.version}-headers.tar.gz";
+          electronHeadersArchive =
+            final.runCommand "electron-${final.electron.version}-headers.tar.gz" {
+              nativeBuildInputs = [
+                final.gnutar
+                final.gzip
+              ];
+            } ''
+              mkdir -p "archive/node-v${final.electron.version}"
+              cp -a ${final.electron.headers}/. "archive/node-v${final.electron.version}/"
+              tar -C archive -czf "$out" "node-v${final.electron.version}"
+            '';
+          hermesDesktopPkgs =
+            final
+            // {
+              # Hermes currently couples a version-derived URL to a static
+              # hash. Feed its existing extraction step an archive made from
+              # nixpkgs' matching headers until upstream PR #69458 lands.
+              fetchurl = attrs:
+                if attrs.url == electronHeadersUrl
+                then electronHeadersArchive
+                else final.fetchurl attrs;
+            };
           hermesNpmLib =
             upstreamNpmLib
             // {
@@ -134,6 +157,7 @@
           final.callPackage "${inputs.hermes-agent}/nix/desktop.nix" {
             inherit hermesNpmLib;
             hermesAgent = final.hermes-agent-full;
+            pkgs = hermesDesktopPkgs;
           };
       })
       marcel.overlays.default
