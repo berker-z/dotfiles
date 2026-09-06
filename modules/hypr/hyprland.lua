@@ -184,6 +184,7 @@ hl.window_rule({ match = { class = "^(xdg-desktop-portal-gtk)$" }, float = true 
 hl.window_rule({ match = { class = "^(thunderbird)$", initial_title = "^()$" }, float = true })
 hl.window_rule({ match = { class = "^(helium)$" }, opacity = "1.0 override 1.0 override 1.0 override" })
 hl.window_rule({ match = { class = "^(com\\.gabm\\.satty)$" }, float = true })
+hl.window_rule({ match = { initial_class = "^(steam_app_3551340)$" }, render_unfocused = true })
 hl.window_rule({ match = { initial_title = "^(Picture-in-Picture)$" }, float = true })
 hl.window_rule({ match = { initial_title = "^(Picture-in-Picture)$" }, size = { 910, 550 } })
 

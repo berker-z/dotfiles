@@ -19,8 +19,6 @@
     };
     marcel = {
       url = "github:berker-z/marcel";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
     };
     hyprhands = {
       url = "github:berker-z/hyprhands";
@@ -160,7 +158,9 @@
             pkgs = hermesDesktopPkgs;
           };
       })
-      marcel.overlays.default
+      (final: _prev: {
+        marcel-rs = marcel.packages.${final.stdenv.hostPlatform.system}.marcel-rs;
+      })
       (final: _prev: {
         hyprhands = inputs.hyprhands.packages.${final.stdenv.hostPlatform.system}.default;
       })

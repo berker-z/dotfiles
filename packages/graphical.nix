@@ -111,6 +111,7 @@
     nautilus
 
     # Graphics & Media
+    aseprite
     gimp
     idescriptor
     imv
