@@ -28,11 +28,11 @@
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    herdr = {
-      url = "github:herdrdev/herdr";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    # herdr's source flake has no binary cache, so it compiled Rust + Zig on
+    # every update. herdr-nix wraps the prebuilt release binaries and is served
+    # from herdr.cachix.org (see profiles/system/base.nix). Its nixpkgs is
+    # deliberately not overridden so the store paths match that cache.
+    herdr.url = "github:herdrdev/herdr-nix";
     yorha.url = "github:berker-z/yorha-flake";
 
     home-manager = {

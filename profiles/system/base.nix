@@ -103,9 +103,13 @@
     };
     settings = {
       auto-optimise-store = true;
-      extra-substituters = ["https://marcel-rs.cachix.org"];
+      extra-substituters = [
+        "https://marcel-rs.cachix.org"
+        "https://herdr.cachix.org"
+      ];
       extra-trusted-public-keys = [
         "marcel-rs.cachix.org-1:ae3s4u7pctzohvoTn8DWdMnRCrLEg1u32OIjfQ7p0VY="
+        "herdr.cachix.org-1:3nH7IStRsS0ASfdonA0DCRR2ZrSCeWitZ7Kwew0cR4I="
       ];
       http-connections = 8;
       keep-derivations = false;
