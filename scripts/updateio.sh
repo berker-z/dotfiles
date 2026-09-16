@@ -18,6 +18,6 @@ if ! nix build --no-link --max-jobs 0 \
 fi
 # Apply the concurrency limits to this build too: new nix.settings only take
 # effect after the new system has been successfully built and activated.
-sudo nixos-rebuild switch --flake .# --max-jobs 2 --cores 4
+sudo nixos-rebuild switch --flake .# --max-jobs 4 --cores 4
 echo "Updated system."
 notify-send "Nixos" "System Rebuilt."

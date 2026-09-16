@@ -117,17 +117,17 @@
       max-substitution-jobs = 4;
       stalled-download-timeout = 600;
 
-      # Every host here is also in use while it rebuilds, and several inputs
-      # (hyprhands, herdr, hermes) follow this flake's nixpkgs, so a nixpkgs
-      # bump compiles them from source with no cache to fall back on. Nix's
-      # defaults run one derivation per core, each using every core, which on
-      # a swapless 32 GiB desktop is a freeze. Two derivations at a time, each
-      # with a few compiler jobs, keeps a rebuild slow rather than fatal. Two
-      # rather than one because fixed-output fetches (each npm tarball of an
+      # Every host here is also in use while it rebuilds. Nix's defaults run
+      # one derivation per core, each using every core, which on a swapless
+      # 32 GiB desktop with a couple of uncached Rust and Electron builds
+      # pending was a freeze. A few derivations at a time, each with a few
+      # compiler jobs, keeps a rebuild slow rather than fatal; the daemon's
+      # memory cap below is what makes even four heavy ones survivable. Not
+      # lower than four because fixed-output fetches (each npm tarball of an
       # Electron app is its own derivation) count as jobs too, and running
       # 800 tiny downloads strictly one at a time took 20 minutes. Cargo
       # honours `cores` through NIX_BUILD_CORES.
-      max-jobs = 2;
+      max-jobs = 4;
       cores = 4;
     };
   };
