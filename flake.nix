@@ -159,27 +159,12 @@
             pkgs = hermesDesktopPkgs;
           };
       })
-      (final: prev: let
-        marcelPackages = marcel.packages.${final.stdenv.hostPlatform.system};
-      in {
-        marcel-rs = marcelPackages.marcel-rs;
-        # Marcel plus the D-Bus activation file for org.freedesktop.FileManager1,
-        # which is what browsers and other apps call for "show in folder". The
-        # plain package deliberately leaves that name alone; this variant
-        # claims it.
-        marcel-file-manager1 = marcelPackages.file-manager1-service;
-        # Nautilus stays installed but must not compete for the same D-Bus
-        # name, or whichever service file lands first in the profile wins.
-        # A symlink view rather than an override: no rebuild of Nautilus or
-        # of anything that depends on it.
-        nautilus-without-file-manager1 = final.symlinkJoin {
-          name = "nautilus-without-file-manager1";
-          paths = [prev.nautilus];
-          postBuild = ''
-            rm "$out/share/dbus-1/services/org.freedesktop.FileManager1.service"
-          '';
-          inherit (prev.nautilus) meta;
-        };
+      (final: _prev: {
+        # Marcel itself is installed and integrated through
+        # marcel.homeManagerModules.default (see profiles/home/workstation.nix).
+        # This binding exists for scripts/updateio.sh, which checks the
+        # pinned Marcel is in the binary cache before rebuilding.
+        marcel-rs = marcel.packages.${final.stdenv.hostPlatform.system}.marcel-rs;
       })
       (final: _prev: {
         hyprhands = inputs.hyprhands.packages.${final.stdenv.hostPlatform.system}.default;
@@ -230,6 +215,7 @@
               home-manager.users.${primaryUser} = import ./hosts/${hostName}/home.nix;
               home-manager.sharedModules = [
                 helium-browser.homeModules.default
+                marcel.homeManagerModules.default
               ];
             }
           ]

@@ -107,8 +107,7 @@
     obsidian
     zenity
     mousepad # Restored
-    marcel-file-manager1 # Marcel, also answering "show in folder" over D-Bus
-    nautilus-without-file-manager1
+    nautilus
 
     # Graphics & Media
     aseprite
@@ -184,7 +183,6 @@
       appflowy
       telegram-desktop
       loupe
-      kdePackages.dolphin
       kdePackages.kde-cli-tools
       kdePackages.kded
       kdePackages.kio

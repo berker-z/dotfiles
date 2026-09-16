@@ -190,10 +190,18 @@
     MimeType=application/epub+zip;
   '';
 
+  # Daily-driver file manager. Nautilus stays installed as a fallback while
+  # Marcel is work in progress; these two flags are what make Marcel, not
+  # Nautilus, the one that opens for folders and for "show in folder".
+  programs.marcel = {
+    enable = true;
+    defaultDirectoryHandler = true;
+    fileManager1 = true;
+  };
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      "inode/directory" = ["io.github.berker_z.Marcel.desktop"];
       "image/png" = ["org.gnome.Loupe.desktop"];
       "image/jpeg" = ["org.gnome.Loupe.desktop"];
       "image/jpg" = ["org.gnome.Loupe.desktop"];
