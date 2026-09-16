@@ -24,7 +24,9 @@
   kdeTitleFontSpec = fontSpec uiFont uiFontSize 57;
   kdeSmallFontSpec = fontSpec uiFont smallFontSize 50;
   kdeFixedFontSpec = fontSpec fixedFont uiFontSize 50;
-  nordKdeColors = builtins.readFile "${pkgs.utterly-nord-plasma}/share/color-schemes/UtterlyNord.colors";
+  # The package copies this file unchanged. Read its pinned source so merely
+  # evaluating the configuration need not realise the Plasma runtime closure.
+  nordKdeColors = builtins.readFile "${pkgs.utterly-nord-plasma.src}/UtterlyNord.colors";
   kdeGlobals =
     lib.replaceStrings
     [

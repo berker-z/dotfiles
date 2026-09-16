@@ -40,6 +40,23 @@
   # ######################DEEPCOOL THINGY##############################
 
   networking.hostName = "nixos";
+
+  # A 32 GiB desktop also runs browsers, editors and agents during rebuilds.
+  # Limit both concurrent derivations and parallel compiler work within each.
+  nix.settings = {
+    max-jobs = 1;
+    cores = 2;
+  };
+  # Compiler/linker subprocesses can exceed their advertised job count. Keep
+  # their aggregate resource use bounded even then; fail the build on OOM
+  # rather than allowing it to exhaust the desktop's memory.
+  systemd.services.nix-daemon.serviceConfig = {
+    MemoryMax = "12G";
+    CPUQuota = "400%";
+    CPUWeight = 25;
+    IOWeight = 25;
+  };
+
   environment.systemPackages = with pkgs; [
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   ];
