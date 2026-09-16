@@ -112,6 +112,26 @@
       keep-outputs = false;
       max-substitution-jobs = 4;
       stalled-download-timeout = 600;
+
+      # Every host here is also in use while it rebuilds, and several inputs
+      # (hyprhands, herdr, hermes) follow this flake's nixpkgs, so a nixpkgs
+      # bump compiles them from source with no cache to fall back on. Nix's
+      # defaults run one derivation per core, each using every core, which on
+      # a swapless 32 GiB desktop is a freeze. One derivation at a time, with
+      # a few compiler jobs, keeps a rebuild slow rather than fatal. Cargo
+      # honours `cores` through NIX_BUILD_CORES.
+      max-jobs = 1;
+      cores = 4;
     };
+  };
+
+  # Belt and braces for the above: compiler and linker processes can exceed
+  # their advertised job count. Cap the daemon's cgroup so an overshoot fails
+  # the build rather than the desktop. The percentage scales with each host's
+  # RAM. Low weights leave the foreground session responsive during a build.
+  systemd.services.nix-daemon.serviceConfig = {
+    MemoryMax = "50%";
+    CPUWeight = 25;
+    IOWeight = 25;
   };
 }
