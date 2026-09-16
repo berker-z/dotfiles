@@ -121,10 +121,13 @@
       # (hyprhands, herdr, hermes) follow this flake's nixpkgs, so a nixpkgs
       # bump compiles them from source with no cache to fall back on. Nix's
       # defaults run one derivation per core, each using every core, which on
-      # a swapless 32 GiB desktop is a freeze. One derivation at a time, with
-      # a few compiler jobs, keeps a rebuild slow rather than fatal. Cargo
+      # a swapless 32 GiB desktop is a freeze. Two derivations at a time, each
+      # with a few compiler jobs, keeps a rebuild slow rather than fatal. Two
+      # rather than one because fixed-output fetches (each npm tarball of an
+      # Electron app is its own derivation) count as jobs too, and running
+      # 800 tiny downloads strictly one at a time took 20 minutes. Cargo
       # honours `cores` through NIX_BUILD_CORES.
-      max-jobs = 1;
+      max-jobs = 2;
       cores = 4;
     };
   };
