@@ -1,6 +1,6 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model = "gpt-5.6-sol"
+model = "gpt-6-astra"
 model_reasoning_effort = "medium"
 web_search = "live"
 personality = "pragmatic"
@@ -21,7 +21,7 @@ pet = "seedy"
 [tui.model_availability_nux]
 "gpt-5.5" = 4
 "gpt-5.6-sol" = 4
-gpt-6-astra = 1
+gpt-6-astra = 4
 
 [projects."/home/berkerz/Projects/Multiplayer/ChapterGO"]
 trust_level = "trusted"
@@ -66,6 +66,15 @@ trust_level = "trusted"
 trust_level = "trusted"
 
 [projects."/home/berkerz/Projects/hyprhands"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/taskblob"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/Multiplayer/Loka"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/older/yorha"]
 trust_level = "trusted"
 
 [plugins."canva@openai-curated"]

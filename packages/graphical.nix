@@ -107,8 +107,8 @@
     obsidian
     zenity
     mousepad # Restored
-    marcel-rs
-    nautilus
+    marcel-file-manager1 # Marcel, also answering "show in folder" over D-Bus
+    nautilus-without-file-manager1
 
     # Graphics & Media
     aseprite
