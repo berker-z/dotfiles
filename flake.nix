@@ -20,10 +20,11 @@
     marcel = {
       url = "github:berker-z/marcel";
     };
-    hyprhands = {
-      url = "github:berker-z/hyprhands";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # Not following nixpkgs: hyprhands is built from source, and following
+    # meant rebuilding it on every nixpkgs bump rather than only when
+    # hyprhands itself changes. Its runtime tools are a PATH suffix behind
+    # the system's own, so the separate pin is harmless.
+    hyprhands.url = "github:berker-z/hyprhands";
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
