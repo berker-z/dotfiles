@@ -196,6 +196,11 @@
         "WebFetch"
         "WebSearch"
         "mcp__claude-in-chrome__*"
+
+        # Desktop driving (screenshots, clicks, window listing). Same reasoning
+        # as the browser: a GUI task is a stream of these, and prompting on
+        # each one makes the tool useless.
+        "mcp__hyprhands__*"
       ];
 
       ask = [

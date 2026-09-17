@@ -5,14 +5,14 @@
   osConfig,
   ...
 }: let
-  hostName = osConfig.networking.hostName or "";
+  hostName = osConfig.[start|stop|restart|toggle|hide|calendar|media|audio|network|power|clipboard|sidebar|dnd|awake|apps|status]ing.hostName or "";
   enabled = hostName == "nixos";
-  configName = "nord-pill";
+  configName = "cornice";
   qs = "${pkgs.quickshell}/bin/qs";
-  nordCliphistThumbs = pkgs.writeShellScriptBin "nord-cliphist-thumbs" ''
+  corniceThumbs = pkgs.writeShellScriptBin "cornice-thumbs" ''
     set -euo pipefail
 
-    cache="''${XDG_CACHE_HOME:-$HOME/.cache}/nord-pill/cliphist-thumbs"
+    cache="''${XDG_CACHE_HOME:-$HOME/.cache}/cornice/cliphist-thumbs"
     mkdir -p "$cache"
     chmod 700 "$cache"
 
@@ -64,7 +64,7 @@
     pkgs.mako
     pkgs.networkmanager
     pkgs.networkmanagerapplet
-    nordCliphistThumbs
+    corniceThumbs
     pkgs.pavucontrol
     pkgs.playerctl
     pkgs.procps
@@ -74,7 +74,7 @@
     pkgs.wl-clipboard
     pkgs.wlogout
   ];
-  nordPill = pkgs.writeShellScriptBin "nord-pill" ''
+  cornice = pkgs.writeShellScriptBin "cornice" ''
     set -euo pipefail
 
     export PATH="${runtimePath}:$PATH"
@@ -124,9 +124,9 @@
       mon="$(monitor_name)"
       start
       if [[ -n "$surface" ]]; then
-        "$qs" -c "$config" ipc call pill "$fn" "$mon" "$surface"
+        "$qs" -c "$config" ipc call bar "$fn" "$mon" "$surface"
       else
-        "$qs" -c "$config" ipc call pill "$fn" "$mon"
+        "$qs" -c "$config" ipc call bar "$fn" "$mon"
       fi
     }
 
@@ -144,23 +144,27 @@
         ;;
       hide)
         if running; then
-          "$qs" -c "$config" ipc call pill hide
+          "$qs" -c "$config" ipc call bar hide
         fi
         ;;
       peek | toggle)
         call peek
         ;;
-      calendar | media | links | power | clipboard)
+      calendar | media | network | power | clipboard)
         call toggle "$1"
         ;;
       mixer | audio | sound)
         call toggle media
         ;;
-      connectivity | network | wifi | bluetooth)
-        call toggle links
+      links | connectivity | wifi | bluetooth)
+        call toggle network
         ;;
       sidebar)
         call sidebar
+        ;;
+      dnd | awake)
+        start
+        "$qs" -c "$config" ipc call bar "$1"
         ;;
       apps | launcher)
         start
@@ -171,7 +175,9 @@
         ;;
       *)
         cat <<'USAGE'
-    usage: nord-pill [start|stop|restart|toggle|hide|calendar|media|audio|links|connectivity|power|clipboard|sidebar|apps|status]
+    usage: cornice [start|stop|restart|toggle|hide|calendar|media|audio|network|power|clipboard|sidebar|dnd|awake|apps|status]
+      toggle    show or hide the bar
+      hide      close whatever is open (popover, tray menu, sidebar)
     USAGE
         exit 2
         ;;
@@ -181,11 +187,11 @@ in {
   config = lib.mkIf enabled {
     home.packages = [
       pkgs.quickshell
-      nordCliphistThumbs
-      nordPill
+      corniceThumbs
+      cornice
     ];
 
-    xdg.configFile."quickshell/${configName}".source = ./nord-pill;
+    xdg.configFile."quickshell/${configName}".source = ./cornice;
 
     wayland.windowManager.hyprland.extraConfig = lib.mkAfter ''
       ${builtins.readFile ./hyprland.lua}
