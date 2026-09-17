@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-24.05";
+    # aseprite is unfree, so no cache ever has it and it recompiles (with
+    # its bundled skia) on every nixpkgs bump. Pin it to its own nixpkgs and
+    # only move this when a newer aseprite is wanted.
+    nixpkgs-aseprite.url = "github:nixos/nixpkgs/b1b875982b17dabde9b4a37f3e229e74913e6db3";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     zen-browser.url = "github:youwen5/zen-browser-flake";
@@ -56,6 +60,7 @@
     self,
     nixpkgs,
     nixpkgs-stable,
+    nixpkgs-aseprite,
     home-manager,
     nixos-hardware,
     zen-browser,
@@ -68,6 +73,10 @@
   }: let
     stablePkgs = import nixpkgs-stable {
       system = "x86_64-linux";
+    };
+    asepritePkgs = import nixpkgs-aseprite {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
     };
 
     overlays = [
@@ -158,6 +167,7 @@
       })
       (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;
+        aseprite = asepritePkgs.aseprite;
       })
     ];
 
