@@ -123,15 +123,17 @@
       # Every host here is also in use while it rebuilds. Nix's defaults run
       # one derivation per core, each using every core, which on a swapless
       # 32 GiB desktop with a couple of uncached Rust and Electron builds
-      # pending was a freeze. A few derivations at a time, each with a few
-      # compiler jobs, keeps a rebuild slow rather than fatal; the daemon's
-      # memory cap below is what makes even four heavy ones survivable. Not
-      # lower than four because fixed-output fetches (each npm tarball of an
-      # Electron app is its own derivation) count as jobs too, and running
-      # 800 tiny downloads strictly one at a time took 20 minutes. Cargo
-      # honours `cores` through NIX_BUILD_CORES.
-      max-jobs = 4;
-      cores = 4;
+      # pending was a freeze. The shape that works: many derivations in
+      # flight, each with few compiler jobs. Most derivations in a big
+      # update are fixed-output fetches (every npm tarball of an Electron
+      # app and every Python wheel of hermes-agent is one) which use no
+      # RAM and no CPU, and at max-jobs = 4 two thousand of them took over
+      # an hour. Real compiles are rare and get two cores each, so the
+      # total thread count stays near the core count; the daemon's memory
+      # cap below catches the overshoot. Cargo honours `cores` through
+      # NIX_BUILD_CORES.
+      max-jobs = 16;
+      cores = 2;
     };
   };
 
