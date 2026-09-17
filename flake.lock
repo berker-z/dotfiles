@@ -333,11 +333,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1789636477,
-        "narHash": "sha256-+/rhQ886XrEQ/CPSZPL0xeNQplMw0wzgl0fLvIz0IAI=",
+        "lastModified": 1789637888,
+        "narHash": "sha256-5lkHqZufMzegah/RvoRsWkWK7wivsuIGNL1zYmOMBnY=",
         "owner": "berker-z",
         "repo": "marcel",
-        "rev": "7d1727dfd2c3ccd9f366c646767980e3a527af93",
+        "rev": "b8184574c01495dd304ae4735551e7faa1df5dde",
         "type": "github"
       },
       "original": {
