@@ -1,13 +1,5 @@
 -- Native Lua equivalent of hyp2.conf.
 
-local waybar = "waybar --config ~/.config/waybar/config.jsonc --style ~/.config/waybar/style.css"
-
-hl.on("hyprland.start", function()
-	hl.exec_cmd(waybar)
-end)
-
-hl.bind("SUPER + ALT + B", hl.dsp.exec_cmd("pkill waybar 2>/dev/null; " .. waybar))
-
 hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("AQ_DRM_DEVICES", "/dev/dri/amd-igpu")
 hl.env("WLR_DRM_DEVICES", "/dev/dri/amd-igpu")

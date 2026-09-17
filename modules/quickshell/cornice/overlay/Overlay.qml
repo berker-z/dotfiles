@@ -19,8 +19,43 @@ PanelWindow {
     readonly property real margin: Math.round(6 * Theme.s)
     readonly property real top: Theme.barHeight + Math.round(2 * Theme.s)
 
+    // Stay mapped for one fade after closing so the fade-out shows. What was
+    // open is latched so the content survives until the window unmaps.
+    property bool shown: false
+    property string popoverName: ""
+    property var menuHandle: null
+    property bool sidebarShown: false
+
+    readonly property string livePopover: active ? Panels.popover : ""
+    readonly property var liveMenu: active ? Panels.trayMenu : null
+    readonly property bool liveSidebar: active && Panels.sidebar
+
+    // Latch on open; on a switch (still active) drop the old one at once,
+    // on a close keep it until the unmap timer fires.
+    onLivePopoverChanged: if (livePopover.length > 0 || active) popoverName = livePopover
+    onLiveMenuChanged: if (liveMenu !== null || active) menuHandle = liveMenu
+    onLiveSidebarChanged: if (liveSidebar || active) sidebarShown = liveSidebar
+
+    onActiveChanged: {
+        if (active)
+            shown = true;
+        else
+            unmap.restart();
+    }
+
+    Timer {
+        id: unmap
+        interval: 100
+        onTriggered: if (!overlay.active) {
+            overlay.shown = false;
+            overlay.popoverName = "";
+            overlay.menuHandle = null;
+            overlay.sidebarShown = false;
+        }
+    }
+
     screen: modelData
-    visible: active
+    visible: shown
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
@@ -37,8 +72,8 @@ PanelWindow {
     mask: Region {
         x: 0
         y: 0
-        width: overlay.width
-        height: overlay.height
+        width: overlay.active ? overlay.width : 0
+        height: overlay.active ? overlay.height : 0
 
         Region {
             intersection: Intersection.Subtract
@@ -55,6 +90,7 @@ PanelWindow {
 
     MouseArea {
         anchors.fill: parent
+        enabled: overlay.active
         acceptedButtons: Qt.AllButtons
         onPressed: Panels.closeAll()
     }
@@ -64,31 +100,44 @@ PanelWindow {
         focus: overlay.active
         Keys.onEscapePressed: Panels.closeAll()
 
+        // Quick fade + a few px of drop on open; closing is instant since
+        // the window just goes away.
+        opacity: overlay.active ? 1 : 0
+        anchors.topMargin: overlay.active ? 0 : -Math.round(6 * Theme.s)
+
+        Behavior on opacity {
+            NumberAnimation { duration: 90; easing.type: Easing.OutCubic }
+        }
+
+        Behavior on anchors.topMargin {
+            NumberAnimation { duration: 90; easing.type: Easing.OutCubic }
+        }
+
         Loader {
             id: popover
-            active: Panels.popover.length > 0 && overlay.active
+            active: overlay.popoverName.length > 0 && overlay.shown
             x: overlay.clampX(width)
             y: overlay.top
-            sourceComponent: Panels.popover === "calendar" ? calendarPopover
-                : Panels.popover === "media" ? mediaPopover
-                : Panels.popover === "network" ? networkPopover
-                : Panels.popover === "clipboard" ? clipboardPopover
-                : Panels.popover === "power" ? powerPopover
+            sourceComponent: overlay.popoverName === "calendar" ? calendarPopover
+                : overlay.popoverName === "media" ? mediaPopover
+                : overlay.popoverName === "network" ? networkPopover
+                : overlay.popoverName === "clipboard" ? clipboardPopover
+                : overlay.popoverName === "power" ? powerPopover
                 : null
             onLoaded: item.forceActiveFocus()
         }
 
         Loader {
-            active: Panels.trayMenu !== null && overlay.active
+            active: overlay.menuHandle !== null && overlay.shown
             x: overlay.clampX(width)
             y: overlay.top
             sourceComponent: TrayMenu {
-                handle: Panels.trayMenu
+                handle: overlay.menuHandle
             }
         }
 
         Loader {
-            active: Panels.sidebar && overlay.active
+            active: overlay.sidebarShown && overlay.shown
             anchors.top: parent.top
             anchors.topMargin: overlay.top
             anchors.right: parent.right

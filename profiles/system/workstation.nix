@@ -46,11 +46,9 @@
     ];
   };
 
-  programs.waybar.package =
-    lib.mkIf (config.networking.hostName == "laptop")
-    (pkgs.waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ ["-Dexperimental=true"];
-    }));
+  # cornice reads the laptop battery through UPower; the item hides itself
+  # on hosts that have no battery, so this is harmless on the desktop.
+  services.upower.enable = true;
 
   programs.hyprland = {
     enable = true;

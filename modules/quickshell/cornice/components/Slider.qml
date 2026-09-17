@@ -11,9 +11,11 @@ Item {
     property string text: ""
     property bool muted: false
     property real wheelStep: 0.05
+    property bool handle: true
 
     signal moved(real value)
     signal iconClicked()
+    signal middleClicked()
 
     implicitHeight: Math.round(24 * Theme.s)
 
@@ -48,7 +50,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         height: parent.height
 
-        readonly property real handle: Math.round(14 * Theme.s)
+        readonly property real handle: slider.handle ? Math.round(14 * Theme.s) : 0
         readonly property real fillW: handle / 2 + (width - handle) * Math.max(0, Math.min(1, slider.value))
 
         Rectangle {
@@ -75,6 +77,7 @@ Item {
         }
 
         Rectangle {
+            visible: slider.handle
             x: track.fillW - width / 2
             anchors.verticalCenter: parent.verticalCenter
             width: track.handle
@@ -95,14 +98,20 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
+            acceptedButtons: Qt.LeftButton | Qt.MiddleButton
 
             function apply(x) {
                 var v = (x - track.handle / 2) / Math.max(1, track.width - track.handle);
                 slider.moved(Math.max(0, Math.min(1, v)));
             }
 
-            onPressed: function(mouse) { apply(mouse.x); }
-            onPositionChanged: function(mouse) { if (pressed) apply(mouse.x); }
+            onPressed: function(mouse) {
+                if (mouse.button === Qt.MiddleButton)
+                    slider.middleClicked();
+                else
+                    apply(mouse.x);
+            }
+            onPositionChanged: function(mouse) { if (pressed && mouse.buttons & Qt.LeftButton) apply(mouse.x); }
             onWheel: function(w) {
                 slider.moved(Math.max(0, Math.min(1, slider.value + (w.angleDelta.y > 0 ? slider.wheelStep : -slider.wheelStep))));
             }

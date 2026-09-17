@@ -76,7 +76,7 @@
   };
 
   # nixos-hardware's generic laptop module enables TLP by default. Keep ASUS
-  # platform profiles owned by asusd/the Waybar script instead of another
+  # platform profiles owned by asusd/scripts/asus-power-profile.sh instead of another
   # daemon rewriting profiles on AC/Battery transitions.
   services.power-profiles-daemon.enable = false;
   services.tlp.enable = false;

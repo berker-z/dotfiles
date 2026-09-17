@@ -6,7 +6,6 @@ asusctl="$bin/asusctl"
 systemctl="$bin/systemctl"
 awk="$bin/awk"
 cat="$bin/cat"
-pkill="$bin/pkill"
 sudo=/run/wrappers/bin/sudo
 
 balanced_cpu_curve="45c:0,50c:15,53c:18,57c:28,61c:40,70c:70,82c:100,98c:142"
@@ -78,8 +77,8 @@ set_cpu_max_freq() {
   fi
 }
 
-refresh_waybar() {
-  "$pkill" -RTMIN+12 waybar 2>/dev/null || true
+refresh_bar() {
+  : # cornice polls status every few seconds; nothing to signal
 }
 
 apply_profile() {
@@ -156,7 +155,7 @@ toggle_profile() {
   esac
 
   apply_profile "$target"
-  refresh_waybar
+  refresh_bar
 }
 
 case "${1:-}" in
@@ -169,7 +168,7 @@ case "${1:-}" in
   set)
     [[ $# -eq 2 ]] || usage
     apply_profile "$2"
-    refresh_waybar
+    refresh_bar
     ;;
   *)
     usage

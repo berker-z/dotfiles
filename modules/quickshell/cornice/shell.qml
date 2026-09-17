@@ -88,6 +88,12 @@ ShellRoot {
         function battery(pct: string, state: string): void {
             Battery.mock(pct, state);
         }
+
+        // `... ipc call bar profile balanced` previews the ASUS power-profile
+        // item; anything else clears the mock.
+        function profile(cls: string): void {
+            PowerProfile.mock(cls);
+        }
     }
 
     Variants {

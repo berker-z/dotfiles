@@ -7,6 +7,10 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd(cornice .. " start")
 end)
 
+-- The overlay (popovers, tray menus, sidebar) does its own ~90 ms fade; the
+-- compositor's layer fade on top of it was what made opening feel slow.
+hl.layer_rule({ match = { namespace = "cornice-overlay" }, no_anim = true })
+
 hl.bind(mainMod .. " + ALT + B", hl.dsp.exec_cmd(cornice .. " restart"))
 hl.bind(mainMod .. " + ALT + P", hl.dsp.exec_cmd(cornice .. " toggle"))
 hl.bind(mainMod .. " + ALT + SHIFT + P", hl.dsp.exec_cmd(cornice .. " restart"))

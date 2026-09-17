@@ -2,11 +2,8 @@
   config,
   lib,
   pkgs,
-  osConfig,
   ...
 }: let
-  hostName = osConfig.[start|stop|restart|toggle|hide|calendar|media|audio|network|power|clipboard|sidebar|dnd|awake|apps|status]ing.hostName or "";
-  enabled = hostName == "nixos";
   configName = "cornice";
   qs = "${pkgs.quickshell}/bin/qs";
   corniceThumbs = pkgs.writeShellScriptBin "cornice-thumbs" ''
@@ -184,7 +181,7 @@
     esac
   '';
 in {
-  config = lib.mkIf enabled {
+  config = {
     home.packages = [
       pkgs.quickshell
       corniceThumbs

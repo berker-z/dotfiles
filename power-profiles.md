@@ -14,13 +14,13 @@ charger is connected or removed.
 
 ## Fan curve notes (opt-in behavior)
 
-Custom fan curves are persistent once set. The Waybar toggle is wired so:
+Custom fan curves are persistent once set. The bar item (cornice, click to cycle) is wired so:
 
 - **Quiet** disables custom Balanced/Performance curves so BIOS defaults are used.
 - **Balanced/Performance** applies custom low-noise curves for those profiles.
 
 If you want to opt out later, switch to **Quiet** once to disable custom curves,
-then remove the Waybar module.
+then drop the PowerProfile item from cornice.
 
 ## Quiet-derived curve blending
 

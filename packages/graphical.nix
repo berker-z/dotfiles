@@ -193,8 +193,5 @@
       gnome-clocks
       kdePackages.kolourpaint
       inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ]
-    ++ lib.optionals (config.networking.hostName == "laptop") [
-      pkgs.waybar
     ];
 }

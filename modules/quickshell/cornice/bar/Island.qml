@@ -10,6 +10,7 @@ Rectangle {
     property bool highlighted: false
 
     signal clicked()
+    signal rightClicked()
 
     implicitWidth: row.implicitWidth + padding * 2
     implicitHeight: Theme.islandHeight
@@ -26,7 +27,13 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-        onClicked: island.clicked()
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: function(mouse) {
+            if (mouse.button === Qt.RightButton)
+                island.rightClicked();
+            else
+                island.clicked();
+        }
     }
 
     Row {
