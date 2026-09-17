@@ -91,28 +91,15 @@
               // {
                 inherit (final.stdenv.hostPlatform) isDarwin isLinux;
               };
-            extraDependencyGroups =
-              [
-                "anthropic"
-                "azure-identity"
-                "bedrock"
-                "daytona"
-                "dingtalk"
-                "edge-tts"
-                "exa"
-                "fal"
-                "feishu"
-                "firecrawl"
-                "hindsight"
-                "honcho"
-                "messaging"
-                "modal"
-                "parallel-web"
-                "tts-premium"
-                "vercel"
-                "voice"
-              ]
-              ++ final.lib.optionals final.stdenv.hostPlatform.isLinux ["matrix"];
+            # Upstream ships no binary cache, so every group here is built
+            # locally on each hermes or nixpkgs bump. Keep it to what is used:
+            # tts/stt go through OpenAI (core), memory is core. `wake` would be
+            # nice but its tflite-runtime has no wheel for nixpkgs' Python.
+            extraDependencyGroups = [
+              "anthropic"
+              "firecrawl"
+              "messaging"
+            ];
           };
         hermes-agent-desktop = let
           upstreamNpmLib = final.hermes-agent-full.hermesNpmLib;
