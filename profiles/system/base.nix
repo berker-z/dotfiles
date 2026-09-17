@@ -103,6 +103,9 @@
     };
     settings = {
       auto-optimise-store = true;
+      # Own flakes declare their cachix cache in nixConfig; stop asking
+      # whether to honour it on every `nix develop`.
+      accept-flake-config = true;
       extra-substituters = [
         "https://marcel-rs.cachix.org"
         "https://herdr.cachix.org"

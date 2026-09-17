@@ -191,12 +191,17 @@
   '';
 
   # Daily-driver file manager. Nautilus stays installed as a fallback while
-  # Marcel is work in progress; these two flags are what make Marcel, not
-  # Nautilus, the one that opens for folders and for "show in folder".
+  # Marcel is work in progress; these three flags are what make Marcel, not
+  # Nautilus or the GTK portal, the one that opens for folders, for "show in
+  # folder", and for every open/save dialog that goes through
+  # xdg-desktop-portal. The last one also writes portals.conf for the
+  # FileChooser interface; Firefox-family browsers additionally need
+  # widget.use-xdg-desktop-portal.file-picker = 1 to use it.
   programs.marcel = {
     enable = true;
     defaultDirectoryHandler = true;
     fileManager1 = true;
+    fileChooserPortal = true;
   };
 
   xdg.mimeApps = {
