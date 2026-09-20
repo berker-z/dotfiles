@@ -1,6 +1,6 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model = "gpt-6-astra"
+model = "gpt-5.6-sol"
 model_reasoning_effort = "medium"
 web_search = "live"
 personality = "pragmatic"
@@ -77,6 +77,12 @@ trust_level = "trusted"
 [projects."/home/berkerz/Projects/older/yorha"]
 trust_level = "trusted"
 
+[projects."/home/berkerz/Projects/Multiplayer/mutfak"]
+trust_level = "trusted"
+
+[projects."/home/berkerz/Projects/ritournelle"]
+trust_level = "trusted"
+
 [plugins."canva@openai-curated"]
 enabled = true
 
@@ -103,6 +109,12 @@ approval_mode = "approve"
 [mcp_servers.hyprhands]
 command = "hyprhands"
 args = ["mcp"]
+
+[mcp_servers.pixellab]
+url = "https://api.pixellab.ai/mcp"
+http_headers_helper = "$HOME/.local/bin/pixellab-mcp-headers"
+default_tools_approval_mode = "writes"
+tool_timeout_sec = 300
 
 [hooks.state]
 

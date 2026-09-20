@@ -53,4 +53,16 @@ in {
     executable = true;
     force = true;
   };
+
+  # Keep the PixelLab API token outside Git and the Nix store. Codex invokes
+  # this helper only when connecting to the declaratively configured MCP.
+  home.file.".local/bin/pixellab-mcp-headers" = {
+    text =
+      builtins.replaceStrings
+      ["@jq@"]
+      ["${pkgs.jq}/bin/jq"]
+      (builtins.readFile ./pixellab-mcp-headers.sh);
+    executable = true;
+    force = true;
+  };
 }

@@ -97,6 +97,9 @@
     hermes-agent-desktop
 
     # --- GUI Applications ---
+    # Gaming
+    lutris
+
     # Browsers
     google-chrome
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default

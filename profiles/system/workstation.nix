@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  primaryUser,
   ...
 }: {
   imports = [
@@ -122,5 +123,7 @@
   };
 
   hardware.graphics.enable32Bit = true;
+  programs.gamemode.enable = true;
+  users.users.${primaryUser}.extraGroups = ["gamemode"];
   programs.steam.enable = true;
 }
