@@ -141,9 +141,9 @@ PanelWindow {
                         }
                         onWheel: function(w) {
                             if (w.angleDelta.y > 0)
-                                Media.previous();
-                            else
                                 Media.next();
+                            else
+                                Media.previous();
                         }
                     }
                 }
