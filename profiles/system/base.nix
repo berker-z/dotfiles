@@ -75,8 +75,8 @@
       fastfetch
     '';
     shellAliases = {
-      otto = "mosh otto -- tmux new -A -s hermes";
-      otto-ssh = "ssh otto -t 'tmux new -A -s hermes'";
+      oracle = "mosh oracle -- tmux new -A -s hermes";
+      oracle-ssh = "ssh oracle -t 'tmux new -A -s hermes'";
     };
   };
 

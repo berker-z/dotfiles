@@ -314,7 +314,7 @@ Ask before partitioning because this changes the disk layout and boot/recovery b
 - Herdr now provides disconnect survival and boot-restored workspace layout. It does not blindly restart arbitrary
   foreground commands; any stronger automatic agent-resume policy should be chosen from observed requirements.
 - File sharing protocol is undecided. SFTP is available through SSH; Samba/NFS should wait for an actual client/use case.
-- Oracle host `otto` remains available. Tailscale is the preferred private transport. Oracle-specific WireGuard is not part of `wired`.
+- Oracle host `oracle` remains available. Tailscale is the preferred private transport. Oracle-specific WireGuard is not part of `wired`.
 
 ## Repository dirt and ownership
 

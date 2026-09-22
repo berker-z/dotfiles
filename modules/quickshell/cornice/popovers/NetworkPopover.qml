@@ -342,7 +342,7 @@ Popover {
 
                 Text {
                     Layout.fillWidth: true
-                    text: "VPN"
+                    text: "Frankfurt exit"
                     color: Theme.fg
                     font.family: Theme.font
                     font.pixelSize: Theme.fontSize
@@ -351,7 +351,7 @@ Popover {
 
                 Text {
                     Layout.fillWidth: true
-                    text: Status.vpnBusy ? "Switching…" : (Status.vpn ? "wg0 up" : "Off")
+                    text: !Status.exitNodeAvailable ? "Needs approval" : (Status.vpnBusy ? "Switching…" : (Status.vpn ? "Tailscale on" : "Off"))
                     color: Theme.fgMuted
                     font.family: Theme.font
                     font.pixelSize: Theme.fontSmall
@@ -360,7 +360,7 @@ Popover {
 
             Switch {
                 checked: Status.vpn
-                enabled: !Status.vpnBusy
+                enabled: Status.exitNodeAvailable && !Status.vpnBusy
                 onToggled: Status.toggleVpn()
             }
         }

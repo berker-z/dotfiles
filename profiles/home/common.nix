@@ -26,16 +26,15 @@
         ControlPersist = "no";
       };
 
-      otto = {
-        HostName = "100.118.69.26";
+      # The Oracle Cloud VM, by its public IP. Its Tailscale address
+      # (100.118.69.26) is the private route when the tailnet is up.
+      oracle = {
+        HostName = "129.159.24.126";
         User = "hermes";
-        IdentityFile = "${config.home.homeDirectory}/Projects/hermesbox/ssh-key-2026-05-01.key";
+        IdentityFile = "${config.home.homeDirectory}/.ssh/id_ed25519_oracle";
         IdentitiesOnly = true;
         ServerAliveInterval = 30;
         ServerAliveCountMax = 3;
-        HostKeyAlias = "hermesbox";
-        StrictHostKeyChecking = "accept-new";
-        UserKnownHostsFile = "/tmp/hermesbox_known_hosts";
       };
     };
   };

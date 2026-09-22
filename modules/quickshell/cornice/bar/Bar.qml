@@ -217,7 +217,7 @@ PanelWindow {
                     visible: Status.vpn
                     icon: "󰦝"
                     flat: true
-                    tooltip: "VPN on"
+                    tooltip: "Frankfurt exit node on"
                     size: Math.round(24 * Theme.s)
                     onClicked: Status.toggleVpn()
                 }

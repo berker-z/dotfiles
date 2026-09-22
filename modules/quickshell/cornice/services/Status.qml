@@ -5,8 +5,8 @@ import Quickshell
 import Quickshell.Io
 
 // The three toggles that live outside any Quickshell service: mako's DND
-// mode, the WireGuard unit, and the idle inhibitor. Polled once here; every
-// surface binds to the same values.
+// mode, the Tailscale exit node, and the idle inhibitor. Polled once here;
+// every surface binds to the same values.
 Singleton {
     id: status
 
@@ -14,14 +14,18 @@ Singleton {
     property bool vpn: false
     property bool keepAwake: false
     property bool vpnBusy: false
+    property bool exitNodeAvailable: false
 
-    readonly property string vpnService: "wg-quick-wg0.service"
+    readonly property string exitNodeIp: "100.118.69.26"
+    readonly property string exitNodeId: "nxLigg91DC21CNTRL"
 
     function refresh() {
         if (!dndProc.running)
             dndProc.running = true;
         if (!vpnProc.running)
             vpnProc.running = true;
+        if (!exitNodeProc.running)
+            exitNodeProc.running = true;
     }
 
     function toggleDnd() {
@@ -31,10 +35,10 @@ Singleton {
     }
 
     function toggleVpn() {
-        if (vpnBusy)
+        if (vpnBusy || !exitNodeAvailable)
             return;
         vpnBusy = true;
-        vpnToggle.command = ["sh", "-c", "pk=$(command -v pkexec || printf /run/current-system/sw/bin/pkexec); if systemctl is-active --quiet \"$1\"; then $pk systemctl stop \"$1\"; else $pk systemctl start \"$1\"; fi", "sh", vpnService];
+        vpnToggle.command = ["sh", "-c", "ts=$(command -v tailscale || printf /run/current-system/sw/bin/tailscale); if $ts debug prefs 2>/dev/null | grep -Fq \"\\\"ExitNodeID\\\": \\\"$2\\\"\"; then $ts set --exit-node=; else $ts set --exit-node=\"$1\" --exit-node-allow-lan-access=false; fi", "sh", exitNodeIp, exitNodeId];
         vpnToggle.running = true;
     }
 
@@ -74,9 +78,17 @@ Singleton {
 
     Process {
         id: vpnProc
-        command: ["sh", "-c", "systemctl is-active --quiet " + status.vpnService + " && printf 1 || printf 0"]
+        command: ["sh", "-c", "tailscale debug prefs 2>/dev/null | grep -Fq '\"ExitNodeID\": \"" + status.exitNodeId + "\"' && printf 1 || printf 0"]
         stdout: StdioCollector {
             onStreamFinished: status.vpn = this.text.trim() === "1"
+        }
+    }
+
+    Process {
+        id: exitNodeProc
+        command: ["sh", "-c", "tailscale exit-node list 2>/dev/null | grep -Fq '" + status.exitNodeIp + "' && printf 1 || printf 0"]
+        stdout: StdioCollector {
+            onStreamFinished: status.exitNodeAvailable = this.text.trim() === "1"
         }
     }
 

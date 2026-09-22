@@ -91,10 +91,11 @@ Rectangle {
                 Toggle {
                     Layout.fillWidth: true
                     icon: "󰦝"
-                    label: "VPN"
+                    label: "Frankfurt exit"
                     checked: Status.vpn
                     busy: Status.vpnBusy
-                    stateText: Status.vpn ? "wg0 up" : "Off"
+                    enabled: Status.exitNodeAvailable
+                    stateText: !Status.exitNodeAvailable ? "Needs approval" : (Status.vpn ? "Tailscale on" : "Off")
                     onClicked: Status.toggleVpn()
                 }
 
