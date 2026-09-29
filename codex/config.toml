@@ -1,6 +1,6 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model = "gpt-5.6-sol"
+model = "gpt-6-sol"
 model_reasoning_effort = "medium"
 web_search = "live"
 personality = "pragmatic"
@@ -17,6 +17,8 @@ status_line = [
   "current-dir",
 ]
 pet = "seedy"
+animations = false
+screen_reader_detection_done = true
 
 [tui.model_availability_nux]
 "gpt-5.5" = 4
@@ -100,10 +102,10 @@ experimental_use_rmcp_client = true
 [mcp_servers.linear]
 url = "https://mcp.linear.app/mcp"
 
-[mcp_servers.linear.tools.save_issue]
+[mcp_servers.linear.tools.save_comment]
 approval_mode = "approve"
 
-[mcp_servers.linear.tools.save_comment]
+[mcp_servers.linear.tools.save_issue]
 approval_mode = "approve"
 
 [mcp_servers.hyprhands]
@@ -113,8 +115,16 @@ args = ["mcp"]
 [mcp_servers.pixellab]
 url = "https://api.pixellab.ai/mcp"
 http_headers_helper = "$HOME/.local/bin/pixellab-mcp-headers"
+tool_timeout_sec = 300.0
 default_tools_approval_mode = "writes"
-tool_timeout_sec = 300
+
+[mcp_servers.aseprite]
+command = "nix"
+args = ["shell", "nixpkgs#uv", "-c", "uvx", "--with", "mcp<2", "aseprite-live-mcp==0.2.0"]
+
+[mcp_servers.aseprite.env]
+ASEPRITE_MCP_BACKEND = "headless"
+ASEPRITE_PATH = "/run/current-system/sw/bin/aseprite"
 
 [hooks.state]
 
