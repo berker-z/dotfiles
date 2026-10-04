@@ -24,6 +24,10 @@
     marcel = {
       url = "github:berker-z/marcel";
     };
+    # Copland's agent box, pinned to a release tag: the system only moves when
+    # this line does. Not following nixpkgs: copland pins its own nixpkgs and
+    # crane, so the store paths match copland.cachix.org (profiles/system/base.nix).
+    copland.url = "github:berker-z/copland/box-v0.4.0?dir=daemon";
     # Not following nixpkgs: hyprhands is built from source, and following
     # meant rebuilding it on every nixpkgs bump rather than only when
     # hyprhands itself changes. Its runtime tools are a PATH suffix behind
@@ -121,6 +125,11 @@
       })
       (final: _prev: {
         hyprhands = inputs.hyprhands.packages.${final.stdenv.hostPlatform.system}.default;
+      })
+      (final: _prev: {
+        # The box and the headless daemon (copland-box, copland-daemon), with
+        # its launcher entry. scripts/updateio.sh checks it is cached first.
+        copland = inputs.copland.packages.${final.stdenv.hostPlatform.system}.default;
       })
       (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;

@@ -14,6 +14,8 @@
     # 0.27.0 both break CDP attach to a live browser (Page.enable timeout).
     # Hermes discovery checks PATH first, so this wins over its npx fallback.
     (pkgs.callPackage ../../packages/agent-browser.nix { })
+    # Copland's agent box (flake input pinned to a release tag; see flake.nix).
+    pkgs.copland
   ];
 
   # Job Watch — serve the jobs.json list as an HTML page on 127.0.0.1:8791.

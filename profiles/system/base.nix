@@ -115,10 +115,12 @@
       extra-substituters = [
         "https://marcel-rs.cachix.org"
         "https://herdr.cachix.org"
+        "https://copland.cachix.org"
       ];
       extra-trusted-public-keys = [
         "marcel-rs.cachix.org-1:ae3s4u7pctzohvoTn8DWdMnRCrLEg1u32OIjfQ7p0VY="
         "herdr.cachix.org-1:3nH7IStRsS0ASfdonA0DCRR2ZrSCeWitZ7Kwew0cR4I="
+        "copland.cachix.org-1:MKDq1A4TI0lpB3+6QiYmCCwHP9ph2W40piY3M3p0NsE="
       ];
       http-connections = 8;
       keep-derivations = false;
