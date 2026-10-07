@@ -7,6 +7,8 @@
 }: {
   imports = [
     ../../modules/workstation
+    # HyperFrames CLI + its Claude skills (HTML → video).
+    ../../modules/agents/hyperframes.nix
   ];
 
   home.packages = [

@@ -49,9 +49,9 @@
     ffmpeg
     ffmpeg-full
     gst_all_1.gst-libav
-    # Temporarily disabled: current nixpkgs pulls in deno -> rusty-v8 here,
-    # and the V8 build is failing under clang on this revision.
-    # yt-dlp
+    # Pulls in deno; was disabled while deno's rusty-v8 failed to build, now
+    # substituted from the binary cache again.
+    yt-dlp
 
     # --- Development ---
     # Languages & Compilers

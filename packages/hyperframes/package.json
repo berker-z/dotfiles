@@ -1,0 +1,8 @@
+{
+  "name": "hyperframes-nix",
+  "version": "0.8.140",
+  "private": true,
+  "dependencies": {
+    "hyperframes": "0.8.140"
+  }
+}
