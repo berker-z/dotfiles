@@ -59,11 +59,17 @@ in
           'copyFileSync(src, dest);' \
           'copyFileSync(src, dest); (await import("fs")).chmodSync(dest, 0o644);'
 
+      # Under a Wayland session Chrome sees WAYLAND_DISPLAY, asks SwiftShader
+      # for a Wayland Vulkan surface it can't provide, and WebGL comes up
+      # null. Headless never needs the compositor, so hide it from Chrome only.
+      makeWrapper ${headlessShell}/chrome-headless-shell-linux64/chrome-headless-shell $out/bin/.chrome-headless-shell \
+        --unset WAYLAND_DISPLAY
+
       for bin in hyperframes hyperframes-localize-fonts; do
         makeWrapper ${nodejs}/bin/node $out/bin/$bin \
           --add-flags $out/lib/node_modules/hyperframes/bin/$bin.mjs \
           --prefix PATH : ${lib.makeBinPath [ffmpeg]} \
-          --set-default HYPERFRAMES_BROWSER_PATH ${headlessShell}/chrome-headless-shell-linux64/chrome-headless-shell \
+          --set-default HYPERFRAMES_BROWSER_PATH $out/bin/.chrome-headless-shell \
           --set-default HYPERFRAMES_FFMPEG_PATH ${ffmpeg}/bin/ffmpeg \
           --set-default HYPERFRAMES_FFPROBE_PATH ${ffmpeg}/bin/ffprobe \
           --set-default HYPERFRAMES_NO_UPDATE_CHECK 1 \
