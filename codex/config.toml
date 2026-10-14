@@ -85,6 +85,9 @@ trust_level = "trusted"
 [projects."/home/berkerz/Projects/ritournelle"]
 trust_level = "trusted"
 
+[projects."/home/berkerz/Projects/kino"]
+trust_level = "trusted"
+
 [plugins."canva@openai-curated"]
 enabled = true
 
