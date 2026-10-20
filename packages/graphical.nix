@@ -147,7 +147,6 @@
     utterly-nord-plasma
 
     # --- Misc / Other ---
-    godot_4
     dex
     btop
     gcalcli
