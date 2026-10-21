@@ -18,7 +18,7 @@ Singleton {
     readonly property bool mocked: mockPercent >= 0
     readonly property bool present: mocked || real
 
-    readonly property int percent: mocked ? mockPercent : (real ? Math.round(device.percentage) : 0)
+    readonly property int percent: mocked ? mockPercent : (real ? Math.round(device.percentage * 100) : 0)
     readonly property bool charging: mocked
         ? (mockState === "charging" || mockState === "full")
         : (real && (device.state === UPowerDeviceState.Charging || device.state === UPowerDeviceState.PendingCharge))
