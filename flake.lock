@@ -371,11 +371,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1790680814,
-        "narHash": "sha256-p0mWQPfcm7ickcX+MRdPQaLA84dIW0F29gPXhh/P9eo=",
+        "lastModified": 1792576990,
+        "narHash": "sha256-+v39Cs0sLaG0NX3MIBDJsI0VPXmX+SPTexBshT38Vtw=",
         "owner": "berker-z",
         "repo": "marcel",
-        "rev": "b001a9f72a6703c7fd6c8c81cb7e10e2d20be254",
+        "rev": "565d55b723683ef679b292bed470dac6003e7a17",
         "type": "github"
       },
       "original": {
