@@ -119,9 +119,11 @@
       (final: _prev: {
         # Marcel itself is installed and integrated through
         # marcel.homeManagerModules.default (see profiles/home/workstation.nix).
-        # This binding exists for scripts/updateio.sh, which checks the
-        # pinned Marcel is in the binary cache before rebuilding.
-        marcel-rs = marcel.packages.${final.stdenv.hostPlatform.system}.marcel-rs;
+        # The module builds Marcel against this nixpkgs on top of Marcel's
+        # cached, compiled dependencies. This binding exists for
+        # scripts/updateio.sh, which checks those are in the binary cache
+        # before rebuilding.
+        marcel-deps = marcel.packages.${final.stdenv.hostPlatform.system}.marcel-deps;
       })
       (final: _prev: {
         hyprhands = inputs.hyprhands.packages.${final.stdenv.hostPlatform.system}.default;
