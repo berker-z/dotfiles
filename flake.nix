@@ -24,10 +24,13 @@
     marcel = {
       url = "github:berker-z/marcel";
     };
-    # Copland's agent box, pinned to a release tag: the system only moves when
-    # this line does. Not following nixpkgs: copland pins its own nixpkgs and
-    # crane, so the store paths match copland.cachix.org (profiles/system/base.nix).
-    copland.url = "github:berker-z/copland/box-v0.5.4?dir=daemon";
+    # Copland's agent box, pinned to a commit (or a release tag): the system
+    # only moves when this line does. Not following nixpkgs: copland pins its
+    # own nixpkgs and crane, so its compiled dependencies match
+    # copland.cachix.org (profiles/system/base.nix). The box itself is built
+    # against this nixpkgs (lib.mkCopland below), so it shares a glibc with
+    # the GPU driver it loads.
+    copland.url = "github:berker-z/copland/cb08d04e9f4e610a971ac1847fc197ee327ac9dc?dir=daemon";
     # Not following nixpkgs: hyprhands is built from source, and following
     # meant rebuilding it on every nixpkgs bump rather than only when
     # hyprhands itself changes. Its runtime tools are a PATH suffix behind
@@ -129,9 +132,12 @@
         hyprhands = inputs.hyprhands.packages.${final.stdenv.hostPlatform.system}.default;
       })
       (final: _prev: {
-        # The box and the headless daemon (copland-box, copland-daemon), with
-        # its launcher entry. scripts/updateio.sh checks it is cached first.
-        copland = inputs.copland.packages.${final.stdenv.hostPlatform.system}.default;
+        # The box, the daemon and the tray, with their launcher entries,
+        # built against this nixpkgs on top of Copland's cached, compiled
+        # dependencies (the module's default too). copland-deps exists for
+        # scripts/updateio.sh, which checks those are cached first.
+        copland = inputs.copland.lib.mkCopland final;
+        copland-deps = inputs.copland.packages.${final.stdenv.hostPlatform.system}.deps;
       })
       (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;

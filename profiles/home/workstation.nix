@@ -18,8 +18,8 @@
     (pkgs.callPackage ../../packages/agent-browser.nix { })
   ];
 
-  # Copland's daemon, box and tray (flake input pinned to a release tag; see
-  # flake.nix). daemon.toml and its tokens come from `copland-daemon --setup`
+  # Copland's daemon, box and tray (flake input pinned to a commit, built
+  # against this nixpkgs; see flake.nix). daemon.toml and its tokens come from `copland-daemon --setup`
   # on each machine, never from the store; never use `--install-service` here,
   # this is that unit, declared. Started by hand from the package's "Copland
   # Daemon" launcher, never at login (autostart and tray.autostart are off).

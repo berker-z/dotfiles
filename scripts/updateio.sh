@@ -7,11 +7,11 @@ cd "$target_directory" || exit 1
 git add . || exit 1
 #nix flake update
 host="$(hostname)"
-# Marcel's development revisions are not all published to Cachix, and
-# Copland's box is only published on release tags. Refuse to turn a routine
-# system update into a full GPUI/Rust source build on a miss. Marcel itself
-# is compiled locally against this nixpkgs; only its dependencies are cached.
-for pkg in marcel-deps copland; do
+# Marcel's and Copland's compiled dependencies (GPUI and the rest) come from
+# Cachix. Refuse to turn a routine system update into a full GPUI/Rust source
+# build on a miss. Marcel and Copland themselves are compiled locally against
+# this nixpkgs, so their GPU drivers' glibc matches; only the deps are cached.
+for pkg in marcel-deps copland-deps; do
   echo "Checking ${pkg} is installed or available from the binary cache..."
   if ! nix build --no-link --max-jobs 0 \
     ".#nixosConfigurations.${host}.pkgs.${pkg}"; then
