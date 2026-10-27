@@ -29,17 +29,17 @@
       },
       "locked": {
         "dir": "daemon",
-        "lastModified": 1793090956,
-        "narHash": "sha256-9dPWZLWqqTE5AdtUhknBw1hfL6KfXvQ2ECsp72GwmcI=",
+        "lastModified": 1793095410,
+        "narHash": "sha256-tcaaqZkR0keGCQpcoo5RNOrDMAh/nBxwfFaQgz5iFVY=",
         "owner": "berker-z",
         "repo": "copland",
-        "rev": "7d32b4383fe2155bd36f737d93979a0777b9a913",
+        "rev": "35d4f517ead02b5f8cc1ebf6c4205bca1d26ed0c",
         "type": "github"
       },
       "original": {
         "dir": "daemon",
         "owner": "berker-z",
-        "ref": "box-v0.5.2",
+        "ref": "box-v0.5.3",
         "repo": "copland",
         "type": "github"
       }
