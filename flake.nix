@@ -8,6 +8,11 @@
     # its bundled skia) on every nixpkgs bump. Pin it to its own nixpkgs and
     # only move this when a newer aseprite is wanted.
     nixpkgs-aseprite.url = "github:nixos/nixpkgs/b1b875982b17dabde9b4a37f3e229e74913e6db3";
+    # mcp-proxy 0.13.0 pins mcp<2, and unstable moved mcp to 2.x (2026-10-23),
+    # so it fails its runtime-deps check there. Taken from the last unstable
+    # that built it, which cache.nixos.org has; drop this once nixpkgs' own
+    # mcp-proxy builds again.
+    nixpkgs-mcp-proxy.url = "github:nixos/nixpkgs/09063bd1f2b36fd9fd793c36dfade7bd40a93dfc";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     zen-browser.url = "github:youwen5/zen-browser-flake";
@@ -142,6 +147,7 @@
       (_final: _prev: {
         libreoffice = stablePkgs.libreoffice-still;
         aseprite = asepritePkgs.aseprite;
+        mcp-proxy = inputs.nixpkgs-mcp-proxy.legacyPackages.x86_64-linux.mcp-proxy;
       })
     ];
 

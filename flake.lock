@@ -458,6 +458,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-mcp-proxy": {
+      "locked": {
+        "lastModified": 1792210252,
+        "narHash": "sha256-Mh0PUaIv4nFY+8wAGonaEh8iBzwsmdNlwjVHmFg1Biw=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "09063bd1f2b36fd9fd793c36dfade7bd40a93dfc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "09063bd1f2b36fd9fd793c36dfade7bd40a93dfc",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1735563628,
@@ -689,6 +705,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-aseprite": "nixpkgs-aseprite",
+        "nixpkgs-mcp-proxy": "nixpkgs-mcp-proxy",
         "nixpkgs-stable": "nixpkgs-stable",
         "obsidian-extensions": "obsidian-extensions",
         "rust-overlay": "rust-overlay_2",
