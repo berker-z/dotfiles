@@ -16,9 +16,19 @@
     # 0.27.0 both break CDP attach to a live browser (Page.enable timeout).
     # Hermes discovery checks PATH first, so this wins over its npx fallback.
     (pkgs.callPackage ../../packages/agent-browser.nix { })
-    # Copland's agent box (flake input pinned to a release tag; see flake.nix).
-    pkgs.copland
   ];
+
+  # Copland's daemon, box and tray (flake input pinned to a release tag; see
+  # flake.nix). daemon.toml and its tokens come from `copland-daemon --setup`
+  # on each machine, never from the store; never use `--install-service` here,
+  # this is that unit, declared. Started by hand from the package's "Copland
+  # Daemon" launcher, never at login (autostart and tray.autostart are off).
+  services.copland = {
+    enable = true;
+    package = pkgs.copland;
+    runtimes = with pkgs; [claude-code git gh];
+    tray.enable = true;
+  };
 
   # Hermes rejects symlinked cron scripts whose resolved target is outside
   # ~/.hermes/scripts. Copy this declarative source as a regular executable.
