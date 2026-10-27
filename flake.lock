@@ -24,21 +24,22 @@
     "copland": {
       "inputs": {
         "crane": "crane",
+        "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
         "dir": "daemon",
-        "lastModified": 1793065929,
-        "narHash": "sha256-JyX9+A9DT1A8dr1e8tepqOwG0Zc+YPKr8N30/AYXPdM=",
+        "lastModified": 1793088643,
+        "narHash": "sha256-DmXSK3QFR+yYvVpAuuMvOqd9V6wS70gQu+DzEE71I54=",
         "owner": "berker-z",
         "repo": "copland",
-        "rev": "2d2da4c951892f3b0cf0ae5310d68b65a16533d7",
+        "rev": "15855e108ae1db241682ce9ddf44bf09048f526f",
         "type": "github"
       },
       "original": {
         "dir": "daemon",
         "owner": "berker-z",
-        "ref": "box-v0.5.0",
+        "ref": "box-v0.5.1",
         "repo": "copland",
         "type": "github"
       }
@@ -173,7 +174,7 @@
     "hermes-agent": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "home-manager": "home-manager",
+        "home-manager": "home-manager_2",
         "nixpkgs": [
           "nixpkgs"
         ],
@@ -199,6 +200,28 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
+          "copland",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784913159,
+        "narHash": "sha256-JWq0BfjO4ktpH5USfQNQzdvHpIDT8fSKD5K7LvdMRFs=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "079a3b5d1aa6a719920a51316253b7d6dd22738d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "079a3b5d1aa6a719920a51316253b7d6dd22738d",
+        "type": "github"
+      }
+    },
+    "home-manager_2": {
+      "inputs": {
+        "nixpkgs": [
           "hermes-agent",
           "nixpkgs"
         ]
@@ -217,7 +240,7 @@
         "type": "github"
       }
     },
-    "home-manager_2": {
+    "home-manager_3": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -659,7 +682,7 @@
         "helium-browser": "helium-browser",
         "herdr": "herdr",
         "hermes-agent": "hermes-agent",
-        "home-manager": "home-manager_2",
+        "home-manager": "home-manager_3",
         "hyprhands": "hyprhands",
         "hyprland-qtutils": "hyprland-qtutils",
         "marcel": "marcel",
