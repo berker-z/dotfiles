@@ -1,5 +1,4 @@
 {
-  lib,
   pkgs,
   ...
 }: {
@@ -28,24 +27,8 @@
     enable = true;
     package = pkgs.copland;
     runtimes = with pkgs; [claude-code git gh];
+    # Started by hand from the package's "Copland Daemon" launcher, never at
+    # login (autostart and tray.autostart default to false).
     tray.enable = true;
-  };
-
-  # Started by hand on the laptop, never at login: the units stay declared
-  # (current store path, declared PATH) but nothing wants them.
-  systemd.user.services.copland-daemon.Install.WantedBy = lib.mkForce [];
-  systemd.user.services.copland-tray.Install.WantedBy = lib.mkForce [];
-
-  xdg.desktopEntries.copland-daemon = {
-    name = "Copland Daemon";
-    comment = "Start this machine's Copland agents and the tray";
-    exec = "systemctl --user start copland-daemon.service copland-tray.service";
-    terminal = false;
-    icon = "copland-box";
-    categories = ["Development"];
-    actions.stop = {
-      name = "Stop Copland Daemon";
-      exec = "systemctl --user stop copland-tray.service copland-daemon.service";
-    };
   };
 }
