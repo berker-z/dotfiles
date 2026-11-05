@@ -21,7 +21,7 @@ PanelWindow {
     implicitHeight: Theme.barHeight
     exclusiveZone: Panels.barHidden ? 0 : Theme.barHeight
     visible: !Panels.barHidden
-    WlrLayershell.layer: WlrLayer.Top
+    WlrLayershell.layer: WlrLayer.Bottom
     WlrLayershell.namespace: "cornice-bar"
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
