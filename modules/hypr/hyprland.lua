@@ -128,7 +128,17 @@ hl.bind(mainMod .. " + V", hl.dsp.window.float())
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + Y", hl.dsp.window.fullscreen())
+-- A plain toggle can't leave fullscreen in Proton games that ask for it straight
+-- back (WoW); client = 2 stops them asking, but other apps would stay in their
+-- own fullscreen mode, so only Proton windows get it.
+hl.bind(mainMod .. " + Y", function()
+	local window = hl.get_active_window()
+	if window and window.fullscreen == 2 and window.class:find("^steam_app_") then
+		hl.dispatch(hl.dsp.window.fullscreen_state({ internal = 0, client = 2 }))
+	else
+		hl.dispatch(hl.dsp.window.fullscreen())
+	end
+end)
 
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "l" }))
 hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "r" }))
