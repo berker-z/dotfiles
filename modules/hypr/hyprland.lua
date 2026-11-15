@@ -94,6 +94,10 @@ hl.config({
 		warp_on_change_workspace = 1,
 		no_hardware_cursors = true,
 	},
+	render = {
+		-- 0.57 offers HDR to fullscreen clients, so chrome videos flip the 8-bit monitor into HDR (modeset blackout)
+		cm_auto_hdr = 0,
+	},
 })
 
 hl.curve("myBezier", {
