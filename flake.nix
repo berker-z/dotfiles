@@ -41,9 +41,14 @@
     # hyprhands itself changes. Its runtime tools are a PATH suffix behind
     # the system's own, so the separate pin is harmless.
     hyprhands.url = "github:berker-z/hyprhands";
+    # hermes-agent patches patchelf with a fix written for 0.19.2, and unstable
+    # went back to patchelf 0.15.2 (2026-11-07), so the patch fails to apply.
+    # Held on the last unstable it built against; drop this once hermes'
+    # nix/pm-packages.nix stops patching or nixpkgs moves past 0.15.2.
+    nixpkgs-hermes.url = "github:nixos/nixpkgs/3ec636362e1816bc2f0888fa0fa2c69f1bc9e504";
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-hermes";
     };
     # herdr's source flake has no binary cache, so it compiled Rust + Zig on
     # every update. herdr-nix wraps the prebuilt release binaries and is served
@@ -103,6 +108,20 @@
               inherit (final.stdenv.hostPlatform) isDarwin isLinux;
             };
         };
+
+        # gnome-desktop 51 dropped the RR API from GnomeDesktop-3.0, but the
+        # typelib still loads, so lutris 0.5.22 crashes on startup calling
+        # GnomeDesktop.RRScreen. Only use it when present (falls back to the
+        # xrandr display manager). Drop once lutris handles this upstream.
+        lutris-unwrapped = prev.lutris-unwrapped.overridePythonAttrs (old: {
+          postPatch =
+            (old.postPatch or "")
+            + ''
+              substituteInPlace lutris/util/display.py \
+                --replace-fail 'LIB_GNOME_DESKTOP_AVAILABLE = True' \
+                  'LIB_GNOME_DESKTOP_AVAILABLE = hasattr(GnomeDesktop, "RRScreen")'
+            '';
+        });
 
         hermes-agent-full =
           inputs.hermes-agent.packages.${final.stdenv.hostPlatform.system}.minimal.override

@@ -99,6 +99,7 @@
     # --- GUI Applications ---
     # Gaming
     lutris
+    wowup-cf
 
     # Browsers
     google-chrome
@@ -178,7 +179,6 @@
       foliate
       vivaldi
       vivaldi-ffmpeg-codecs
-      brave
       vlc
       deluge
       steam
